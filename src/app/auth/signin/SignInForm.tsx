@@ -17,15 +17,20 @@ export function SignInForm() {
     setLoading(true);
     setError(null);
 
-    const result = await signIn("credentials", { email, password, redirect: false });
-    setLoading(false);
+    try {
+      const result = await signIn("credentials", { email, password, redirect: false });
+      setLoading(false);
 
-    if (result?.error) {
-      setError(result.error === "CredentialsSignin" ? "Email ou mot de passe incorrect" : result.error);
-      return;
+      if (result?.error) {
+        setError(result.error === "CredentialsSignin" ? "Email ou mot de passe incorrect" : result.error);
+        return;
+      }
+      // Redirection complète pour que le cookie de session soit bien pris en compte
+      window.location.href = "/dashboard";
+    } catch (err: any) {
+      setLoading(false);
+      setError(err?.message || "Erreur de connexion. Vérifie tes identifiants.");
     }
-    router.push("/dashboard");
-    router.refresh();
   }
 
   async function handleMagicLink(e: React.FormEvent) {
