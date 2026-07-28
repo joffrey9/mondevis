@@ -144,6 +144,3 @@ export default async function FacturesPage() {
   );
 }
 
-export async function generateStaticParams() {
-  return [];
-}

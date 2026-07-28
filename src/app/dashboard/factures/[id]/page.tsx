@@ -264,6 +264,3 @@ export default async function FactureDetailPage(props: { params: Promise<{ id: s
   );
 }
 
-export async function generateStaticParams() {
-  return [];
-}

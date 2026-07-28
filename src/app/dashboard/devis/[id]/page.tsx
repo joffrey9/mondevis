@@ -257,6 +257,3 @@ export default async function DevisDetailPage(props: { params: Promise<{ id: str
   );
 }
 
-export async function generateStaticParams() {
-  return [];
-}
