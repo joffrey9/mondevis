@@ -36,14 +36,29 @@ export function SignInForm() {
     setLoading(true);
     setError(null);
 
-    const result = await signIn("resend", { email, redirect: false, callbackUrl: "/dashboard" });
-    setLoading(false);
+    try {
+      const result = await signIn("resend", { email, redirect: false, callbackUrl: "/dashboard" });
+      setLoading(false);
 
-    if (result?.error) {
-      setError("Erreur d'envoi du lien. Vérifie l'email.");
-      return;
+      if (result?.error) {
+        setError("Erreur d'envoi du lien. Vérifie l'email.");
+        return;
+      }
+      alert("📬 Un lien de connexion t'a été envoyé par email !");
+    } catch (err: any) {
+      setLoading(false);
+      setError(err?.message || "Erreur d'envoi du lien.");
     }
-    alert("📬 Un lien de connexion t'a été envoyé par email !");
+  }
+
+  async function handleGoogleSignIn() {
+    setLoading(true);
+    try {
+      await signIn("google", { callbackUrl: "/dashboard" });
+    } catch {
+      setLoading(false);
+      setError("Erreur avec Google. Réessaie.");
+    }
   }
 
   async function handleGoogleSignIn() {
