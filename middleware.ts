@@ -1,30 +1,39 @@
-import { auth } from "@/auth";
 import { NextResponse } from "next/server";
+import type { NextRequest } from "next/server";
 
-export default auth((req) => {
-  const { pathname } = req.nextUrl;
-  const isLoggedIn = !!req.auth;
-  const role = req.auth?.user?.role;
+// Middleware léger - vérifie la présence du cookie de session sans importer NextAuth
+const publicPaths = ["/", "/auth/signin", "/auth/register", "/auth/error", "/api/auth", "/pricing", "/mentions-legales"];
 
-  const publicPaths = ["/", "/auth/signin", "/auth/register", "/auth/error", "/api/auth"];
-  if (publicPaths.some((p) => pathname.startsWith(p))) {
+export function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+
+  // Routes publiques : on laisse passer
+  if (publicPaths.some((p) => pathname === p || pathname.startsWith(p + "/"))) {
     return NextResponse.next();
   }
 
+  // Routes API : on laisse passer (l'auth se fait dans les routes elles-mêmes)
   if (pathname.startsWith("/api/")) {
     return NextResponse.next();
   }
 
-  if (!isLoggedIn) {
-    return NextResponse.redirect(new URL("/auth/signin", req.url));
+  // Vérifie la présence du cookie de session NextAuth
+  const sessionCookie = request.cookies.get("next-auth.session-token")
+    || request.cookies.get("__Secure-next-auth.session-token");
+
+  // Ressources statiques : on laisse passer
+  if (pathname.startsWith("/_next/") || pathname.startsWith("/favicon")) {
+    return NextResponse.next();
   }
 
-  if (pathname.startsWith("/admin") && role !== "admin") {
-    return NextResponse.redirect(new URL("/dashboard", req.url));
+  if (!sessionCookie) {
+    const url = new URL("/auth/signin", request.url);
+    url.searchParams.set("callbackUrl", pathname);
+    return NextResponse.redirect(url);
   }
 
   return NextResponse.next();
-});
+}
 
 export const config = {
   matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
