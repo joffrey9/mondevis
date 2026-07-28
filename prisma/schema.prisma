@@ -1,0 +1,187 @@
+// ── MonDevis — Schema Prisma ──
+// Dev : SQLite (fichier local)
+// Prod : PostgreSQL (via DATABASE_URL dans les variables d'environnement)
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+// ── Auth (saas-auth) ──
+
+model User {
+  id            String    @id @default(cuid())
+  name          String?
+  email         String?   @unique
+  emailVerified DateTime?
+  image         String?
+  role          String    @default("user")
+
+  // Infos entreprise pour factures et UBL/Peppol
+  companyName    String?
+  companySiret   String?  // SIRET (FR) ou N° BCE/TVA (BE)
+  companyAddress String?
+  companyPhone   String?
+  companyEmail   String?
+  companyLogo    String?  // Base64 data-URL du logo de l'entreprise
+  companyIban    String?  // IBAN pour les virements
+  companyBic     String?  // BIC pour les virements
+  nextDevisNumber Int?    // Prochain numéro de devis (pour numérotation personnalisée)
+  peppolProvider String?  // Fournisseur Peppol configuré (ex: "einvoice", "billit", "banqup")
+  whatsappNumber String? // Numéro WhatsApp pour envoyer les devis
+
+  accounts    Account[]
+  sessions    Session[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model Account {
+  id                String  @id @default(cuid())
+  userId            String
+  type              String
+  provider          String
+  providerAccountId String
+  refresh_token     String?
+  access_token      String?
+  expires_at        Int?
+  token_type        String?
+  scope             String?
+  id_token          String?
+  session_state     String?
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@unique([provider, providerAccountId])
+}
+
+model Session {
+  id           String   @id @default(cuid())
+  sessionToken String   @unique
+  userId       String
+  expires      DateTime
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+}
+
+model VerificationToken {
+  identifier String
+  token      String   @unique
+  expires    DateTime
+
+  @@unique([identifier, token])
+}
+
+// ── Feature : Devis ──
+
+model Client {
+  id        String   @id @default(cuid())
+  userId    String
+  name      String
+  email     String?
+  phone     String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  devis Devis[]
+
+  @@index([userId])
+}
+
+model Devis {
+  id           String   @id @default(cuid())
+  userId       String
+  clientId     String?
+  clientName   String              // Nom du client (libre si pas de client enregistré)
+  clientEmail  String?
+  clientPhone  String?
+  clientAddress String?
+  country      String   @default("FR") // FR | BE
+  profession   String?             // Menuiserie, Plomberie, Électricité...
+  number       String             // ex: "DEV-2026-0001"
+  devisPrefix  String?            // Préfixe custom (ex: "FACT")
+  status       String   @default("draft") // draft | sent | accepted | refused | archived
+  totalHt      Float    @default(0)
+  totalTtc     Float    @default(0)
+  acomptePct   Float    @default(30) // % d'acompte à la commande
+  delaiPaiement Int    @default(30) // délai de paiement en jours
+  notes        String?
+  sentAt       DateTime?
+  acceptedAt   DateTime?
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  client   Client? @relation(fields: [clientId], references: [id])
+  lines    DevisLine[]
+  factures Facture[]  // Une fois accepté, peut générer une ou plusieurs factures
+
+  @@index([userId, status])
+  @@index([userId, createdAt])
+}
+
+model DevisLine {
+  id          String  @id @default(cuid())
+  devisId     String
+  description String
+  quantity    Float   @default(1)
+  unitPrice   Float   @default(0)
+  tvaRate     Float   @default(20) // FR: 20/10/5.5/2.1/0 — BE: 21/12/6/0
+  totalHt     Float   @default(0)
+
+  devis Devis @relation(fields: [devisId], references: [id], onDelete: Cascade)
+
+  @@index([devisId])
+}
+
+// ── Feature : Factures ──
+
+model Facture {
+  id           String   @id @default(cuid())
+  userId       String
+  devisId      String?                                         // Optionnel : lien vers le devis d'origine
+  clientName   String
+  clientEmail  String?
+  clientPhone  String?
+  clientAddress String?
+  country      String   @default("FR")
+  profession   String?
+  number       String                                         // ex: "FAC-2026-0001"
+  facturePrefix  String?                                      // Préfixe custom
+  status       String   @default("draft")                     // draft | sent | paid | cancelled
+  totalHt      Float    @default(0)
+  totalTtc     Float    @default(0)
+  iban         String?                                        // IBAN pour le virement
+  bic          String?                                        // BIC pour le virement
+  acomptePct   Float    @default(0)
+  delaiPaiement Int    @default(30)
+  notes        String?
+  sentAt       DateTime?
+  paidAt       DateTime?
+  dueDate      DateTime?                                      // Date d'échéance
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  devis Devis?  @relation(fields: [devisId], references: [id])
+  lines FactureLine[]
+
+  @@index([userId, status])
+  @@index([userId, createdAt])
+}
+
+model FactureLine {
+  id          String  @id @default(cuid())
+  factureId   String
+  description String
+  quantity    Float   @default(1)
+  unitPrice   Float   @default(0)
+  tvaRate     Float   @default(20) // FR: 20/10/5.5/2.1/0 — BE: 21/12/6/0
+  totalHt     Float   @default(0)
+
+  facture Facture @relation(fields: [factureId], references: [id], onDelete: Cascade)
+
+  @@index([factureId])
+}
