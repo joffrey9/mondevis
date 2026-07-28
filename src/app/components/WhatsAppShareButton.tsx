@@ -56,11 +56,11 @@ export function WhatsAppShareButton({
 
     const fullUrl = getFullUrl();
     const msg = encodeURIComponent(
-      `📄 *Devis ${devisNumber}*${companyName ? ` — ${companyName}` : ""}\n\n` +
+      `Devis ${devisNumber}${companyName ? ` - ${companyName}` : ""}\n\n` +
       `Bonjour ${clientName},\n\n` +
-      `Voici votre devis d'un montant de *${totalTtc.toFixed(2)} € TTC*.\n\n` +
-      `Vous pouvez le consulter ici : ${fullUrl}\n\n` +
-      `Cordialement.`
+      `Montant : ${totalTtc.toFixed(2).replace(".", ",")} EUR\n\n` +
+      `Cordialement\n\n` +
+      `${fullUrl}`
     );
     window.open(`https://wa.me/${clean}?text=${msg}`, "_blank");
     setSent(true);
@@ -74,7 +74,7 @@ export function WhatsAppShareButton({
 
     const fullUrl = getFullUrl();
     const link = `https://wa.me/${clean}?text=${encodeURIComponent(
-      `Bonjour${companyName ? ` ${companyName}` : ""}, je suis intéressé par votre devis *${devisNumber}*. ${fullUrl}`
+      `Bonjour${companyName ? ` ${companyName}` : ""}, je suis interesse par votre devis ${devisNumber}. ${fullUrl}`
     )}`;
 
     try {
@@ -82,8 +82,8 @@ export function WhatsAppShareButton({
       setCopied(true);
       setCopyError(false);
     } catch (err) {
-      console.warn("Clipboard copy failed:", err);
-      // Fallback : créer un textarea temporaire
+      console.warn("WhatsAppShareButton: clipboard copy failed", err);
+      // Fallback : textarea temporaire
       try {
         const textarea = document.createElement("textarea");
         textarea.value = link;
@@ -119,12 +119,12 @@ export function WhatsAppShareButton({
           }`}
         >
           <Send className="w-4 h-4" />
-          {sent ? "✅ Envoyé !" : "📲 Envoyer au client"}
+          {sent ? "Envoye !" : "Envoyer au client"}
         </button>
       ) : (
         <span className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm text-gray-400 bg-gray-100 border border-dashed border-gray-300">
           <MessageCircle className="w-4 h-4" />
-          Ajoutez un téléphone client pour envoyer par WhatsApp
+          Ajoutez un telephone client pour envoyer par WhatsApp
         </span>
       )}
 
@@ -142,11 +142,11 @@ export function WhatsAppShareButton({
           }`}
         >
           {copied ? (
-            <><Check className="w-4 h-4" /> Lien copié !</>
+            <><Check className="w-4 h-4" /> Lien copie !</>
           ) : copyError ? (
             <><Copy className="w-4 h-4" /> Copie manuelle</>
           ) : (
-            <><Copy className="w-4 h-4" /> Copier mon contact WhatsApp</>
+            <><Copy className="w-4 h-4" /> Copier mon contact</>
           )}
         </button>
       )}
