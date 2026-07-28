@@ -244,6 +244,7 @@ export default async function DevisDetailPage(props: { params: Promise<{ id: str
           companyName={user?.companyName}
         />
         <WhatsAppShareButton
+          clientPhone={devis.clientPhone}
           whatsappNumber={user?.whatsappNumber}
           clientName={devis.clientName}
           devisNumber={devis.number}
