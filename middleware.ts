@@ -17,21 +17,12 @@ export function middleware(request: NextRequest) {
     return NextResponse.next();
   }
 
-  // Vérifie la présence du cookie de session NextAuth
-  const sessionCookie = request.cookies.get("next-auth.session-token")
-    || request.cookies.get("__Secure-next-auth.session-token");
-
   // Ressources statiques : on laisse passer
   if (pathname.startsWith("/_next/") || pathname.startsWith("/favicon")) {
     return NextResponse.next();
   }
 
-  if (!sessionCookie) {
-    const url = new URL("/auth/signin", request.url);
-    url.searchParams.set("callbackUrl", pathname);
-    return NextResponse.redirect(url);
-  }
-
+  // Pas de vérification de session ici — chaque page gère sa propre auth via auth()
   return NextResponse.next();
 }
 
