@@ -61,11 +61,6 @@ export function SignInForm() {
     }
   }
 
-  async function handleGoogleSignIn() {
-    setLoading(true);
-    await signIn("google", { callbackUrl: "/dashboard" });
-  }
-
   return (
     <form onSubmit={mode === "credentials" ? handleCredentials : handleMagicLink} className="space-y-4">
       {mode === "credentials" ? (
