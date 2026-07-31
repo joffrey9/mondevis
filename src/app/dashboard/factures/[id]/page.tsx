@@ -40,7 +40,7 @@ export default async function FactureDetailPage(props: { params: Promise<{ id: s
         companyIban: true,
         companyBic: true,
         peppolProvider: true,
-
+        customLegalMentions: true,
       },
     }),
   ]);
@@ -260,6 +260,20 @@ export default async function FactureDetailPage(props: { params: Promise<{ id: s
         </div>
       </div>
 
+      {/* Mentions légales personnalisées */}
+      {user?.customLegalMentions && (
+        <div className="bg-white dark:bg-[#14141f] rounded-xl border border-gray-200 dark:border-[#1e1e30] p-6 shadow-sm mt-6">
+          <p className="text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">📋 Mentions personnalisées</p>
+          <ul className="space-y-1">
+            {user.customLegalMentions.split("\n").filter(Boolean).map((mention, i) => (
+              <li key={i} className="text-xs text-gray-500 dark:text-gray-400 flex items-start gap-2">
+                <span className="text-gray-300 dark:text-gray-600 mt-0.5">•</span>
+                <span>{mention}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       {/* Actions */}
       <div className="mt-6 flex flex-col sm:flex-row flex-wrap gap-2 sm:gap-3">
@@ -295,7 +309,7 @@ export default async function FactureDetailPage(props: { params: Promise<{ id: s
           companyEmail={user?.companyEmail}
           companyIban={user?.companyIban}
           companyBic={user?.companyBic}
-
+          customLegalMentions={user?.customLegalMentions}
         />
 
         {/* Bouton UBL Peppol */}

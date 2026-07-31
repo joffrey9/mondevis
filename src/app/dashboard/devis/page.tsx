@@ -4,14 +4,14 @@ import { prisma } from "@/lib/db";
 import Link from "next/link";
 import { Plus, Eye, Trash2, Send, CheckCircle, XCircle } from "lucide-react";
 import { updateDevisStatus, deleteDevis } from "@/app/actions/devis";
-import { COUNTRIES, type Country } from "@/lib/countries";
+import { COUNTRIES, detectClientType, type Country } from "@/lib/countries";
 
 const statusLabels: Record<string, { label: string; color: string }> = {
-  draft: { label: "Brouillon", color: "bg-gray-100 text-gray-700" },
-  sent: { label: "Envoyé", color: "bg-blue-100 text-blue-700" },
-  accepted: { label: "Accepté", color: "bg-green-100 text-green-700" },
-  refused: { label: "Refusé", color: "bg-red-100 text-red-700" },
-  archived: { label: "Archivé", color: "bg-gray-100 text-gray-500" },
+  draft: { label: "Brouillon", color: "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300" },
+  sent: { label: "Envoyé", color: "bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300" },
+  accepted: { label: "Accepté", color: "bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300" },
+  refused: { label: "Refusé", color: "bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300" },
+  archived: { label: "Archivé", color: "bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400" },
 };
 
 export default async function DevisListPage() {
@@ -28,8 +28,8 @@ export default async function DevisListPage() {
     <div className="max-w-5xl mx-auto p-6">
       <header className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-3xl font-bold">Mes devis</h1>
-          <p className="text-gray-500 mt-1">{devisList.length} devis créés</p>
+          <h1 className="text-3xl font-bold dark:text-gray-100">Mes devis</h1>
+          <p className="text-gray-500 dark:text-gray-400 mt-1">{devisList.length} devis créés</p>
         </div>
         <Link
           href="/dashboard/devis/nouveau"
@@ -40,8 +40,8 @@ export default async function DevisListPage() {
       </header>
 
       {devisList.length === 0 ? (
-        <div className="bg-white rounded-xl border border-gray-200 p-12 text-center">
-          <p className="text-gray-500">Aucun devis pour le moment.</p>
+        <div className="bg-white dark:bg-[#14141f] rounded-xl border border-gray-200 dark:border-[#1e1e30] p-12 text-center">
+          <p className="text-gray-500 dark:text-gray-400">Aucun devis pour le moment.</p>
           <Link href="/dashboard/devis/nouveau" className="mt-4 inline-block text-blue-600 hover:underline">
             Créer ton premier devis →
           </Link>
@@ -49,10 +49,10 @@ export default async function DevisListPage() {
       ) : (
         <>
           {/* Vue Desktop : tableau */}
-          <div className="hidden md:block bg-white rounded-xl border border-gray-200 overflow-hidden">
+          <div className="hidden md:block bg-white dark:bg-[#14141f] rounded-xl border border-gray-200 dark:border-[#1e1e30] overflow-hidden">
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
-                <thead className="bg-gray-50 text-gray-600 uppercase text-xs">
+                <thead className="bg-gray-50 dark:bg-[#1a1a2e] text-gray-600 dark:text-gray-400 uppercase text-xs">
                   <tr>
                     <th className="text-left p-4">N°</th>
                     <th className="text-left p-4">Client</th>
@@ -68,30 +68,41 @@ export default async function DevisListPage() {
                   {devisList.map((devis) => {
                     const st = statusLabels[devis.status] ?? statusLabels.draft;
                     return (
-                      <tr key={devis.id} className="border-t border-gray-100 hover:bg-gray-50">
-                        <td className="p-4 font-mono text-sm">{devis.number}</td>
-                        <td className="p-4 font-medium">{devis.clientName}</td>
+                      <tr key={devis.id} className="border-t border-gray-100 dark:border-[#1e1e30] hover:bg-gray-50 dark:hover:bg-[#1a1a2e]">
+                        <td className="p-4 font-mono text-sm dark:text-gray-300">{devis.number}</td>
+                        <td className="p-4 font-medium dark:text-gray-200">
+                          <div className="flex items-center gap-2">
+                            <span>{devis.clientName}</span>
+                            <span className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[10px] font-medium ${
+                              detectClientType(devis.clientSiret, (devis.country || "FR") as Country) === "professionnel"
+                                ? 'bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-200'
+                                : 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-200'
+                            }`}>
+                              {detectClientType(devis.clientSiret, (devis.country || "FR") as Country) === "professionnel" ? "🏢 Pro" : "👤 Part"}
+                            </span>
+                          </div>
+                        </td>
                         <td className="p-4 text-center">
-                          <span className="text-xs font-medium text-gray-500">
+                          <span className="text-xs font-medium text-gray-500 dark:text-gray-400">
                             {COUNTRIES[(devis.country || "FR") as Country]?.flag}
                           </span>
                         </td>
                         <td className="p-4 text-center">
-                          <span className="text-xs text-gray-400">{devis.profession || "—"}</span>
+                          <span className="text-xs text-gray-400 dark:text-gray-500">{devis.profession || "—"}</span>
                         </td>
-                        <td className="p-4 text-right tabular-nums">
+                        <td className="p-4 text-right tabular-nums dark:text-gray-200">
                           {devis.totalTtc.toFixed(2)} €
-                          <div className="text-xs text-gray-400">HT: {devis.totalHt.toFixed(2)} €</div>
+                          <div className="text-xs text-gray-400 dark:text-gray-500">HT: {devis.totalHt.toFixed(2)} €</div>
                         </td>
                         <td className="p-4 text-center">
                           <span className={`inline-block px-2.5 py-1 rounded-full text-xs font-medium ${st.color}`}>{st.label}</span>
                         </td>
-                        <td className="p-4 text-right text-gray-500 text-xs">
+                        <td className="p-4 text-right text-gray-500 dark:text-gray-400 text-xs">
                           {new Date(devis.createdAt).toLocaleDateString("fr-FR")}
                         </td>
                         <td className="p-4 text-right">
                           <div className="flex items-center justify-end gap-1">
-                            <Link href={`/dashboard/devis/${devis.id}`} className="p-1.5 hover:bg-gray-100 rounded transition" title="Voir">
+                            <Link href={`/dashboard/devis/${devis.id}`} className="p-1.5 hover:bg-gray-100 dark:hover:bg-gray-800 rounded transition" title="Voir">
                               <Eye className="w-4 h-4 text-gray-500" />
                             </Link>
                             {devis.status === "draft" && (
@@ -135,26 +146,35 @@ export default async function DevisListPage() {
             {devisList.map((devis) => {
               const st = statusLabels[devis.status] ?? statusLabels.draft;
               return (
-                <div key={devis.id} className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
+                <div key={devis.id} className="bg-white dark:bg-[#14141f] rounded-xl border border-gray-200 dark:border-[#1e1e30] p-4 shadow-sm">
                   <Link href={`/dashboard/devis/${devis.id}`} className="block">
                     <div className="flex items-start justify-between mb-2">
                       <div>
-                        <p className="font-mono text-xs text-gray-500">{devis.number}</p>
-                        <p className="font-semibold text-sm mt-0.5">{devis.clientName}</p>
+                        <p className="font-mono text-xs text-gray-500 dark:text-gray-400">{devis.number}</p>
+                        <p className="font-semibold text-sm mt-0.5 dark:text-gray-100">
+                          {devis.clientName}
+                          <span className={`ml-1.5 inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[10px] font-medium ${
+                            detectClientType(devis.clientSiret, (devis.country || "FR") as Country) === "professionnel"
+                              ? 'bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-200'
+                              : 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-200'
+                          }`}>
+                            {detectClientType(devis.clientSiret, (devis.country || "FR") as Country) === "professionnel" ? "🏢 Pro" : "👤 Part"}
+                          </span>
+                        </p>
                       </div>
                       <span className={`px-2 py-0.5 rounded-full text-[10px] font-medium ${st.color}`}>{st.label}</span>
                     </div>
-                    <div className="flex items-center justify-between text-xs text-gray-500">
+                    <div className="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">
                       <span>
                         {COUNTRIES[(devis.country || "FR") as Country]?.flag}
                         {devis.profession && ` · ${devis.profession}`}
                       </span>
-                      <span className="tabular-nums font-semibold text-gray-900">{devis.totalTtc.toFixed(2)} €</span>
+                      <span className="tabular-nums font-semibold text-gray-900 dark:text-gray-100">{devis.totalTtc.toFixed(2)} €</span>
                     </div>
-                    <p className="text-[10px] text-gray-400 mt-1">{new Date(devis.createdAt).toLocaleDateString("fr-FR")}</p>
+                    <p className="text-[10px] text-gray-400 dark:text-gray-500 mt-1">{new Date(devis.createdAt).toLocaleDateString("fr-FR")}</p>
                   </Link>
                   {/* Actions rapides */}
-                  <div className="flex gap-1.5 mt-3 pt-3 border-t border-gray-100">
+                  <div className="flex gap-1.5 mt-3 pt-3 border-t border-gray-100 dark:border-[#1e1e30]">
                     <Link href={`/dashboard/devis/${devis.id}`}
                       className="flex-1 text-center text-xs px-3 py-1.5 bg-gray-100 text-gray-600 rounded-lg hover:bg-gray-200 transition font-medium">
                       Voir

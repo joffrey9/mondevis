@@ -12,10 +12,12 @@ export function DevisPDFDownload({
   devis,
   companyLogo,
   companyName,
+  customLegalMentions,
 }: {
   devis: DevisWithLines;
   companyLogo?: string | null;
   companyName?: string | null;
+  customLegalMentions?: string | null;
 }) {
   const [showSignature, setShowSignature] = useState(false);
   const [signatureData, setSignatureData] = useState<string | null>(null);
@@ -28,7 +30,7 @@ export function DevisPDFDownload({
   function handleDownload(withSignature: boolean) {
     setLoading(true);
     try {
-      downloadDevisPDF(devis, withSignature ? signatureData : null, companyLogo, companyName);
+      downloadDevisPDF(devis, withSignature ? signatureData : null, companyLogo, companyName, customLegalMentions);
     } finally {
       setLoading(false);
     }
@@ -53,7 +55,7 @@ export function DevisPDFDownload({
           <button
             type="button"
             onClick={() => setShowSignature(true)}
-            className="flex items-center gap-1.5 px-4 py-2.5 border border-gray-300 rounded-xl font-medium text-sm text-gray-700 hover:bg-gray-50 transition"
+            className="flex items-center gap-1.5 px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-xl font-medium text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition"
           >
             ✍️ Présenter au client pour signature
           </button>
@@ -70,28 +72,27 @@ export function DevisPDFDownload({
       </div>
 
       {showSignature && (
-        <div className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm space-y-4">
+        <div className="bg-white dark:bg-[#14141f] rounded-xl border border-gray-200 dark:border-[#1e1e30] p-4 shadow-sm space-y-4">
           {/* Résumé des montants */}
-          <div className="bg-amber-50 rounded-lg p-4 border border-amber-200">
-            <h4 className="font-semibold text-sm text-amber-800 mb-2">
+          <div className="bg-amber-50 dark:bg-amber-900/20 rounded-lg p-4 border border-amber-200 dark:border-amber-800/30">              <h4 className="font-semibold text-sm text-amber-800 dark:text-amber-300 mb-2">
               💰 Récapitulatif du devis
             </h4>
             <div className="grid grid-cols-2 gap-3 text-sm">
               <div>
-                <p className="text-xs text-amber-600">Total TTC</p>
-                <p className="text-lg font-bold text-amber-900">{devis.totalTtc.toFixed(2)} €</p>
+                <p className="text-xs text-amber-600 dark:text-amber-400">Total TTC</p>
+                <p className="text-lg font-bold text-amber-900 dark:text-amber-200">{devis.totalTtc.toFixed(2)} €</p>
               </div>
               <div>
-                <p className="text-xs text-amber-600">Acompte à la commande</p>
-                <p className="font-semibold text-amber-800">{devis.acomptePct || 30}% — {acompteMontant.toFixed(2)} €</p>
+                <p className="text-xs text-amber-600 dark:text-amber-400">Acompte à la commande</p>
+                <p className="font-semibold text-amber-800 dark:text-amber-300">{devis.acomptePct || 30}% — {acompteMontant.toFixed(2)} €</p>
               </div>
               <div>
-                <p className="text-xs text-amber-600">Solde à la réception</p>
-                <p className="font-semibold text-amber-800">{soldeMontant.toFixed(2)} €</p>
+                <p className="text-xs text-amber-600 dark:text-amber-400">Solde à la réception</p>
+                <p className="font-semibold text-amber-800 dark:text-amber-300">{soldeMontant.toFixed(2)} €</p>
               </div>
               <div>
-                <p className="text-xs text-amber-600">Délai de paiement</p>
-                <p className="font-semibold text-amber-800">{devis.delaiPaiement || 30} jours</p>
+                <p className="text-xs text-amber-600 dark:text-amber-400">Délai de paiement</p>
+                <p className="font-semibold text-amber-800 dark:text-amber-300">{devis.delaiPaiement || 30} jours</p>
               </div>
             </div>
           </div>
@@ -99,11 +100,11 @@ export function DevisPDFDownload({
           <SignaturePad onSignatureChange={handleSignatureChange} />
 
           {signatureData ? (
-            <p className="text-xs text-green-600 flex items-center gap-1">
+            <p className="text-xs text-green-600 dark:text-green-400 flex items-center gap-1">
               ✓ Signature capturée — le PDF incluera la signature avec la mention « Bon pour accord »
             </p>
           ) : (
-            <p className="text-xs text-gray-400">
+            <p className="text-xs text-gray-400 dark:text-gray-500">
               Le client signe ci-dessus pour acceptation du devis et des conditions de paiement
             </p>
           )}

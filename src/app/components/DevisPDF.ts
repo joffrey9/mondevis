@@ -9,7 +9,8 @@ export function downloadDevisPDF(
   devis: DevisWithLines,
   signatureData?: string | null,
   companyLogo?: string | null,
-  companyName?: string | null
+  companyName?: string | null,
+  customLegalMentions?: string | null
 ) {
   import("jspdf").then(({ default: jsPDF }) => {
     const doc = new jsPDF({ orientation: "portrait", unit: "mm", format: "a4" });
@@ -104,7 +105,7 @@ export function downloadDevisPDF(
     doc.text("DÉTAIL DES PRESTATIONS", margin + 2, y + 2);
     y += 14;
 
-    const colX = [margin, margin + 80, margin + 110, margin + 135, margin + 165];
+    const colX = [margin, margin + 85, margin + 112, margin + 140, margin + 168];
     doc.setFontSize(8);
     doc.setFont("helvetica", "bold");
     doc.setTextColor(100, 100, 100);
@@ -204,6 +205,27 @@ export function downloadDevisPDF(
       const split = doc.splitTextToSize(`• ${mention}`, pageWidth - margin * 2);
       doc.text(split, margin, y);
       y += split.length * 4 + 1;
+    }
+
+    // — Mentions personnalisées —
+    if (customLegalMentions) {
+      y += 4;
+      if (y > pageHeight - 30) { doc.addPage(); y = margin; }
+      doc.setFont("helvetica", "bold");
+      doc.setFontSize(8);
+      doc.setTextColor(80, 80, 80);
+      doc.text("Mentions personnalisées", margin, y);
+      y += 5;
+      doc.setFont("helvetica", "normal");
+      doc.setFontSize(7.5);
+      doc.setTextColor(100, 100, 100);
+      const customLines = customLegalMentions.split("\n").filter(Boolean);
+      for (const mention of customLines) {
+        if (y > pageHeight - 20) { doc.addPage(); y = margin; }
+        const split = doc.splitTextToSize(`• ${mention}`, pageWidth - margin * 2);
+        doc.text(split, margin, y);
+        y += split.length * 4 + 1;
+      }
     }
 
     // — Signature —

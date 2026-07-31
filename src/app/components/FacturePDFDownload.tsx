@@ -16,6 +16,7 @@ export function FacturePDFDownload({
   companyEmail,
   companyIban,
   companyBic,
+  customLegalMentions,
 }: {
   facture: FactureWithLines;
   companyLogo?: string | null;
@@ -25,6 +26,7 @@ export function FacturePDFDownload({
   companyEmail?: string | null;
   companyIban?: string | null;
   companyBic?: string | null;
+  customLegalMentions?: string | null;
 }) {
   const [loading, setLoading] = useState(false);
 
@@ -39,7 +41,8 @@ export function FacturePDFDownload({
         companyAddress,
         companyEmail,
         companyIban,
-        companyBic
+        companyBic,
+        customLegalMentions
       );
     } finally {
       setLoading(false);

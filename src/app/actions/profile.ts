@@ -16,6 +16,7 @@ export type ProfileInput = {
   nextDevisNumber?: number | null;
   peppolProvider?: string;
   whatsappNumber?: string;
+  customLegalMentions?: string;
 };
 
 export async function updateProfile(input: ProfileInput) {
@@ -40,6 +41,7 @@ export async function updateProfile(input: ProfileInput) {
       nextDevisNumber: input.nextDevisNumber !== undefined ? input.nextDevisNumber : null,
       peppolProvider: input.peppolProvider || null,
       whatsappNumber: input.whatsappNumber || null,
+      customLegalMentions: input.customLegalMentions || null,
     },
   });
 
@@ -70,6 +72,7 @@ export async function getProfile() {
       nextDevisNumber: true,
       peppolProvider: true,
       whatsappNumber: true,
+      customLegalMentions: true,
     },
   });
 

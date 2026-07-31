@@ -34,6 +34,7 @@ model User {
   nextDevisNumber Int?    // Prochain numéro de devis (pour numérotation personnalisée)
   peppolProvider String?  // Fournisseur Peppol configuré (ex: "einvoice", "billit", "banqup")
   whatsappNumber String? // Numéro WhatsApp pour envoyer les devis
+  customLegalMentions String? @db.Text // Mentions légales personnalisées de l'artisan
 
   accounts    Account[]
   sessions    Session[]

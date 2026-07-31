@@ -6,10 +6,10 @@ import { FileText, Send, CheckCircle, Hourglass, Plus } from "lucide-react";
 import { getCountry, type Country } from "@/lib/countries";
 
 const statusLabels: Record<string, { label: string; color: string; icon: string }> = {
-  draft: { label: "Brouillon", color: "bg-gray-100 text-gray-700", icon: "📄" },
-  sent: { label: "Envoyée", color: "bg-blue-100 text-blue-700", icon: "✉️" },
-  paid: { label: "Payée ✅", color: "bg-green-100 text-green-700", icon: "✅" },
-  cancelled: { label: "Annulée", color: "bg-red-100 text-red-700", icon: "❌" },
+  draft: { label: "Brouillon", color: "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300", icon: "📄" },
+  sent: { label: "Envoyée", color: "bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300", icon: "✉️" },
+  paid: { label: "Payée ✅", color: "bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300", icon: "✅" },
+  cancelled: { label: "Annulée", color: "bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300", icon: "❌" },
 };
 
 export default async function FacturesPage() {
@@ -33,8 +33,8 @@ export default async function FacturesPage() {
     <div className="max-w-5xl mx-auto p-6 space-y-6">
       <header className="flex items-center justify-between">
         <div>
-          <h1 className="text-3xl font-bold">Factures</h1>
-          <p className="text-gray-500 mt-1">
+          <h1 className="text-3xl font-bold dark:text-gray-100">Factures</h1>
+          <p className="text-gray-500 dark:text-gray-400 mt-1">
             {total === 0
               ? "Aucune facture pour le moment"
               : `${total} facture${total > 1 ? "s" : ""} au total`}
@@ -51,42 +51,42 @@ export default async function FacturesPage() {
 
       {/* Stats */}
       <section className="grid grid-cols-2 md:grid-cols-5 gap-3">
-        <div className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
-          <p className="text-xs text-gray-500 uppercase tracking-wide">Total</p>
-          <p className="text-2xl font-bold mt-1">{total}</p>
+        <div className="bg-white dark:bg-[#14141f] rounded-xl border border-gray-200 dark:border-[#1e1e30] p-4 shadow-sm">
+          <p className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide">Total</p>
+          <p className="text-2xl font-bold mt-1 dark:text-gray-100">{total}</p>
         </div>
-        <div className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
-          <p className="text-xs text-gray-500 uppercase tracking-wide flex items-center gap-1">
+        <div className="bg-white dark:bg-[#14141f] rounded-xl border border-gray-200 dark:border-[#1e1e30] p-4 shadow-sm">
+          <p className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide flex items-center gap-1">
             <FileText className="w-3 h-3" /> Brouillon
           </p>
-          <p className="text-2xl font-bold mt-1">{draft}</p>
+          <p className="text-2xl font-bold mt-1 dark:text-gray-100">{draft}</p>
         </div>
-        <div className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
-          <p className="text-xs text-gray-500 uppercase tracking-wide flex items-center gap-1">
+        <div className="bg-white dark:bg-[#14141f] rounded-xl border border-gray-200 dark:border-[#1e1e30] p-4 shadow-sm">
+          <p className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide flex items-center gap-1">
             <Send className="w-3 h-3 text-blue-500" /> Envoyée
           </p>
-          <p className="text-2xl font-bold mt-1">{sent}</p>
+          <p className="text-2xl font-bold mt-1 dark:text-gray-100">{sent}</p>
         </div>
-        <div className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
-          <p className="text-xs text-gray-500 uppercase tracking-wide flex items-center gap-1">
+        <div className="bg-white dark:bg-[#14141f] rounded-xl border border-gray-200 dark:border-[#1e1e30] p-4 shadow-sm">
+          <p className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide flex items-center gap-1">
             <CheckCircle className="w-3 h-3 text-green-500" /> Payée
           </p>
-          <p className="text-2xl font-bold mt-1">{paid}</p>
+          <p className="text-2xl font-bold mt-1 dark:text-gray-100">{paid}</p>
         </div>
-        <div className="bg-white rounded-xl border border-gray-200 p-4 shadow-sm">
-          <p className="text-xs text-gray-500 uppercase tracking-wide flex items-center gap-1">
+        <div className="bg-white dark:bg-[#14141f] rounded-xl border border-gray-200 dark:border-[#1e1e30] p-4 shadow-sm">
+          <p className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide flex items-center gap-1">
             <Hourglass className="w-3 h-3 text-red-400" /> Annulée
           </p>
-          <p className="text-2xl font-bold mt-1">{cancelled}</p>
+          <p className="text-2xl font-bold mt-1 dark:text-gray-100">{cancelled}</p>
         </div>
       </section>
 
       {/* Liste */}
-      <section className="bg-white rounded-xl border border-gray-200 shadow-sm">
+      <section className="bg-white dark:bg-[#14141f] rounded-xl border border-gray-200 dark:border-[#1e1e30] shadow-sm">
         {factures.length === 0 ? (
           <div className="p-12 text-center">
-            <FileText className="w-12 h-12 text-gray-300 mx-auto mb-3" />
-            <p className="text-sm text-gray-500 mb-4">
+            <FileText className="w-12 h-12 text-gray-300 dark:text-gray-600 mx-auto mb-3" />
+            <p className="text-sm text-gray-500 dark:text-gray-400 mb-4">
               Vous n&apos;avez pas encore de facture.
             </p>
             <Link
@@ -98,7 +98,7 @@ export default async function FacturesPage() {
             </Link>
           </div>
         ) : (
-          <div className="divide-y divide-gray-100">
+          <div className="divide-y divide-gray-100 dark:divide-[#1e1e30]">
             {factures.map((f) => {
               const st = statusLabels[f.status] ?? statusLabels.draft;
               const countryConfig = getCountry((f.country || "FR") as Country);
@@ -106,15 +106,15 @@ export default async function FacturesPage() {
                 <Link
                   key={f.id}
                   href={`/dashboard/factures/${f.id}`}
-                  className="flex items-center justify-between p-4 hover:bg-gray-50 transition"
+                  className="flex items-center justify-between p-4 hover:bg-gray-50 dark:hover:bg-[#1a1a2e] transition"
                 >
                   <div className="flex items-center gap-3 min-w-0">
                     <span className="text-lg">{countryConfig.flag}</span>
                     <div className="min-w-0">
-                      <p className="font-medium text-sm truncate">
+                      <p className="font-medium text-sm truncate dark:text-gray-200">
                         {f.clientName}
                       </p>
-                      <p className="text-xs text-gray-500 font-mono">
+                      <p className="text-xs text-gray-500 dark:text-gray-400 font-mono">
                         {f.number}
                       </p>
                     </div>
@@ -126,10 +126,10 @@ export default async function FacturesPage() {
                       {st.label}
                     </span>
                     <div className="text-right">
-                      <p className="font-semibold tabular-nums">
+                      <p className="font-semibold tabular-nums dark:text-gray-200">
                         {f.totalTtc.toFixed(2)} €
                       </p>
-                      <p className="text-xs text-gray-400">
+                      <p className="text-xs text-gray-400 dark:text-gray-500">
                         {new Date(f.createdAt).toLocaleDateString("fr-FR")}
                       </p>
                     </div>

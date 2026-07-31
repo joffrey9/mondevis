@@ -28,7 +28,7 @@ export default async function DevisDetailPage(props: { params: Promise<{ id: str
       where: { id },
       include: { lines: true },
     }),
-    prisma.user.findUnique({ where: { id: session.user.id }, select: { companyName: true, companyLogo: true, companyIban: true, companyBic: true, whatsappNumber: true } }),
+    prisma.user.findUnique({ where: { id: session.user.id }, select: { companyName: true, companyLogo: true, customLegalMentions: true, companyIban: true, companyBic: true, whatsappNumber: true } }),
   ]);
   if (!devis || devis.userId !== session.user.id) notFound();
 
@@ -201,6 +201,20 @@ export default async function DevisDetailPage(props: { params: Promise<{ id: str
         </div>
       </div>
 
+      {/* Mentions légales personnalisées */}
+      {user?.customLegalMentions && (
+        <div className="bg-white dark:bg-[#14141f] rounded-xl border border-gray-200 dark:border-[#1e1e30] p-6 shadow-sm mt-6">
+          <p className="text-sm font-medium text-gray-600 dark:text-gray-300 mb-2">📋 Mentions personnalisées</p>
+          <ul className="space-y-1">
+            {user.customLegalMentions.split("\n").filter(Boolean).map((mention, i) => (
+              <li key={i} className="text-xs text-gray-500 dark:text-gray-400 flex items-start gap-2">
+                <span className="text-gray-300 dark:text-gray-600 mt-0.5">•</span>
+                <span>{mention}</span>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       {/* Actions */}
       <div className="mt-6 flex flex-col sm:flex-row flex-wrap gap-2 sm:gap-3">
@@ -270,7 +284,7 @@ export default async function DevisDetailPage(props: { params: Promise<{ id: str
           devis={devis}
           companyLogo={user?.companyLogo}
           companyName={user?.companyName}
-
+          customLegalMentions={user?.customLegalMentions}
         />
         <WhatsAppShareButton
           clientPhone={devis.clientPhone}
