@@ -21,6 +21,7 @@ export interface UBLInvoiceData {
     nom?: string;
     adresse?: string;
     email?: string;
+    tva?: string;
   };
 
   // Financier
@@ -136,6 +137,7 @@ export function generatePeppolUBL(f: UBLInvoiceData): string {
   const buyerName = f.client?.nom || "Client";
   const buyerAddress = f.client?.adresse || "";
   const buyerEmail = f.client?.email || "";
+  const buyerVatId = f.client?.tva?.replace(/[\s.\-]/g, "") || "";
 
   // Données financières
   const currency = "EUR";
@@ -237,7 +239,17 @@ export function generatePeppolUBL(f: UBLInvoiceData): string {
         <cac:AddressLine>
           <cbc:Line>${esc(buyerAddress)}</cbc:Line>
         </cac:AddressLine>
-      </cac:PostalAddress>
+      </cac:PostalAddress>${
+    buyerVatId
+      ? `
+      <cac:PartyTaxScheme>
+        <cbc:CompanyID schemeID="${esc(vatSchemeId)}">${esc(buyerVatId)}</cbc:CompanyID>
+        <cac:TaxScheme>
+          <cbc:ID>VAT</cbc:ID>
+        </cac:TaxScheme>
+      </cac:PartyTaxScheme>`
+      : ""
+  }
       <cac:Contact>
         <cbc:ElectronicMail>${esc(buyerEmail)}</cbc:ElectronicMail>
       </cac:Contact>

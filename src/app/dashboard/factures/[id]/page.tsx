@@ -67,6 +67,7 @@ export default async function FactureDetailPage(props: { params: Promise<{ id: s
       nom: facture.clientName,
       adresse: facture.clientAddress || "",
       email: facture.clientEmail || "",
+      tva: facture.clientSiret || "",
     },
     totalHT: facture.totalHt,
     totalTTC: facture.totalTtc,

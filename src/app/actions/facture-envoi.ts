@@ -68,6 +68,7 @@ function buildUblData(facture: OwnedFacture["facture"], user: OwnedFacture["user
       nom: facture.clientName,
       adresse: facture.clientAddress || "",
       email: facture.clientEmail || "",
+      tva: facture.clientSiret || "",
     },
     totalHT: facture.totalHt,
     totalTTC: facture.totalTtc,
