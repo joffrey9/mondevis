@@ -8,6 +8,7 @@ import { updateFactureStatus } from "@/app/actions/factures";
 import { getCountry, detectClientType, type Country } from "@/lib/countries";
 import { UBLDownloadButton } from "./UBLDownloadButton";
 import { FacturePDFDownload } from "@/app/components/FacturePDFDownload";
+import { FactureSendButtons } from "@/app/components/FactureSendButtons";
 
 const statusLabels: Record<string, { label: string; color: string }> = {
   draft: { label: "Brouillon", color: "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300" },
@@ -274,6 +275,19 @@ export default async function FactureDetailPage(props: { params: Promise<{ id: s
           </ul>
         </div>
       )}
+
+      {/* Envoi : email (privé) / Peppol (B2B belge) */}
+      <div className="mt-6">
+        <FactureSendButtons
+          factureId={facture.id}
+          hasClientEmail={!!facture.clientEmail}
+          canSendPeppol={
+            facture.country === "BE" &&
+            detectClientType(facture.clientSiret, (facture.country || "FR") as Country) === "professionnel"
+          }
+          status={facture.status}
+        />
+      </div>
 
       {/* Actions */}
       <div className="mt-6 flex flex-col sm:flex-row flex-wrap gap-2 sm:gap-3">

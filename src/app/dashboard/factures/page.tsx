@@ -3,7 +3,7 @@ import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db";
 import Link from "next/link";
 import { FileText, Send, CheckCircle, Hourglass, Plus } from "lucide-react";
-import { getCountry, type Country } from "@/lib/countries";
+import { getCountry, detectClientType, type Country } from "@/lib/countries";
 
 const statusLabels: Record<string, { label: string; color: string; icon: string }> = {
   draft: { label: "Brouillon", color: "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300", icon: "📄" },
@@ -114,9 +114,20 @@ export default async function FacturesPage() {
                       <p className="font-medium text-sm truncate dark:text-gray-200">
                         {f.clientName}
                       </p>
-                      <p className="text-xs text-gray-500 dark:text-gray-400 font-mono">
-                        {f.number}
-                      </p>
+                      <div className="flex items-center gap-2 mt-0.5">
+                        <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                          detectClientType(f.clientSiret, (f.country || "FR") as Country) === "professionnel"
+                            ? "bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400"
+                            : "bg-sky-50 dark:bg-sky-900/20 text-sky-700 dark:text-sky-400"
+                        }`}>
+                          {detectClientType(f.clientSiret, (f.country || "FR") as Country) === "professionnel"
+                            ? "🏢 Pro"
+                            : "👤 Part"}
+                        </span>
+                        <p className="text-xs text-gray-500 dark:text-gray-400 font-mono">
+                          {f.number}
+                        </p>
+                      </div>
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
