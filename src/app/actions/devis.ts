@@ -17,6 +17,7 @@ export type CreateDevisInput = {
   clientEmail?: string;
   clientPhone?: string;
   clientAddress?: string;
+  clientSiret?: string;            // N° TVA/SIRET client → auto-détection Privé/Pro
   clientId?: string;
   country?: Country;
   profession?: string;
@@ -67,6 +68,15 @@ export async function createDevis(input: CreateDevisInput) {
   const session = await auth();
   if (!session?.user?.id) throw new Error("Non authentifié");
 
+  // Sécurité : le client lié doit appartenir à l'utilisateur
+  if (input.clientId) {
+    const owned = await prisma.client.findFirst({
+      where: { id: input.clientId, userId: session.user.id },
+      select: { id: true },
+    });
+    if (!owned) throw new Error("Client introuvable");
+  }
+
   const totalHt = input.lines.reduce(
     (s, l) => s + l.quantity * l.unitPrice, 0
   );
@@ -93,6 +103,7 @@ export async function createDevis(input: CreateDevisInput) {
       clientEmail: input.clientEmail || null,
       clientPhone: input.clientPhone || null,
       clientAddress: input.clientAddress || null,
+      clientSiret: input.clientSiret || null,
       clientId: input.clientId || null,
       country,
       profession: input.profession || null,
@@ -160,6 +171,21 @@ export async function getNextDevisInfo(userId?: string) {
   };
 }
 
+export async function getDevisForEdit(id: string) {
+  const session = await auth();
+  if (!session?.user?.id) throw new Error("Non authentifié");
+
+  const devis = await prisma.devis.findUnique({
+    where: { id, userId: session.user.id },
+    include: { lines: true },
+  });
+
+  if (!devis) throw new Error("Devis introuvable");
+  if (devis.status !== "draft") throw new Error("Seuls les devis en brouillon peuvent être modifiés");
+
+  return devis;
+}
+
 export async function updateDevisStatus(id: string, status: string) {
   const session = await auth();
   if (!session?.user?.id) throw new Error("Non authentifié");
@@ -175,6 +201,76 @@ export async function updateDevisStatus(id: string, status: string) {
   revalidatePath(`/dashboard/devis/${id}`);
   revalidatePath("/dashboard/devis");
   return { success: true };
+}
+
+export async function updateDevis(id: string, input: CreateDevisInput) {
+  const session = await auth();
+  if (!session?.user?.id) throw new Error("Non authentifié");
+
+  // Vérifier que le devis existe, appartient à l'utilisateur et est en brouillon
+  const existing = await prisma.devis.findUnique({
+    where: { id, userId: session.user.id },
+    select: { status: true },
+  });
+  if (!existing) throw new Error("Devis introuvable");
+  if (existing.status !== "draft") throw new Error("Seuls les devis en brouillon peuvent être modifiés");
+
+  // Sécurité : le client lié doit appartenir à l'utilisateur
+  if (input.clientId) {
+    const owned = await prisma.client.findFirst({
+      where: { id: input.clientId, userId: session.user.id },
+      select: { id: true },
+    });
+    if (!owned) throw new Error("Client introuvable");
+  }
+
+  const totalHt = input.lines.reduce((s, l) => s + l.quantity * l.unitPrice, 0);
+  const totalTtc = input.lines.reduce(
+    (s, l) => s + l.quantity * l.unitPrice * (1 + l.tvaRate / 100), 0
+  );
+
+  const country = input.country || "FR";
+  const validLines = input.lines.map((l) => ({
+    ...l,
+    tvaRate: validateTvaRate(country, l.tvaRate),
+  }));
+
+  // Transaction : supprimer les anciennes lignes + créer les nouvelles + mettre à jour le devis
+  const devis = await prisma.$transaction(async (tx) => {
+    await tx.devisLine.deleteMany({ where: { devisId: id } });
+    return tx.devis.update({
+      where: { id },
+      data: {
+        clientId: input.clientId || null,
+        clientName: input.clientName,
+        clientEmail: input.clientEmail || null,
+        clientPhone: input.clientPhone || null,
+        clientAddress: input.clientAddress || null,
+        clientSiret: input.clientSiret || null,
+        country,
+        profession: input.profession || null,
+        totalHt,
+        totalTtc,
+        acomptePct: input.acomptePct ?? 30,
+        delaiPaiement: input.delaiPaiement ?? 30,
+        notes: input.notes || null,
+        lines: {
+          create: validLines.map((l) => ({
+            description: l.description,
+            quantity: l.quantity,
+            unitPrice: l.unitPrice,
+            tvaRate: l.tvaRate,
+            totalHt: l.quantity * l.unitPrice,
+          })),
+        },
+      },
+      include: { lines: true },
+    });
+  });
+
+  revalidatePath(`/dashboard/devis/${id}`);
+  revalidatePath("/dashboard/devis");
+  return devis;
 }
 
 export async function deleteDevis(id: string) {

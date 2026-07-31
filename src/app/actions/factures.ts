@@ -13,10 +13,12 @@ export type FactureLineInput = {
 };
 
 export type CreateFactureInput = {
+  clientId?: string;             // Lien vers le carnet clients (optionnel)
   clientName: string;
   clientEmail?: string;
   clientPhone?: string;
   clientAddress?: string;
+  clientSiret?: string;            // N° TVA / SIRET client
   country?: Country;
   profession?: string;
   devisId?: string;            // Optionnel : créer depuis un devis
@@ -49,6 +51,15 @@ export async function createFacture(input: CreateFactureInput) {
   const session = await auth();
   if (!session?.user?.id) throw new Error("Non authentifié");
 
+  // Sécurité : le client lié doit appartenir à l'utilisateur
+  if (input.clientId) {
+    const owned = await prisma.client.findFirst({
+      where: { id: input.clientId, userId: session.user.id },
+      select: { id: true },
+    });
+    if (!owned) throw new Error("Client introuvable");
+  }
+
   const totalHt = input.lines.reduce((s, l) => s + l.quantity * l.unitPrice, 0);
   const totalTtc = input.lines.reduce(
     (s, l) => s + l.quantity * l.unitPrice * (1 + l.tvaRate / 100), 0
@@ -78,10 +89,12 @@ export async function createFacture(input: CreateFactureInput) {
     data: {
       userId: session.user.id,
       devisId: input.devisId || null,
+      clientId: input.clientId || null,
       clientName: input.clientName,
       clientEmail: input.clientEmail || null,
       clientPhone: input.clientPhone || null,
       clientAddress: input.clientAddress || null,
+      clientSiret: input.clientSiret || null,
       country,
       profession: input.profession || null,
       facturePrefix: input.facturePrefix || prefix,

@@ -1,9 +1,10 @@
 import Link from "next/link";
-import { FileText, Receipt, LayoutDashboard, Settings } from "lucide-react";
+import { FileText, Receipt, LayoutDashboard, Settings, Users } from "lucide-react";
 import { ThemeToggle } from "@/app/components/ThemeToggle";
 
 const navItems = [
   { href: "/dashboard", label: "Tableau de bord", icon: LayoutDashboard },
+  { href: "/dashboard/clients", label: "Clients", icon: Users },
   { href: "/dashboard/devis", label: "Devis", icon: FileText },
   { href: "/dashboard/factures", label: "Factures", icon: Receipt },
   { href: "/dashboard/settings", label: "Mon entreprise", icon: Settings },

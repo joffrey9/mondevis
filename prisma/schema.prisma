@@ -84,12 +84,18 @@ model Client {
   name      String
   email     String?
   phone     String?
+  address   String?            // Adresse postale complète
+  siret     String?            // N° TVA / SIRET → auto-détection Privé / Professionnel
+  type      String   @default("particulier") // particulier | professionnel (détecté auto via siret)
+  notes     String?            // Notes internes
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   devis Devis[]
+  factures Facture[]
 
   @@index([userId])
+  @@index([userId, type])
 }
 
 model Devis {
@@ -100,6 +106,7 @@ model Devis {
   clientEmail  String?
   clientPhone  String?
   clientAddress String?
+  clientSiret   String?            // N° TVA / SIRET client → auto-détection Privé / Professionnel
   country      String   @default("FR") // FR | BE
   profession   String?             // Menuiserie, Plomberie, Électricité...
   number       String             // ex: "DEV-2026-0001"
@@ -143,10 +150,12 @@ model Facture {
   id           String   @id @default(cuid())
   userId       String
   devisId      String?                                         // Optionnel : lien vers le devis d'origine
+  clientId     String?                                          // Lien vers le carnet clients (optionnel)
   clientName   String
   clientEmail  String?
   clientPhone  String?
   clientAddress String?
+  clientSiret   String?            // N° TVA / SIRET client → auto-détection Privé / Professionnel
   country      String   @default("FR")
   profession   String?
   number       String                                         // ex: "FAC-2026-0001"
@@ -165,10 +174,12 @@ model Facture {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
-  devis Devis?  @relation(fields: [devisId], references: [id])
-  lines FactureLine[]
+  devis  Devis?   @relation(fields: [devisId], references: [id])
+  client Client?  @relation(fields: [clientId], references: [id])
+  lines  FactureLine[]
 
   @@index([userId, status])
+  @@index([clientId])
   @@index([userId, createdAt])
 }
 

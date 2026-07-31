@@ -105,6 +105,39 @@ export const PROFESSIONS: Record<string, { value: string; label: string; emoji: 
   ],
 };
 
+/**
+ * Normalise un numéro TVA / SIRET : retire espaces, points et tirets,
+ * passe en majuscules. Helper partagé pour la détection de type client
+ * et la détection du pays (FR / BE) dans les formulaires.
+ */
+export function normalizeNumero(numero: string | null | undefined): string {
+  if (!numero) return "";
+  return numero.replace(/[\s.\-]/g, "").toUpperCase().trim();
+}
+
+/**
+ * Détecte si un client est Professionnel ou Particulier
+ * en fonction de son numéro de TVA / SIRET.
+ *
+ * 🇫🇷 France : SIRET (14 chiffres) ou TVA FR + 11 chiffres → Professionnel
+ * 🇧🇪 Belgique : TVA BE + 10 chiffres → Professionnel
+ * Sinon → Particulier
+ */
+export function detectClientType(numero: string | null | undefined, _country?: Country): "professionnel" | "particulier" {
+  const cleaned = normalizeNumero(numero);
+  if (!cleaned) return "particulier";
+
+  // Détection par format du numéro (indépendant du pays sélectionné)
+  // SIRET France : 14 chiffres
+  if (/^\d{14}$/.test(cleaned)) return "professionnel";
+  // TVA intracommunautaire FR : FR + 11 chiffres
+  if (/^FR\d{11}$/.test(cleaned)) return "professionnel";
+  // TVA belge : BE + 10 chiffres
+  if (/^BE\d{10}$/.test(cleaned)) return "professionnel";
+
+  return "particulier";
+}
+
 /** Formatte un montant selon la locale du pays */
 export function formatCurrency(amount: number, country: Country): string {
   return new Intl.NumberFormat(COUNTRIES[country].locale, {
