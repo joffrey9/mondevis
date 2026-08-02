@@ -44,3 +44,7 @@ yarn-error.log*
 next-env.d.ts
 
 /src/generated/prisma
+
+# SQLite local (obsolète — base = Postgres/Neon)
+prisma/dev.db
+clef Resend mondevis-prod/

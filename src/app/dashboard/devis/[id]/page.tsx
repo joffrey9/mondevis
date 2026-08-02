@@ -8,6 +8,7 @@ import { createFacture } from "@/app/actions/factures";
 import { PrintButton } from "@/app/components/PrintButton";
 import { DevisPDFDownload } from "@/app/components/DevisPDFDownload";
 import { WhatsAppShareButton } from "@/app/components/WhatsAppShareButton";
+import { DevisSendButtons } from "@/app/components/DevisSendButtons";
 import { getCountry, detectClientType, type Country } from "@/lib/countries";
 
 const statusLabels: Record<string, { label: string; color: string }> = {
@@ -285,6 +286,11 @@ export default async function DevisDetailPage(props: { params: Promise<{ id: str
           companyLogo={user?.companyLogo}
           companyName={user?.companyName}
           customLegalMentions={user?.customLegalMentions}
+        />
+        <DevisSendButtons
+          devisId={devis.id}
+          hasClientEmail={!!devis.clientEmail}
+          status={devis.status}
         />
         <WhatsAppShareButton
           clientPhone={devis.clientPhone}
