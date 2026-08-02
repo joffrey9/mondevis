@@ -4,7 +4,35 @@ import "./globals.css";
 
 export const metadata: Metadata = {
   title: "MonDevis — Crée des devis pros en 2 minutes",
-  description: "MonDevis permet aux artisans de créer, envoyer et suivre leurs devis depuis leur téléphone.",
+  description:
+    "MonDevis permet aux artisans de créer, envoyer et suivre leurs devis depuis leur téléphone. Devis, factures Peppol, signature électronique. Essai gratuit 14 jours.",
+  keywords: ["devis", "facture", "artisan", "Peppol", "signature électronique", "devis gratuit", "logiciel devis"],
+  authors: [{ name: "MonDevis" }],
+  creator: "MonDevis",
+  publisher: "MonDevis",
+  metadataBase: new URL("https://mondedevis.eu"),
+  alternates: {
+    canonical: "/",
+  },
+  openGraph: {
+    title: "MonDevis — Crée des devis pros en 2 minutes",
+    description:
+      "Le devis que tes clients attendaient. Crée, envoie et fais signer tes devis en 2 minutes. Pour artisans et indépendants.",
+    url: "https://mondedevis.eu",
+    siteName: "MonDevis",
+    locale: "fr_FR",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "MonDevis — Crée des devis pros en 2 minutes",
+    description:
+      "Le devis que tes clients attendaient. Crée, envoie et fais signer tes devis en 2 minutes.",
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
 
 export default function RootLayout({
