@@ -33,6 +33,8 @@ model User {
   companyBic     String?  // BIC pour les virements
   nextDevisNumber Int?    // Prochain numéro de devis (pour numérotation personnalisée)
   peppolProvider String?  // Fournisseur Peppol configuré (ex: "einvoice", "billit", "banqup")
+  peppolApiKey   String?  // Clé API Peppol personnelle de l'artisan (e-invoice.be, Billit, Banqup...)
+  peppolSenderId String?  // Identifiant Peppol de l'artisan (optionnel)
   whatsappNumber String? // Numéro WhatsApp pour envoyer les devis
   customLegalMentions String? @db.Text // Mentions légales personnalisées de l'artisan
 

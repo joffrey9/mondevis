@@ -15,6 +15,8 @@ export type ProfileInput = {
   companyBic?: string;
   nextDevisNumber?: number | null;
   peppolProvider?: string;
+  peppolApiKey?: string;
+  peppolSenderId?: string;
   whatsappNumber?: string;
   customLegalMentions?: string;
 };
@@ -40,6 +42,8 @@ export async function updateProfile(input: ProfileInput) {
       companyBic: input.companyBic || null,
       nextDevisNumber: input.nextDevisNumber !== undefined ? input.nextDevisNumber : null,
       peppolProvider: input.peppolProvider || null,
+      peppolApiKey: input.peppolApiKey || null,
+      peppolSenderId: input.peppolSenderId || null,
       whatsappNumber: input.whatsappNumber || null,
       customLegalMentions: input.customLegalMentions || null,
     },
@@ -71,6 +75,8 @@ export async function getProfile() {
       companyBic: true,
       nextDevisNumber: true,
       peppolProvider: true,
+      peppolApiKey: true,
+      peppolSenderId: true,
       whatsappNumber: true,
       customLegalMentions: true,
     },

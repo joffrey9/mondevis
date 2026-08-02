@@ -5,6 +5,7 @@ import { prisma } from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import { generatePeppolUBL, type UBLInvoiceData } from "@/lib/ubl";
 import { detectClientType, type Country } from "@/lib/countries";
+import { buildFacturePdfDoc, facturePdfFilename } from "@/lib/pdf/facture-pdf";
 import { Resend } from "resend";
 
 const PEPPOL_API_URL = process.env.PEPPOL_API_URL || "https://api.e-invoice.be/v1";
@@ -29,8 +30,13 @@ async function loadOwnedFacture(factureId: string) {
       companySiret: true,
       companyAddress: true,
       companyEmail: true,
+      companyLogo: true,
       companyIban: true,
       companyBic: true,
+      peppolProvider: true,
+      peppolApiKey: true,
+      peppolSenderId: true,
+      customLegalMentions: true,
     },
   });
 
@@ -110,7 +116,7 @@ function buildFactureEmailHtml(facture: OwnedFacture["facture"], user: OwnedFact
       <p style="margin:4px 0 0;font-size:14px;opacity:.9;">${esc(seller)}</p>
     </div>
     <div style="padding:24px 32px;">
-      <p style="margin:0 0 16px;color:#52525b;font-size:14px;">Bonjour ${esc(facture.clientName)},<br/>Veuillez trouver ci-dessous le détail de votre facture.</p>
+      <p style="margin:0 0 16px;color:#52525b;font-size:14px;">Bonjour ${esc(facture.clientName)},<br/>Veuillez trouver ci-dessous le détail de votre facture, ainsi que le PDF en pièce jointe.</p>
       <table style="width:100%;border-collapse:collapse;font-size:14px;">
         <thead>
           <tr style="background:#f4f4f5;color:#52525b;">
@@ -140,23 +146,48 @@ function buildFactureEmailHtml(facture: OwnedFacture["facture"], user: OwnedFact
 </html>`;
 }
 
+/** Génère le buffer PDF de la facture (utilisé en pièce jointe) */
+async function buildFacturePdfBuffer(facture: OwnedFacture["facture"], user: OwnedFacture["user"]): Promise<Buffer> {
+  const doc = await buildFacturePdfDoc(facture, {
+    logo: user?.companyLogo,
+    name: user?.companyName || user?.name,
+    siret: user?.companySiret,
+    address: user?.companyAddress,
+    email: user?.companyEmail || user?.email,
+    iban: facture.iban || user?.companyIban,
+    bic: facture.bic || user?.companyBic,
+    customLegalMentions: user?.customLegalMentions,
+  });
+  const arrayBuffer = doc.output("arraybuffer");
+  return Buffer.from(arrayBuffer);
+}
+
 /** Envoie la facture par email au client (privé) via Resend, puis la marque comme envoyée */
 export async function sendFactureByEmail(factureId: string) {
   const { facture, user } = await loadOwnedFacture(factureId);
   if (!facture.clientEmail) throw new Error("Aucun email client renseigné sur cette facture");
 
-  const apiKey = process.env.RESEND_API_KEY;
-  if (!apiKey) throw new Error("Email non configuré : ajoutez RESEND_API_KEY dans les variables d'environnement");
+  const apiKey = process.env.RESEND_API_KEY || process.env.AUTH_RESEND_KEY;
+  if (!apiKey) throw new Error("Email non configuré : ajoutez RESEND_API_KEY ou AUTH_RESEND_KEY dans les variables d'environnement");
 
   const resend = new Resend(apiKey);
-  const from = process.env.EMAIL_FROM || "noreply@mondevis.fr";
+  const from = process.env.EMAIL_FROM || process.env.AUTH_RESEND_FROM || "noreply@mondedevis.eu";
   const seller = user?.companyName || user?.name || "Entreprise";
+
+  const pdfBuffer = await buildFacturePdfBuffer(facture, user);
+  const pdfFilename = facturePdfFilename(facture);
 
   const { error } = await resend.emails.send({
     from,
     to: facture.clientEmail,
     subject: `Votre facture ${facture.number} — ${seller}`,
     html: buildFactureEmailHtml(facture, user),
+    attachments: [
+      {
+        filename: pdfFilename,
+        content: pdfBuffer,
+      },
+    ],
   });
   if (error) throw new Error(`Envoi échoué : ${error.message}`);
 
@@ -174,10 +205,22 @@ export async function sendFactureByEmail(factureId: string) {
 export async function sendFactureViaPeppol(factureId: string) {
   const { facture, user } = await loadOwnedFacture(factureId);
 
-  const apiKey = process.env.PEPPOL_API_KEY;
+  // 1. Clé API de l'artisan (son propre compte Peppol), sinon fallback global MonDevis
+  const apiKey = user?.peppolApiKey || process.env.PEPPOL_API_KEY;
   if (!apiKey) {
-    throw new Error("API Peppol non configurée : ajoutez PEPPOL_API_KEY dans les variables d'environnement (clé e-invoice.be)");
+    throw new Error(
+      user?.peppolApiKey
+        ? "Clé API Peppol invalide. Vérifiez-la dans Mon entreprise > Connexion Peppol."
+        : "API Peppol non configurée : ajoutez votre clé dans Mon entreprise > Connexion Peppol, ou contactez le support."
+    );
   }
+
+  // 2. URL de l'API : utiliser celle du fournisseur configuré, ou fallback e-invoice.be
+  const apiUrl = user?.peppolProvider === "billit"
+    ? "https://api.billit.be/v1"
+    : user?.peppolProvider === "banqup"
+    ? "https://api.banqup.com/v1"
+    : process.env.PEPPOL_API_URL || "https://api.e-invoice.be/v1";
 
   // L'envoi Peppol est réservé aux factures B2B belges : client professionnel avec n° TVA
   if (facture.country !== "BE") {
@@ -189,12 +232,12 @@ export async function sendFactureViaPeppol(factureId: string) {
 
   const ublXml = generatePeppolUBL(buildUblData(facture, user));
   const payload: Record<string, unknown> = { ublXml };
-  const senderId = process.env.PEPPOL_SENDER_ID;
+  const senderId = user?.peppolSenderId || process.env.PEPPOL_SENDER_ID;
   if (senderId) payload.sender = { peppolId: senderId };
 
   let response: Response;
   try {
-    response = await fetch(`${PEPPOL_API_URL}/invoices`, {
+    response = await fetch(`${apiUrl}/invoices`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -204,7 +247,7 @@ export async function sendFactureViaPeppol(factureId: string) {
       body: JSON.stringify(payload),
     });
   } catch (e) {
-    throw new Error(`Impossible de joindre l'API Peppol (${PEPPOL_API_URL}) : ${e instanceof Error ? e.message : String(e)}`);
+    throw new Error(`Impossible de joindre l'API Peppol (${apiUrl}) : ${e instanceof Error ? e.message : String(e)}`);
   }
 
   // Lire le corps une seule fois (json() consomme le flux, text() ensuite renverrait vide)

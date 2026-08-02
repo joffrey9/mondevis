@@ -26,6 +26,8 @@ export default function SettingsPage() {
     companyBic: "",
     nextDevisNumber: null,
     peppolProvider: "",
+    peppolApiKey: "",
+    peppolSenderId: "",
     whatsappNumber: "",
     customLegalMentions: "",
   });
@@ -50,6 +52,8 @@ export default function SettingsPage() {
           companyBic: profile.companyBic || "",
           nextDevisNumber: profile.nextDevisNumber ?? null,
         peppolProvider: profile.peppolProvider || "",
+        peppolApiKey: profile.peppolApiKey || "",
+        peppolSenderId: profile.peppolSenderId || "",
         whatsappNumber: profile.whatsappNumber || "",
         customLegalMentions: profile.customLegalMentions || "",
       });
@@ -269,9 +273,28 @@ export default function SettingsPage() {
               </ul>
             </div>
             {form.peppolProvider && (
-              <div className="bg-green-50 border border-green-200 rounded-lg p-3 text-sm text-green-700">
-                ✅ Fournisseur enregistré. Utilisez le bouton <strong>📤 Télécharger UBL (Peppol)</strong> sur chaque facture pour obtenir le fichier XML à importer chez votre fournisseur.
-              </div>
+              <>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">🔑 Clé API Peppol (votre compte)</label>
+                  <input type="password" value={form.peppolApiKey || ""} onChange={(e) => setForm((prev) => ({ ...prev, peppolApiKey: e.target.value }))}
+                    placeholder="Clé API fournie par votre fournisseur Peppol" className="w-full max-w-md px-3 py-2.5 border border-gray-300 dark:border-[#1e1e30] rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm bg-white dark:bg-[#0f0f1a] dark:text-gray-200" />
+                  <p className="text-xs text-gray-400 mt-1">Nécessaire pour envoyer directement vos factures via Peppol. Sans cette clé, seul le téléchargement UBL est possible.</p>
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">🆔 Identifiant Peppol (optionnel)</label>
+                  <input type="text" value={form.peppolSenderId || ""} onChange={(e) => setForm((prev) => ({ ...prev, peppolSenderId: e.target.value }))}
+                    placeholder="Votre identifiant Peppol (ex: 9933:be0123456789)" className="w-full max-w-md px-3 py-2.5 border border-gray-300 dark:border-[#1e1e30] rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm bg-white dark:bg-[#0f0f1a] dark:text-gray-200" />
+                </div>
+                {form.peppolApiKey ? (
+                  <div className="bg-green-50 border border-green-200 rounded-lg p-3 text-sm text-green-700">
+                    ✅ Peppol configuré avec votre clé API. Le bouton <strong>📤 Envoyer à Peppol</strong> enverra directement vos factures via votre compte.
+                  </div>
+                ) : (
+                  <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-3 text-sm text-yellow-700">
+                    ⚠️ Clé API non configurée. Vous pouvez télécharger le fichier UBL (XML) pour l&apos;importer manuellement chez votre fournisseur Peppol.
+                  </div>
+                )}
+              </>
             )}
           </div>
         </div>

@@ -16,7 +16,7 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [
     Google,
     Resend({
-      from: process.env.AUTH_RESEND_FROM ?? "noreply@mondevis.fr",
+      from: process.env.AUTH_RESEND_FROM ?? "noreply@mondedevis.eu",
     }),
     Credentials({
       credentials: {
