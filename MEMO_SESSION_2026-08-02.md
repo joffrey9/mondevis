@@ -1,6 +1,6 @@
 # MEMO SESSION — 2026-08-02 (MonDevis : état des lieux + plan Resend demain)
 
-> **Statut global** : ✅ Landing page refaite et commitée (`17a8aac`, 15:53). ✅ Peppol fonctionnel (clé par artisan) — **NE PLUS TOUCHER**. ⏸ Stripe = à faire **juste avant la vente** (le pricing pointe déjà vers `/auth/signin`, pas de checkout encore). 🔜 Resend = planifié **demain matin si < 45 min** (sinon on arrête et on reprend plus tard).
+> **Statut global** : ✅ Landing page refaite et commitée (`17a8aac`, 15:53). ✅ Peppol fonctionnel (clé par artisan) — **NE PLUS TOUCHER**. ⏸ **DevisFlash = SUSPENDU** (aucun retour pour le moment) → on bascule sur **`mondedevis.eu`**. ⏸ Stripe = à faire **juste avant la vente**. 🔜 Resend/OVH = planifié **demain matin si < 45 min** (sinon on arrête et on reprend plus tard).
 
 ---
 
@@ -10,9 +10,10 @@
 |---|---|---|
 | **Peppol** (clé API par artisan + fallback global) | ✅ Fonctionnel — **ne plus y toucher** | Verrouillé |
 | **Landing page** (navbar, hero, how-it-works, stats, features, témoignages, pricing, FAQ) | ✅ Commitée `17a8aac` 15:53 | Fait |
+| **DevisFlash** | ⏸ **SUSPENDU** — aucun retour pour le moment. Ne pas y investir. Comptes IG/Facebook à refaire plus tard | En pause |
+| **Domaine d'envoi** | 🔄 **Bascule sur `mondedevis.eu`** (OVH) — c'est le produit qu'on vend | Demain |
 | **OVH + Resend** | 🔜 Demain matin, **seulement si < 45 min** | En attente |
 | **Stripe** (checkout + webhook + abonnement) | 🔜 Juste avant la vente | Plus tard |
-| **2e domaine Resend** (`mondedevis.eu`) | ❌ **Impossible en gratuit** (Free = 1 domaine) | Écarté |
 
 ---
 
@@ -20,87 +21,93 @@
 
 ### 2.1. `devisflash.net` — registrar **Cloudflare** (PAS OVH)
 
-Le DNS est **déjà configuré pour Resend** :
+Le DNS est **déjà configuré pour Resend** (SPF `include:_spf.resend.com` ✅, DKIM RSA ✅, DMARC ✅).
 
-| Record | Valeur trouvée | Statut |
+→ **Mais DevisFlash est suspendu** → ce domaine ne sert plus pour les emails. Il sera **retiré de Resend** pour libérer le slot unique du plan Free.
+
+### 2.2. `mondedevis.eu` — registrar **OVH** (ns106.ovh.net / dns106.ovh.net) ⭐ CIBLE
+
+| Record | Valeur actuelle | Statut |
 |---|---|---|
-| SPF (TXT `@`) | `v=spf1 include:_spf.resend.com ~all` | ✅ |
-| DKIM (TXT `send._domainkey`) | clé RSA publique présente | ✅ |
-| DMARC (TXT `_dmarc`) | `v=DMARC1; p=quarantine; rua=mailto:dmarc@devisflach.net` | ✅ (typo `devisflach` cosmétique) |
-| MX | vide (normal pour un domaine d'envoi transactionnel) | ✅ |
-
-→ **`devisflash.net` est très probablement DÉJÀ `Verified` sur Resend** (ou vérifiable en 2 min car les records sont posés).
-
-### 2.2. `mondedevis.eu` — registrar **OVH** (ns106.ovh.net)
-
-| Record | Valeur trouvée | Statut |
-|---|---|---|
-| SPF (TXT `@`) | `v=spf1 include:amazonses.com ~all` (ancien, reste AWS SES) | ⚠️ |
-| DKIM Resend | absent | ❌ |
-| MX | vide | ❌ |
-
-→ **NON configuré pour Resend.** Et de toute façon : **inutile de le configurer** car le plan Free Resend = 1 seul domaine, et on garde `devisflash.net`.
+| SPF (TXT `@`) | `v=spf1 include:amazonses.com ~all` (reste AWS SES) | ⚠️ **À remplacer** par `include:_spf.resend.com` |
+| DKIM Resend (TXT `send._domainkey`) | absent | ❌ **À ajouter** (clé fournie par Resend) |
+| DMARC (TXT `_dmarc`) | absent | ❌ **À ajouter** |
+| MX | vide | ✅ OK (domaine d'envoi transactionnel) |
 
 ---
 
-## 3. 🎯 STRATÉGIE RETENUE (option 1 — gratuite)
+## 3. 🎯 STRATÉGIE RETENUE — Bascule sur `mondedevis.eu`
 
-**MonDevis envoie déjà ses emails via `noreply@devisflash.net`** (constaté dans `.env.local` : `EMAIL_FROM=noreply@devisflash.net`, `AUTH_RESEND_FROM=noreply@devisflash.net`).
+**Règle Resend (vérifiée doc officielle 02/08/2026)** : plan **Free = 1 seul domaine** par compte. Comme on bascule sur `mondedevis.eu`, on **retire `devisflash.net`** de Resend (DevisFlash est suspendu, plus besoin de ses emails).
 
-→ Il suffit de **confirmer que `devisflash.net` est `Verified` sur Resend** et de **lancer un test d'envoi réel**. Aucun DNS à modifier chez OVH, aucun record à ajouter.
-
-> 💡 Rappel Resend (vérifié doc officielle 02/08/2026) :
-> - Plan **Free** = **1 domaine** vérifié, 100 emails/jour, 3000/mois
-> - Plan **Pro** = 10 domaines, 20 $/mois
-> - Les **sous-domaines comptent comme des domaines séparés** (doivent être vérifiés individuellement)
-> - Aucune astuce officielle pour 2 domaines racine en gratuit
+**Impact sur `devisflash.net`** :
+- ✅ Le domaine reste enregistré chez Cloudflare, le site `devisflash-jf.vercel.app` continue de marcher
+- ❌ Il ne peut plus **envoyer d'emails** via Resend (slot libéré) — OK car DevisFlash est en suspend
 
 ---
 
 ## 4. 🔜 PLAN POUR DEMAIN MATIN (budget total ≤ 45 min)
 
-### Étape 1 — Vérifier le domaine sur Resend (5 min) 🔍
+### Étape 1 — Côté Resend (5 min) 🔍
 
 1. Ouvre https://resend.com/domains
-2. Cherche `devisflash.net` :
-   - **Si statut = `Verified`** ✅ → passe à l'Étape 2
-   - **Si absent** → bouton **Add Domain** → tape `devisflash.net` → Save → status `Pending` → clique **Verify** (les records DNS sont déjà posés, donc ça passe en quelques minutes)
-   - **Si `Pending`/`Failed`** → vérifie les records avec :
-     ```bash
-     dig +short TXT devisflash.net          # doit contenir include:_spf.resend.com
-     dig +short TXT send._domainkey.devisflash.net   # doit contenir p=...
-     dig +short TXT _dmarc.devisflash.net   # doit contenir v=DMARC1
-     ```
+2. **Add Domain** → tape `mondedevis.eu` → Save → status `Pending`
+3. **Note les 2-3 records DNS** affichés (SPF + DKIM + optionnel DMARC) — Resend fournit les valeurs exactes
 
-### Étape 2 — Lancer le test d'envoi réel (10 min) 🚀
+### Étape 2 — Côté OVH (10 min) 🛠️
 
-Dans le terminal, depuis `~/Desktop/MonDevis` :
+1. https://www.ovh.com/manager → domaine `mondedevis.eu` → Zone DNS
+2. **Modifier** le TXT `@` : remplacer `v=spf1 include:amazonses.com ~all` par `v=spf1 include:_spf.resend.com ~all`
+3. **Ajouter** le TXT DKIM `send._domainkey` avec la clé fournie par Resend (étape 1)
+4. **Ajouter** le TXT `_dmarc` : `v=DMARC1; p=quarantine; rua=mailto:dmarc@mondedevis.eu`
+5. Vérifier propagation :
+   ```bash
+   dig +short TXT mondedevis.eu          # doit contenir include:_spf.resend.com
+   dig +short TXT send._domainkey.mondedevis.eu   # doit contenir p=...
+   ```
+
+### Étape 3 — Retour Resend → Verify + retirer devisflash.net (5 min) ✅
+
+1. Sur Resend → clic **Verify** sur `mondedevis.eu` → status doit passer `Verified`
+2. Dans la liste des domaines → **supprimer `devisflash.net`** (libère rien de plus, mais évite la confusion — optionnel si le compte Free bloque l'ajout avant suppression : dans ce cas supprimer AVANT l'ajout en Étape 1)
+
+### Étape 4 — Mettre à jour `.env.local` de MonDevis (5 min) 🔑
+
+```bash
+cd ~/Desktop/MonDevis
+# Éditer .env.local manuellement :
+#   EMAIL_FROM=noreply@mondedevis.eu
+#   AUTH_RESEND_FROM=noreply@mondedevis.eu
+#   (garder les clés RESEND_API_KEY / AUTH_RESEND_KEY inchangées)
+```
+
+⚠️ **`.env.local` = secrets → ne PAS committer, ne PAS me demander de le modifier** (tu le fais à la main).
+
+### Étape 5 — Lancer le test d'envoi réel (10 min) 🚀
 
 ```bash
 cd ~/Desktop/MonDevis
 npx tsx scripts/test-email-send.ts "ton@email.com"
 ```
 
-**Ce que fait le script** : charge le dernier devis + la dernière facture en base, génère les 2 vrais PDF, construit le payload Resend exact (comme l'app), et envoie avec PDF joints depuis `noreply@devisflash.net`.
-
 **Critère de succès** :
 - Sortie : `✓ ENVOYÉ avec succès à ...`
-- L'email arrive dans ta boîte (pas en spam)
-- `From: noreply@devisflash.net` (PAS `onboarding@resend.dev`)
+- Email reçu dans la boîte (pas en spam)
+- `From: noreply@mondedevis.eu` (PAS `onboarding@resend.dev`)
 - Gmail → `Show original` → `dkim=pass spf=pass dmarc=pass`
 
-### Étape 3 — Si l'envoi échoue (diagnostic rapide, 15 min) 🆘
+### Étape 6 — Si l'envoi échoue (diagnostic, 15 min) 🆘
 
 | Erreur | Cause probable | Fix |
 |---|---|---|
-| `403` / "domain not verified" | `devisflash.net` pas encore `Verified` sur Resend | Étape 1 → Add Domain → Verify |
-| `from` invalide | `EMAIL_FROM` pointe vers un domaine non vérifié | Remplacer par `noreply@devisflash.net` |
-| `dkim=fail` côté Gmail | clé DKIM pas propagée / TTL | Re-check `dig` Étape 1 |
-| Email en **spam** | volume faible = normal au début | Ouvrir Gmail → "Pas du spam" + ajouter à contacts |
+| `403` / "domain not verified" | `mondedevis.eu` pas encore `Verified` sur Resend | Étape 3 → Verify + re-check dig |
+| SPF fail | SPF encore `amazonses.com` | Étape 2.2 → remplacer le TXT `@` |
+| `dkim=fail` côté Gmail | DKIM pas propagé / TTL | Re-check `dig` Étape 2.5 |
+| Email en **spam** | volume faible = normal au début | Gmail → "Pas du spam" + ajouter à contacts |
 
-### Étape 4 — Décision GO / STOP (5 min) ⏱️
+### Étape 7 — Décision GO / STOP (5 min) ⏱️
 
-- **Si tout passe** ✅ → l'email est opérationnel. On note, et on ferme le dossier Resend.
+- **Si tout passe** ✅ → l'email est opérationnel sur `mondedevis.eu`. Dossier Resend fermé.
 - **Si > 45 min écoulées** → **STOP** (comme convenu). On reprend plus tard, sans rien casser.
 
 ---
@@ -108,9 +115,9 @@ npx tsx scripts/test-email-send.ts "ton@email.com"
 ## 5. 📌 Ce qu'il NE FAUT PAS toucher demain
 
 - ❌ **Peppol** : ne pas modifier (fonctionnel, verrouillé)
-- ❌ **`mondedevis.eu`** : ne pas ajouter chez Resend (2e domaine = payant, inutile)
 - ❌ **Stripe** : ne pas implémenter (seulement juste avant la vente)
-- ❌ **`.env.local`** : secrets — ne pas committer, ne pas modifier sans besoin
+- ❌ **DevisFlash** : suspendu — ne rien faire dessus (comptes IG/FB à refaire plus tard, hors scope)
+- ❌ **`.env.local`** : secrets — modification **manuelle uniquement** (Étape 4), jamais committée
 
 ---
 
@@ -122,15 +129,16 @@ npx tsx scripts/test-email-send.ts "ton@email.com"
 | Config emails | `~/Desktop/MonDevis/src/auth.ts` | Magic Link Resend (NextAuth) |
 | Envoi devis/factures | `~/Desktop/MonDevis/src/app/actions/devis-envoi.ts`, `facture-envoi.ts` | Payload Resend exact |
 | Env vars | `~/Desktop/MonDevis/.env.local` | `EMAIL_FROM`, `AUTH_RESEND_FROM`, clés |
+| OVH Manager | https://www.ovh.com/manager | Zone DNS `mondedevis.eu` |
+| Resend Domains | https://resend.com/domains | Add/Verify/Remove domain |
 | Doc Resend (domaines) | https://resend.com/docs/dashboard/domains/introduction | Politique officielle (Free = 1 domaine) |
-| Doc setup DevisFlash (réf.) | `~/Desktop/dossier Freebuff/devis-generator/SETUP-RESEND-DOMAIN.md` | Contexte similaire déjà documenté (Strat D §8) |
 
 ---
 
 ## 7. 🎯 Bilan
 
-**Session 02/08 close-able** : landing ✅, Peppol verrouillé ✅, stratégie email = `devisflash.net` (gratuit, DNS déjà en place) ✅.
+**Session 02/08 close-able** : landing ✅, Peppol verrouillé ✅, **DevisFlash suspendu** ✅ (décision actée), **cible email = `mondedevis.eu`** ✅ (OVH).
 
-**Demain matin** : Étape 1 (5 min) → Étape 2 (10 min) → si tout vert, dossier Resend fermé. Budget total ≈ 15-20 min, largement sous les 45 min.
+**Demain matin** : Resend Add Domain (5 min) → OVH zone DNS (10 min) → Verify + retirer devisflash.net (5 min) → .env.local manuel (5 min) → test d'envoi (10 min). Budget total ≈ 35 min, sous les 45 min.
 
-*Memo close-out v1. Rédigé le 02/08/2026 en fin de session. À relire demain matin avant d'ouvrir Resend.*
+*Memo close-out v2 (mis à jour 02/08/2026 soir — décision DevisFlash suspendu + bascule mondedevis.eu). À relire demain matin avant d'ouvrir Resend.*
