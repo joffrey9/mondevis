@@ -1,8 +1,9 @@
 # SETUP STRIPE — MonDevis (abonnements Pro / Business)
 
-> **Statut** : ✅ Code implémenté (checkout + webhook + portal + UI pricing/dashboard).
-> ✅ Produits & prix **créés en mode TEST** via CLI Stripe (voir §3).
-> 🔜 Reste côté user : clés dans `.env.local` (manuel, §2) + test checkout réel (§5) + passage LIVE avant la vente (§6).
+> **Statut** : ✅✅ **TEST RÉUSSI** (carte 4242 → plan Pro actif en base, webhook reçu, bandeau vert dashboard).
+> ✅ Code implémenté (checkout + webhook + portal + UI pricing/dashboard).
+> ✅ Produits & prix **créés en mode TEST** + clés configurées dans `.env.local`.
+> 🔜 Reste : gating Pro, passage LIVE avant la vente (§6), test Portal annulation.
 
 ---
 
@@ -87,6 +88,10 @@ stripe listen --forward-to localhost:3000/api/webhooks/stripe
 7. Tester le Portal : « Gérer mon abonnement » → annuler → le webhook passe le statut à ⛔ Résilié
 
 > ✅ Vérifié en local (sans clé) : `/pricing` répond 200, le webhook répond proprement (`Webhook non configuré` = 500 attendu sans secret), `/dashboard` redirige vers l'auth.
+
+> ✅✅ **TEST RÉUSSI le 2026-08-03** : souscription Pro active en base (`price_1U0DU6RvirNv9z5kOuiOjpWr`, échéance 2026-09-03), événement `checkout.session.completed` reçu par le webhook, bandeau vert sur le dashboard.
+> 
+> ⚠️ **Leçon test** : si `/pricing` crashe avec `DATABASE_URL vide` en runtime, c'est que le shell de login exporte `DATABASE_URL=` (vide) — Next.js ne surcharge pas une variable déjà présente. Lancer le serveur avec `/tmp/run-mondevis-dev.sh` (fait `source .env.local` avant `npm run dev`).
 
 ---
 

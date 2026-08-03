@@ -1,6 +1,6 @@
 # MEMO SESSION — 2026-08-03 (Stripe implémenté + dry-run email validé)
 
-> **Statut global** : ✅ **Stripe implémenté de bout en bout** (checkout + webhook + portal + UI). ✅ Migration DB appliquée sur Neon. ✅ Produits & prix TEST créés via CLI. ✅ Test dry-run email validé (2 modes). ⏸ Blocage connu : les clés Stripe restent à saisir **manuellement** dans `.env.local` (convention projet) avant le test checkout réel. ⏸ Bascule Resend sur `mondedevis.eu` **toujours en attente** (Étape 4 du mémo 02/08 non faite).
+> **Statut global** : ✅✅ **TEST CHECKOUT RÉUSSI** (carte 4242, plan Pro actif en base, webhook reçu). ✅ Stripe implémenté de bout en bout. ✅ Clés test configurées dans `.env.local`. ✅ Migration DB appliquée. ✅ Produits & prix TEST créés. ⏸ Reste pour demain : gating Pro (limite 3 devis/mois), passage LIVE avant la vente, bascule Resend `mondedevis.eu`, correction du shell de login (DATABASE_URL vide).
 >
 > **TL;DR** : le user a demandé « ouvrir le plan du mémo, tester le dry-run, préparer Stripe pour plus tard » → en cours de session il a choisi de **commencer l'implémentation Stripe** (option validée via ask_user). Tout est vert : tsc 0 erreur, 17/17 tests, lint clean, build Next.js OK. Restent 2 actions manuelles user + 1 décision (LIVE).
 
@@ -57,6 +57,20 @@ Continuer le dossier **Desktop/MonDevis** :
 - `GET /pricing` → **200** (charge sans crash, lazy singleton OK)
 - `POST /api/webhooks/stripe` (sans secret) → `{"error":"Webhook non configuré"}` **500 attendu**
 - `GET /dashboard` → **307** → `/auth/signin` (auth OK)
+
+---
+
+## 2.6. ✅ TEST CHECKOUT RÉUSSI (carte 4242) — 2026-08-03
+
+**Preuve complète en base et logs :**
+- Souscription en DB : `price_1U0DU6RvirNv9z5kOuiOjpWr` (Pro 19€) → statut **active**, échéance **2026-09-03**
+- Webhook reçu : `checkout.session.completed` [evt_1U0EO8RvirNv9z5kHWaYVL] à 07:26
+- Dashboard : bandeau vert 🎉 + carte « Abonnement : ✅ Actif »
+
+**Découvertes pendant le test :**
+1. **Bug DATABASE_URL vide en runtime** : le shell de login exporte `DATABASE_URL=` (vide) → Next.js ne surcharge pas une variable déjà présente (même vide) → Prisma crashe sur `/pricing` connecté. **Fix** : script `/tmp/run-mondevis-dev.sh` qui fait `source .env.local` AVANT `npm run dev`.
+2. **`curl /pricing` sans session = faux négatif** : la requête Prisma ne s'exécute que si `session?.user?.id` existe → il faut tester connecté.
+3. **Purge `.next` nécessaire** après modification de `.env.local` pendant que le serveur tourne (cache Turbopack).
 
 ---
 
