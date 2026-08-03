@@ -1,12 +1,27 @@
 import Link from "next/link";
-import { CheckCircle, ArrowLeft, PenTool } from "lucide-react";
+import { ArrowLeft, PenTool } from "lucide-react";
 import ScrollReveal from "../components/ScrollReveal";
 import PricingCard from "./PricingCard";
+import { auth } from "@/auth";
+import { prisma } from "@/lib/db";
+import { PRICE_IDS } from "@/lib/plans";
 
-const allPlans = [
+type Plan = {
+  name: string;
+  price: string;
+  period: string;
+  desc: string;
+  features: string[];
+  cta: string;
+  popular: boolean;
+  stripePlan?: "pro" | "business";
+  priceId?: string;
+};
+
+const allPlans: Plan[] = [
   { name: "Débutant", price: "0", period: "€/mois", desc: "Pour démarrer gratuitement", features: ["3 devis/mois", "Modèles de base", "Envoi par email", "Support standard", "1 utilisateur"], cta: "Commencer gratuitement", popular: false },
-  { name: "Pro", price: "19", period: "€/mois", desc: "Pour les artisans actifs", features: ["Devis illimités", "Signature électronique", "Statistiques avancées", "Support prioritaire", "WhatsApp intégré", "Relances automatiques", "Personnalisation PDF"], cta: "Essayer 14 jours", popular: true },
-  { name: "Business", price: "49", period: "€/mois", desc: "Pour les PME et équipes", features: ["Tout le plan Pro", "Factures électroniques Peppol", "Multi-utilisateurs (5)", "Marque blanche", "API accès", "Support dédié", "Formation incluse"], cta: "Démarrer", popular: false },
+  { name: "Pro", price: "19", period: "€/mois", desc: "Pour les artisans actifs", features: ["Devis illimités", "Signature électronique", "Statistiques avancées", "Support prioritaire", "WhatsApp intégré", "Relances automatiques", "Personnalisation PDF"], cta: "Essayer 14 jours", popular: true, stripePlan: "pro", priceId: PRICE_IDS.pro },
+  { name: "Business", price: "49", period: "€/mois", desc: "Pour les PME et équipes", features: ["Tout le plan Pro", "Factures électroniques Peppol", "Multi-utilisateurs (5)", "Marque blanche", "API accès", "Support dédié", "Formation incluse"], cta: "Démarrer", popular: false, stripePlan: "business", priceId: PRICE_IDS.business },
 ];
 
 const comparisonRows = [
@@ -23,7 +38,18 @@ const comparisonRows = [
   ["Support prioritaire", "—", "✅", "✅"],
 ];
 
-export default function PricingPage() {
+export default async function PricingPage() {
+  const session = await auth();
+  let currentPlanId: string | null = null;
+  if (session?.user?.id) {
+    const sub = await prisma.subscription.findFirst({
+      where: { userId: session.user.id, status: { in: ["active", "trialing"] } },
+      orderBy: { createdAt: "desc" },
+    });
+    currentPlanId = sub?.stripePriceId ?? null;
+  }
+  const isAuthenticated = Boolean(session?.user?.id);
+
   return (
     <div className="min-h-screen bg-[#fafbff]">
       {/* Floating shapes */}
@@ -64,7 +90,13 @@ export default function PricingPage() {
         <div className="max-w-5xl mx-auto">
           <div className="grid md:grid-cols-3 gap-6 lg:gap-8">
             {allPlans.map((plan, i) => (
-              <PricingCard key={plan.name} plan={plan} index={i} />
+              <PricingCard
+                key={plan.name}
+                plan={plan}
+                index={i}
+                isAuthenticated={isAuthenticated}
+                currentPlanId={currentPlanId}
+              />
             ))}
           </div>
         </div>

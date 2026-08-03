@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { CheckoutButton } from "./CheckoutButton";
 import { CheckCircle } from "lucide-react";
 import ScrollReveal from "../components/ScrollReveal";
 
@@ -12,9 +13,19 @@ interface Plan {
   features: string[];
   cta: string;
   popular: boolean;
+  // Stripe : "pro" | "business" pour les plans payants, undefined pour le gratuit
+  stripePlan?: "pro" | "business";
+  priceId?: string;
 }
 
-export default function PricingCard({ plan, index }: { plan: Plan; index: number }) {
+interface Props {
+  plan: Plan;
+  index: number;
+  isAuthenticated: boolean;
+  currentPlanId?: string | null;
+}
+
+export default function PricingCard({ plan, index, isAuthenticated, currentPlanId }: Props) {
   return (
     <ScrollReveal delay={index * 150}>
       <div
@@ -43,16 +54,28 @@ export default function PricingCard({ plan, index }: { plan: Plan; index: number
             </li>
           ))}
         </ul>
-        <Link
-          href="/auth/signin"
-          className={`mt-8 block text-center py-3.5 rounded-xl font-semibold transition-all duration-300 ${
-            plan.popular
-              ? "bg-gradient-to-r from-indigo-600 to-violet-600 text-white hover:from-indigo-700 hover:to-violet-700 shadow-md hover:shadow-lg hover:-translate-y-0.5"
-              : "bg-gray-100 text-gray-700 hover:bg-gray-200 hover:shadow-md"
-          }`}
-        >
-          {plan.cta}
-        </Link>
+        {plan.stripePlan ? (
+          <CheckoutButton
+            plan={plan.stripePlan}
+            isCurrentPlan={Boolean(
+              plan.priceId && currentPlanId === plan.priceId
+            )}
+            isAuthenticated={isAuthenticated}
+            popular={plan.popular}
+            label={plan.cta}
+          />
+        ) : (
+          <Link
+            href="/auth/register"
+            className={`mt-8 block text-center py-3.5 rounded-xl font-semibold transition-all duration-300 ${
+              plan.popular
+                ? "bg-gradient-to-r from-indigo-600 to-violet-600 text-white hover:from-indigo-700 hover:to-violet-700 shadow-md hover:shadow-lg hover:-translate-y-0.5"
+                : "bg-gray-100 text-gray-700 hover:bg-gray-200 hover:shadow-md"
+            }`}
+          >
+            {plan.cta}
+          </Link>
+        )}
       </div>
     </ScrollReveal>
   );

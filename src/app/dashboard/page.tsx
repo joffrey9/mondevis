@@ -2,11 +2,19 @@ import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db";
 import Link from "next/link";
-import { FileText, Send, CheckCircle, XCircle, Receipt } from "lucide-react";
+import { FileText, Send, CheckCircle, XCircle, Receipt, CreditCard } from "lucide-react";
+import { formatSubscriptionStatus } from "@/lib/subscription";
+import { PortalButton } from "./PortalButton";
 
-export default async function DashboardPage() {
+export default async function DashboardPage(props: { searchParams: Promise<{ checkout?: string }> }) {
+  const { checkout } = await props.searchParams;
   const session = await auth();
   if (!session?.user) redirect("/auth/signin");
+
+  const subscription = await prisma.subscription.findFirst({
+    where: { userId: session.user.id, status: { in: ["active", "trialing", "past_due", "canceled"] } },
+    orderBy: { createdAt: "desc" },
+  });
 
   const [
     total, draft, sent, accepted, refused,
@@ -45,6 +53,35 @@ export default async function DashboardPage() {
           </button>
         </form>
       </header>
+
+      {/* Confirmation checkout */}
+      {checkout === "success" && (
+        <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-xl p-4 text-green-800 dark:text-green-300 text-sm">
+          🎉 Merci ! Votre abonnement est actif. Bienvenue parmi les artisans MonDevis Pro. 🚀
+        </div>
+      )}
+
+      {/* Abonnement Stripe */}
+      {subscription && (
+        <section className="bg-white dark:bg-[#14141f] rounded-xl border border-gray-200 dark:border-[#1e1e30] p-5 shadow-sm flex flex-wrap items-center justify-between gap-4">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-lg bg-indigo-100 dark:bg-indigo-900/40 flex items-center justify-center">
+              <CreditCard className="w-5 h-5 text-indigo-600 dark:text-indigo-400" />
+            </div>
+            <div>
+              <p className="font-semibold dark:text-gray-100">
+                Abonnement : {formatSubscriptionStatus(subscription.status)}
+              </p>
+              {subscription.currentPeriodEnd && (
+                <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5">
+                  Prochaine échéance : {subscription.currentPeriodEnd.toLocaleDateString("fr-FR")}
+                </p>
+              )}
+            </div>
+          </div>
+          <PortalButton />
+        </section>
+      )}
 
       {/* Stats devis */}
       <section className="grid grid-cols-2 md:grid-cols-5 gap-3">

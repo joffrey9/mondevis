@@ -9,6 +9,7 @@ Application web de devis & factures pour artisans : création, PDF, envoi par em
 - **NextAuth v5** (Google OAuth + Magic Link Resend + Credentials)
 - **Resend** — emails transactionnels
 - **jsPDF** — génération des PDF (devis & factures), partagée client/serveur
+- **Stripe** — abonnements (checkout, webhook, customer portal)
 - **Vitest** — tests unitaires
 
 ## Démarrage local
@@ -33,6 +34,10 @@ Ouvrir http://localhost:3000
 | `RESEND_API_KEY` | Clé Resend pour l'envoi de devis/factures (fallback sur `AUTH_RESEND_KEY`) |
 | `EMAIL_FROM` / `AUTH_RESEND_FROM` | Expéditeur des emails |
 | `PEPPOL_API_KEY` | Clé API e-invoice.be (envoi B2B belge) |
+| `STRIPE_SECRET_KEY` | Clé secrète Stripe (serveur) |
+| `STRIPE_WEBHOOK_SECRET` | Secret de signature des webhooks Stripe |
+| `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY` | Clé publique Stripe (client) |
+| `NEXT_PUBLIC_STRIPE_PRICE_ID_PRO` / `NEXT_PUBLIC_STRIPE_PRICE_ID_BUSINESS` | ID des prix des abonnements Pro / Business |
 
 ## Migrations de base de données 🗄️
 

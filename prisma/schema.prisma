@@ -38,6 +38,11 @@ model User {
   whatsappNumber String? // Numéro WhatsApp pour envoyer les devis
   customLegalMentions String? @db.Text // Mentions légales personnalisées de l'artisan
 
+
+  // Stripe (abonnements)
+  stripeCustomerId String?         @unique
+  subscriptions    Subscription[]
+
   accounts    Account[]
   sessions    Session[]
   createdAt   DateTime @default(now())
@@ -198,4 +203,24 @@ model FactureLine {
   facture Facture @relation(fields: [factureId], references: [id], onDelete: Cascade)
 
   @@index([factureId])
+}
+
+
+// ── Feature : Abonnements Stripe ──
+
+model Subscription {
+  id                String    @id @default(cuid())
+  userId            String
+  user              User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  stripeId          String    @unique              // ID abonnement Stripe (sub_xxx)
+  stripePriceId     String                        // ID du prix (price_xxx)
+  status            String    @default("active")   // active | past_due | canceled | incomplete | trialing | unpaid
+  currentPeriodStart DateTime?
+  currentPeriodEnd  DateTime?
+  cancelAtPeriodEnd Boolean   @default(false)
+  createdAt         DateTime  @default(now())
+  updatedAt         DateTime  @updatedAt
+
+  @@index([userId])
+  @@index([status])
 }
