@@ -2,9 +2,10 @@ import { auth } from "@/auth";
 import { redirect } from "next/navigation";
 import { prisma } from "@/lib/db";
 import Link from "next/link";
-import { Plus, Eye, Trash2, Send, CheckCircle, XCircle } from "lucide-react";
+import { Plus, Eye, Trash2, Send, CheckCircle, XCircle, FileText } from "lucide-react";
 import { updateDevisStatus, deleteDevis } from "@/app/actions/devis";
 import { COUNTRIES, detectClientType, type Country } from "@/lib/countries";
+import { getDevisQuota } from "@/lib/subscription";
 
 const statusLabels: Record<string, { label: string; color: string }> = {
   draft: { label: "Brouillon", color: "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300" },
@@ -24,6 +25,8 @@ export default async function DevisListPage() {
     include: { _count: { select: { lines: true } } },
   });
 
+  const quota = await getDevisQuota(session.user.id);
+
   return (
     <div className="max-w-5xl mx-auto p-6">
       <header className="flex items-center justify-between mb-6">
@@ -32,12 +35,42 @@ export default async function DevisListPage() {
           <p className="text-gray-500 dark:text-gray-400 mt-1">{devisList.length} devis créés</p>
         </div>
         <Link
-          href="/dashboard/devis/nouveau"
+          href={quota && !quota.allowed ? "/pricing" : "/dashboard/devis/nouveau"}
           className="flex items-center gap-2 px-4 py-2.5 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition"
         >
-          <Plus className="w-4 h-4" /> Nouveau devis
+          <Plus className="w-4 h-4" /> {quota && !quota.allowed ? "Passer Pro" : "Nouveau devis"}
         </Link>
       </header>
+
+      {/* Bandeau quota plan Débutant */}
+      {quota && !quota.subscribed && quota.limit != null && (
+        <div className="mb-6 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 rounded-xl p-4 flex flex-wrap items-center justify-between gap-3">
+          <div className="flex items-center gap-3 min-w-0">
+            <div className="w-9 h-9 rounded-lg bg-amber-100 dark:bg-amber-900/40 flex items-center justify-center shrink-0">
+              <FileText className="w-4 h-4 text-amber-600 dark:text-amber-400" />
+            </div>
+            <div className="min-w-0">
+              <p className="text-sm font-medium text-amber-900 dark:text-amber-200">
+                Plan Débutant — {quota.used}/{quota.limit} devis utilisés ce mois-ci
+              </p>
+              <div className="mt-1.5 w-full max-w-xs h-1.5 bg-amber-200 dark:bg-amber-800 rounded-full overflow-hidden">
+                <div
+                  className={`h-full rounded-full ${quota.allowed ? "bg-amber-500" : "bg-red-500"}`}
+                  style={{ width: `${Math.min(100, (quota.used / quota.limit) * 100)}%` }}
+                />
+              </div>
+            </div>
+          </div>
+          {!quota.allowed && (
+            <Link
+              href="/pricing"
+              className="px-3 py-1.5 bg-amber-600 text-white text-sm rounded-lg font-medium hover:bg-amber-700 transition"
+            >
+              Débloquer les devis illimités →
+            </Link>
+          )}
+        </div>
+      )}
 
       {devisList.length === 0 ? (
         <div className="bg-white dark:bg-[#14141f] rounded-xl border border-gray-200 dark:border-[#1e1e30] p-12 text-center">

@@ -4,6 +4,7 @@ import { auth } from "@/auth";
 import { prisma } from "@/lib/db";
 import { revalidatePath } from "next/cache";
 import { validateTvaRate, type Country } from "@/lib/countries";
+import { getDevisQuota } from "@/lib/subscription";
 
 export type DevisLineInput = {
   description: string;
@@ -67,6 +68,15 @@ async function getNextDevisNumber(userId: string, prefix: string): Promise<strin
 export async function createDevis(input: CreateDevisInput) {
   const session = await auth();
   if (!session?.user?.id) throw new Error("Non authentifié");
+
+  // Gating Pro : limite de devis mensuelle pour le plan Débutant (3/mois)
+  const quota = await getDevisQuota(session.user.id);
+  if (quota && !quota.allowed) {
+    throw new Error(
+      `Limite du plan gratuit atteinte : ${quota.used}/${quota.limit} devis ce mois-ci. ` +
+        "Passe à Pro pour créer des devis illimités."
+    );
+  }
 
   // Sécurité : le client lié doit appartenir à l'utilisateur
   if (input.clientId) {
