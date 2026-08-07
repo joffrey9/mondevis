@@ -97,13 +97,59 @@ stripe listen --forward-to localhost:3000/api/webhooks/stripe
 
 ## 6. 🚀 Passage en production (LIVE) — juste avant la vente
 
-1. Recréer les **2 produits + prix LIVE** dans le Dashboard (mode Live) — ou dupliquer les produits test
-2. Mettre à jour `.env.local` / env Vercel :
-   - `STRIPE_SECRET_KEY=sk_live_...`
-   - `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_live_...`
-   - `NEXT_PUBLIC_STRIPE_PRICE_ID_PRO` / `..._BUSINESS` → price IDs LIVE
-3. Ajouter l'endpoint webhook LIVE (§4)
-4. Tester avec une vraie carte (petit montant / remboursement immédiat) avant la campagne
+> **Statut au 07/08/2026** : préparation live en cours.
+> - ✅ Script prêt : `scripts/setup-stripe-live.ts` (idempotent — crée produits/prix live sans doublon, vérifie `charges_enabled`)
+> - ⏳ Produits/prix LIVE **pas encore créés** (clé CLI restreinte sans `product_write`/`feature_write` OU en attente d'une `sk_live_` dans `.env.local`)
+> - ✅ CLI Stripe connecté au compte `acct_1Ths6ORvirNv9z5k` (mode live dispo)
+
+### 6.1. Créer les produits/prix LIVE
+
+**Option A — CLI (après déblocage de la clé restreinte) :**
+1. Activer sur la clé CLI (`mk_1TjBuGRvirNv9z5k3pNSgRXp`) : **Products → Write** + **Features → Write**
+   Lien : https://dashboard.stripe.com/b/acct_1Ths6ORvirNv9z5k?destination=%2Fapikeys%2Fmk_1TjBuGRvirNv9z5k3pNSgRXp%2Fedit
+2. Créer :
+   ```bash
+   stripe products create --live --name "MonDevis Pro" --description "Abonnement Pro - devis illimités"
+   stripe prices create --live --product prod_xxx --unit-amount 1900 --currency eur --recurring.interval=month
+   stripe products create --live --name "MonDevis Business" --description "Abonnement Business - PME et équipes"
+   stripe prices create --live --product prod_xxx --unit-amount 4900 --currency eur --recurring.interval=month
+   ```
+
+**Option B — script avec `sk_live_` (recommandé, fiable) :**
+1. Dans `.env.local` : `STRIPE_SECRET_KEY=sk_live_...` (Dashboard → Developers → API keys → mode **LIVE**)
+2. `npx tsx scripts/setup-stripe-live.ts`
+   → crée les 2 produits + prix, vérifie `charges_enabled`, affiche les lignes `.env.local` exactes à coller
+
+### 6.2. Mettre à jour `.env.local` / Vercel (manuel, jamais commité)
+
+- `STRIPE_SECRET_KEY=sk_live_...`
+- `NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY=pk_live_...`
+- `NEXT_PUBLIC_STRIPE_PRICE_ID_PRO` / `NEXT_PUBLIC_STRIPE_PRICE_ID_BUSINESS` → price IDs **LIVE**
+- ⚠️ Purger `.next` si le serveur tourne pendant la modif (memo 06/08)
+- En Vercel : cocher Production + Preview
+
+### 6.3. Webhook LIVE (dashboard Stripe → Developers → Webhooks → Add endpoint)
+
+- URL : `https://<domaine-prod>/api/webhooks/stripe`
+- Événements : `checkout.session.completed`, `customer.subscription.updated`, `customer.subscription.deleted`, `invoice.payment_failed`
+- Copier le **Signing secret** (`whsec_...`) → `STRIPE_WEBHOOK_SECRET` (.env.local + Vercel)
+- ⚠️ Les webhooks test et live sont séparés : recréer l'endpoint en mode **Live**
+
+### 6.4. Test final live
+
+1. Vraie carte (petit montant, remboursement immédiat via dashboard Stripe → Payments → Refund)
+2. Vérifier : webhook reçu (logs Vercel), abonnement `active` en base Neon/Prisma, email de confirmation reçu
+3. Le gating des fonctionnalités Pro (devis illimités vs 3/mois) se branche déjà sur `isSubscribed()`
+
+### 6.5. Checklist LIVE
+
+- [ ] Onboarding Stripe complet (`charges_enabled = true`)
+- [ ] Produit + prix **Pro** live (19€/mois)
+- [ ] Produit + prix **Business** live (49€/mois)
+- [ ] `.env.local` : `sk_live_` + `pk_live_` + price IDs live
+- [ ] Webhook endpoint **live** configuré + `whsec_` live dans `.env.local`
+- [ ] Test paiement live réussi (carte réelle, refund après)
+- [ ] Vitest + TSC + build OK avant la campagne
 
 ---
 
