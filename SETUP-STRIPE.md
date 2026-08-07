@@ -97,10 +97,11 @@ stripe listen --forward-to localhost:3000/api/webhooks/stripe
 
 ## 6. 🚀 Passage en production (LIVE) — juste avant la vente
 
-> **Statut au 07/08/2026** : préparation live en cours.
-> - ✅ Script prêt : `scripts/setup-stripe-live.ts` (idempotent — crée produits/prix live sans doublon, vérifie `charges_enabled`)
-> - ⏳ Produits/prix LIVE **pas encore créés** (clé CLI restreinte sans `product_write`/`feature_write` OU en attente d'une `sk_live_` dans `.env.local`)
-> - ✅ CLI Stripe connecté au compte `acct_1Ths6ORvirNv9z5k` (mode live dispo)
+> **Statut au 07/08/2026** : ✅ **PRODUITS/PRIX LIVE CRÉÉS** (setup réussi avec `sk_live_`).
+> - ✅ Compte `acct_1Ths6ORvirNv9z5k` : `charges_enabled = OUI` (prêt à encaisser)
+> - ✅ **MonDevis Pro** → `prod_V1iuu8wPSxtmQZ` · 19€/mois → `price_1U1fSGRvirNv9z5kcxZyPNK7`
+> - ✅ **MonDevis Business** → `prod_V1iuAesxVlMcmJ` · 49€/mois → `price_1U1fSHRvirNv9z5kG7HMn7ZU`
+> - 🔜 Reste : `pk_live_` dans `.env.local`, webhook endpoint **live** + `whsec_`, test paiement live
 
 ### 6.1. Créer les produits/prix LIVE
 
@@ -143,10 +144,10 @@ stripe listen --forward-to localhost:3000/api/webhooks/stripe
 
 ### 6.5. Checklist LIVE
 
-- [ ] Onboarding Stripe complet (`charges_enabled = true`)
-- [ ] Produit + prix **Pro** live (19€/mois)
-- [ ] Produit + prix **Business** live (49€/mois)
-- [ ] `.env.local` : `sk_live_` + `pk_live_` + price IDs live
+- [x] Onboarding Stripe complet (`charges_enabled = true`)
+- [x] Produit + prix **Pro** live (19€/mois) → `price_1U1fSGRvirNv9z5kcxZyPNK7`
+- [x] Produit + prix **Business** live (49€/mois) → `price_1U1fSHRvirNv9z5kG7HMn7ZU`
+- [x] `.env.local` : `sk_live_` + price IDs live (reste `pk_live_` + `whsec_`)
 - [ ] Webhook endpoint **live** configuré + `whsec_` live dans `.env.local`
 - [ ] Test paiement live réussi (carte réelle, refund après)
 - [ ] Vitest + TSC + build OK avant la campagne
