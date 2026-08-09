@@ -1,12 +1,5 @@
 import { describe, it, expect } from "vitest";
-import {
-  normalizeNumero,
-  detectClientType,
-  validateTvaRate,
-  getTvaRates,
-  formatCurrency,
-  COUNTRY_LIST,
-} from "../countries";
+import { normalizeNumero, detectClientType, validateTvaRate, getTvaRates, formatCurrency, COUNTRY_LIST, getCountry } from "../countries";
 
 describe("normalizeNumero", () => {
   it("supprime espaces, points et tirets et passe en majuscules", () => {
@@ -80,5 +73,15 @@ describe("getTvaRates / COUNTRY_LIST", () => {
 
   it("liste la France et la Belgique", () => {
     expect(COUNTRY_LIST.map((c) => c.code)).toEqual(["FR", "BE"]);
+  });
+});
+
+
+describe("Libellés pays compatibles PDF", () => {
+  it("conserve le nom du pays sans drapeau emoji dans le libellé texte", () => {
+    expect(getCountry("BE").label).toBe("Belgique");
+    expect(getCountry("FR").label).toBe("France");
+    expect(getCountry("BE").label).not.toMatch(/[\uD83C][\uDDE6-\uDDFF]/);
+    expect(getCountry("FR").label).not.toMatch(/[\uD83C][\uDDE6-\uDDFF]/);
   });
 });

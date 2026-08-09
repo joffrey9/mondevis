@@ -1,6 +1,6 @@
 import { describe, it, expect } from "vitest";
 import { buildFacturePdfDoc, facturePdfFilename, type FactureWithLines } from "@/lib/pdf/facture-pdf";
-import { buildDevisPdfDoc, devisPdfFilename, type DevisWithLines } from "@/lib/pdf/devis-pdf";
+import { buildDevisPdfDoc, devisPdfFilename, getPdfCountryLabel, type DevisWithLines } from "@/lib/pdf/devis-pdf";
 
 function makeFacture(): FactureWithLines {
   return {
@@ -94,6 +94,14 @@ describe("PDF facture (génération serveur compatible)", () => {
 
   it("calcule le nom de fichier standard", () => {
     expect(facturePdfFilename(makeFacture())).toBe("facture-fac-2026-0001.pdf");
+  });
+});
+
+describe("Libellés pays PDF", () => {
+  it("retourne un libellé compatible avec les polices PDF standard", () => {
+    expect(getPdfCountryLabel("BE")).toBe("Belgique");
+    expect(getPdfCountryLabel("FR")).toBe("France");
+    expect(getPdfCountryLabel("BE")).not.toMatch(/[\uD83C][\uDDE6-\uDDFF]/);
   });
 });
 

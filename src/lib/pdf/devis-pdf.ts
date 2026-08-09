@@ -11,6 +11,11 @@ export interface DevisPdfCompany {
   customLegalMentions?: string | null;
 }
 
+/** Texte compatible avec les polices PDF standard (sans emoji de drapeau). */
+export function getPdfCountryLabel(country: Country): string {
+  return getCountry(country).label;
+}
+
 /** Construit le document PDF du devis (sans déclencher le téléchargement) */
 export async function buildDevisPdfDoc(
   devis: DevisWithLines,
@@ -98,7 +103,7 @@ export async function buildDevisPdfDoc(
   if (devis.clientEmail) { doc.text(`Email : ${devis.clientEmail}`, margin, y); y += 5; }
   if (devis.clientPhone) { doc.text(`Tél : ${devis.clientPhone}`, margin, y); y += 5; }
   if (devis.clientAddress) { doc.text(`Adresse : ${devis.clientAddress}`, margin, y); y += 5; }
-  doc.text(`Pays : ${countryConfig.flag} ${countryConfig.label}`, margin, y);
+  doc.text(`Pays : ${countryConfig.label}`, margin, y);
   y += 10;
 
   // — Lines table —
