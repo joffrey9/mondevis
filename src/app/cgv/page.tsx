@@ -9,7 +9,7 @@ export default function CgvPage() {
 
         <p className="text-sm text-gray-600">
           Les présentes conditions régissent l&apos;accès et l&apos;utilisation du service MonDevis,
-          édité par <strong>Joffrey Fortemps</strong> — [ADRESSE COMPLÈTE] — [N° D&apos;ENTREPRISE / TVA],
+          édité par <strong>Joffrey Fortemps</strong> — Rue Général Michel 11, 1120 Bruxelles, Belgique — BE 0891.930.638,
           joignable à{" "}
           <a href="mailto:hello@mondedevis.eu" className="text-blue-600 hover:underline">
             hello@mondedevis.eu
@@ -85,7 +85,7 @@ export default function CgvPage() {
 
         <h2 className="text-xl font-semibold mt-8">9. Droit applicable</h2>
         <p className="text-sm text-gray-600">
-          Les présentes CGV sont soumises au droit [DROIT APPLICABLE — belge / français]. En cas de
+          Les présentes CGV sont soumises au droit belge. En cas de
           litige, une solution amiable sera recherchée avant toute action judiciaire.
         </p>
 

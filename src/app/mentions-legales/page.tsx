@@ -10,9 +10,8 @@ export default function MentionsLegalesPage() {
         <h2 className="text-xl font-semibold mt-8">Éditeur du site</h2>
         <p className="text-sm text-gray-600">
           Le site MonDevis est édité par <strong>Joffrey Fortemps</strong>.<br />
-          Adresse : [ADRESSE COMPLÈTE]<br />
-          N° d&apos;entreprise / TVA : [N° D&apos;ENTREPRISE / TVA]<br />
-          Téléphone : [TÉLÉPHONE]<br />
+          Adresse : Rue Général Michel 11, 1120 Bruxelles, Belgique<br />
+          N° d&apos;entreprise / TVA : BE 0891.930.638<br />
           Email :{" "}
           <a href="mailto:hello@mondedevis.eu" className="text-blue-600 hover:underline">
             hello@mondedevis.eu

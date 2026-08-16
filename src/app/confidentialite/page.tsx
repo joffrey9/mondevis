@@ -9,7 +9,7 @@ export default function ConfidentialitePage() {
 
         <h2 className="text-xl font-semibold mt-8">1. Responsable du traitement</h2>
         <p className="text-sm text-gray-600">
-          Le responsable du traitement est <strong>Joffrey Fortemps</strong> — [ADRESSE COMPLÈTE],
+          Le responsable du traitement est <strong>Joffrey Fortemps</strong> — Rue Général Michel 11, 1120 Bruxelles, Belgique,
           joignable à{" "}
           <a href="mailto:hello@mondedevis.eu" className="text-blue-600 hover:underline">
             hello@mondedevis.eu
