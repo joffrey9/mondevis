@@ -283,7 +283,7 @@ export default function HomePage() {
                       </li>
                     ))}
                   </ul>
-                  <Link href="/auth/signin" className={`mt-8 block text-center py-3.5 rounded-xl font-semibold transition-all duration-300 ${plan.popular ? "bg-gradient-to-r from-indigo-600 to-violet-600 text-white hover:from-indigo-700 hover:to-violet-700 shadow-md hover:shadow-lg hover:-translate-y-0.5" : "bg-gray-100 text-gray-700 hover:bg-gray-200 hover:shadow-md"}`}>{plan.cta}</Link>
+                  <Link href="/pricing" className={`mt-8 block text-center py-3.5 rounded-xl font-semibold transition-all duration-300 ${plan.popular ? "bg-gradient-to-r from-indigo-600 to-violet-600 text-white hover:from-indigo-700 hover:to-violet-700 shadow-md hover:shadow-lg hover:-translate-y-0.5" : "bg-gray-100 text-gray-700 hover:bg-gray-200 hover:shadow-md"}`}>{plan.cta}</Link>
                 </div>
               </ScrollReveal>
             ))}
