@@ -57,7 +57,7 @@ export default async function DashboardPage(props: { searchParams: Promise<{ che
       {/* Confirmation checkout */}
       {checkout === "success" && (
         <div className="bg-green-50 dark:bg-green-900/20 border border-green-200 dark:border-green-800 rounded-xl p-4 text-green-800 dark:text-green-300 text-sm">
-          🎉 Merci ! Votre abonnement est actif. Bienvenue parmi les artisans MonDevis Pro. 🚀
+          🎉 Merci ! Votre essai gratuit de 14 jours a démarré. Bienvenue parmi les artisans MonDevis Pro. 🚀
         </div>
       )}
 
