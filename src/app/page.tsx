@@ -362,8 +362,11 @@ export default function HomePage() {
             <span className="text-lg font-bold text-gray-900">Mon<span className="gradient-text">Devis</span></span>
           </div>
           <p className="text-sm text-gray-400">© {new Date().getFullYear()} MonDevis. Tous droits réservés.</p>
-          <div className="flex justify-center gap-6 mt-3">
+          <div className="flex flex-wrap justify-center gap-6 mt-3">
             <Link href="/mentions-legales" className="text-xs text-gray-400 hover:text-indigo-500 transition-colors">Mentions légales</Link>
+            <Link href="/cgv" className="text-xs text-gray-400 hover:text-indigo-500 transition-colors">CGV</Link>
+            <Link href="/confidentialite" className="text-xs text-gray-400 hover:text-indigo-500 transition-colors">Confidentialité</Link>
+            <Link href="/retractation" className="text-xs text-gray-400 hover:text-indigo-500 transition-colors">Rétractation</Link>
             <Link href="/pricing" className="text-xs text-gray-400 hover:text-indigo-500 transition-colors">Tarifs</Link>
             <a href="mailto:hello@mondedevis.eu" className="text-xs text-gray-400 hover:text-indigo-500 transition-colors">Contact</a>
           </div>

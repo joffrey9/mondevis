@@ -8,6 +8,9 @@ import { PRICE_IDS } from "@/lib/plans";
 
 const ORIGIN = process.env.AUTH_URL ?? process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
 
+// Essai gratuit Stripe : 14 jours sans prélèvement (aligné sur le marketing du site).
+const TRIAL_PERIOD_DAYS = 14;
+
 /** Crée une session Checkout d'abonnement (mode: subscription). */
 export async function createCheckoutSession(plan: "pro" | "business") {
   const session = await auth();
@@ -29,7 +32,10 @@ export async function createCheckoutSession(plan: "pro" | "business") {
     // ne transmet PAS ses metadata à l'objet Subscription, mais le webhook
     // reçoit l'abonnement. Sans ça, la résolution du userId repose uniquement
     // sur le fallback stripeCustomerId.
-    subscription_data: { metadata: { userId: session.user.id } },
+    subscription_data: {
+      metadata: { userId: session.user.id },
+      trial_period_days: TRIAL_PERIOD_DAYS,
+    },
   });
 
   return { url: checkout.url };

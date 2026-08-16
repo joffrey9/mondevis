@@ -48,3 +48,6 @@ next-env.d.ts
 # SQLite local (obsolète — base = Postgres/Neon)
 prisma/dev.db
 clef Resend mondevis-prod/
+
+# Secrets exportés (clés API) — ne jamais committer
+Clé API MISTRAL*
