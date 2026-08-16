@@ -153,8 +153,9 @@ body {
   perspective: 1000px;
 }
 
+/* Pas de transform au survol : déplacer la carte ferait bouger le bouton sous
+   le curseur (clic « manqué » + clignotement). On garde uniquement l'ombre. */
 .card-3d:hover {
-  transform: translateY(-8px) rotateX(2deg) rotateY(2deg) scale(1.02);
   box-shadow: 0 20px 60px rgba(99, 102, 241, 0.15), 0 8px 20px rgba(0, 0, 0, 0.06);
 }
 
@@ -195,9 +196,7 @@ button:active:not(:disabled), [role="button"]:active:not(:disabled), label:activ
   transform: scale(0.96);
 }
 
-.card-3d:active {
-  transform: scale(0.98);
-}
+
 
 /* ── Transition douce pour le thème ── */
 html.dark,
