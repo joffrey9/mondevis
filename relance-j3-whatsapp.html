@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MonDevis — Relance J+3 (WhatsApp)</title>
+<style>
+  :root { color-scheme: light; }
+  * { box-sizing: border-box; }
+  body { font-family: -apple-system, Segoe UI, Roboto, sans-serif; background:#f5f6fa; margin:0; padding:24px; color:#1a1a2e; }
+  h1 { font-size:1.3rem; margin:0 0 4px; }
+  .sub { color:#666; font-size:.9rem; margin-bottom:20px; }
+  .card { background:#fff; border:1px solid #e3e3ee; border-radius:12px; padding:16px; margin-bottom:12px; box-shadow:0 1px 2px rgba(0,0,0,.03); }
+  .head { display:flex; align-items:baseline; justify-content:space-between; gap:8px; flex-wrap:wrap; }
+  .name { font-weight:700; font-size:1.05rem; }
+  .meta { color:#888; font-size:.82rem; }
+  .msg { white-space:pre-wrap; background:#f7f7fb; border:1px solid #eee; border-radius:8px; padding:10px 12px; margin:10px 0; font-size:.9rem; line-height:1.45; }
+  .btn { display:inline-block; background:#25D366; color:#fff; text-decoration:none; font-weight:600; padding:10px 16px; border-radius:8px; border:none; cursor:pointer; font-size:.95rem; }
+  .btn:hover { background:#1eb856; }
+  .done { color:#999; font-size:.8rem; margin-left:10px; }
+  .note { background:#fff8e1; border:1px solid #f0e0b0; border-radius:8px; padding:10px 12px; font-size:.85rem; margin-bottom:18px; }
+</style>
+</head>
+<body>
+  <h1>🔁 MonDevis — Relance J+3</h1>
+  <div class="sub">Ne relance <b>que ceux qui n'ont pas répondu</b>. Clique « Ouvrir WhatsApp » → le message est déjà écrit → appuie sur <b>Envoyer</b>.</div>
+  <div class="note">📅 À envoyer <b>jeudi 20/08</b> (J+3). Les 2 lignes fixes (Jean #7, Repartim #9) ne sont pas ici : à joindre par appel/email.</div>
+
+  <div id="list"></div>
+
+<script>
+const contacts = [
+  { prenom:"Jérôme",    m:"CLAU'ELEC · électricien, Nantes",        t:"33619621550" },
+  { prenom:"Ylann",     m:"Plobylec · plombier-électricien, Rennes", t:"33666013009" },
+  { prenom:"Sébastien", m:"PRO'DECO · peintre, Grenoble",           t:"33666010553" },
+  { prenom:"Florent",   m:"Delagrange · électricien, Montpellier",  t:"33755605880" },
+  { prenom:"Bruno",     m:"BS Sani Chauf · plombier-chauffagiste, Orléans", t:"33666791323" },
+  { prenom:"Nicolas",   m:"Nice Travaux Rénovation · rénovation, Nice", t:"33633631867" },
+  { prenom:"Axel",      m:"Du Sol au Plafond · peintre, Marseille", t:"33617143164" },
+];
+
+function messageFor(c){
+  return `Salut ${c.prenom}, je reviens vers toi 🙂\n\nPas d'obligation : c'est gratuit (3 devis/mois sans engagement).\nTu me dis ce que tu en penses, même si c'est pour me dire que ça ne sert à rien.\n\n→ mondedevis.eu`;
+}
+
+const list = document.getElementById("list");
+contacts.forEach((c) => {
+  const msg = messageFor(c);
+  const url = "https://wa.me/" + c.t + "?text=" + encodeURIComponent(msg);
+  const card = document.createElement("div");
+  card.className = "card";
+  card.innerHTML =
+    `<div class="head"><span class="name">${c.prenom}</span><span class="meta">${c.m}</span></div>` +
+    `<div class="msg">${msg.replace(/&/g,"&amp;").replace(/</g,"&lt;")}</div>` +
+    `<a class="btn" href="${url}" target="_blank" rel="noopener" onclick="this.insertAdjacentHTML('afterend','<span class=done>✓ ouvert</span>')">Ouvrir WhatsApp</a>`;
+  list.appendChild(card);
+});
+</script>
+</body>
+</html>
