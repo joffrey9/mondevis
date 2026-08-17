@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MonDevis — Envoyer aux 9 artisans (WhatsApp)</title>
+<style>
+  :root { color-scheme: light; }
+  * { box-sizing: border-box; }
+  body { font-family: -apple-system, Segoe UI, Roboto, sans-serif; background:#f5f6fa; margin:0; padding:24px; color:#1a1a2e; }
+  h1 { font-size:1.3rem; margin:0 0 4px; }
+  .sub { color:#666; font-size:.9rem; margin-bottom:20px; }
+  .card { background:#fff; border:1px solid #e3e3ee; border-radius:12px; padding:16px; margin-bottom:12px; box-shadow:0 1px 2px rgba(0,0,0,.03); }
+  .head { display:flex; align-items:baseline; justify-content:space-between; gap:8px; flex-wrap:wrap; }
+  .name { font-weight:700; font-size:1.05rem; }
+  .meta { color:#888; font-size:.82rem; }
+  .msg { white-space:pre-wrap; background:#f7f7fb; border:1px solid #eee; border-radius:8px; padding:10px 12px; margin:10px 0; font-size:.9rem; line-height:1.45; }
+  .btn { display:inline-block; background:#25D366; color:#fff; text-decoration:none; font-weight:600; padding:10px 16px; border-radius:8px; border:none; cursor:pointer; font-size:.95rem; }
+  .btn:hover { background:#1eb856; }
+  .done { color:#999; font-size:.8rem; margin-left:10px; }
+  .skip { color:#b00020; font-weight:600; }
+  .note { background:#fff8e1; border:1px solid #f0e0b0; border-radius:8px; padding:10px 12px; font-size:.85rem; margin-bottom:18px; }
+</style>
+</head>
+<body>
+  <h1>💬 MonDevis — 9 messages WhatsApp</h1>
+  <div class="sub">Clique sur « Ouvrir WhatsApp » → le message est déjà écrit → tu appuies juste sur <b>Envoyer</b>. Envoie <b>5 max aujourd'hui</b> (anti-spam).</div>
+  <div class="note">⚠️ Envoie depuis <b>ton WhatsApp perso</b>. Si le numéro a changé de titulaire, adapte le prénom avant d'envoyer. Le prospect #10 (L'Artisan Français, Tours) est exclu (introuvable).</div>
+
+  <div id="list"></div>
+
+<script>
+const contacts = [
+  { n:"1 · Jérôme",   m:"CLAU'ELEC · électricien, Nantes",      t:"+33619621550", corporate:false, prenom:"Jérôme", metier:"électricien", ville:"Nantes" },
+  { n:"2 · Ylann",    m:"Plobylec · plombier-électricien, Rennes", t:"+33666013009", corporate:false, prenom:"Ylann", metier:"plombier-électricien", ville:"Rennes" },
+  { n:"3 · Sébastien",m:"PRO'DECO · peintre, Grenoble",         t:"+33666010553", corporate:false, prenom:"Sébastien", metier:"peintre", ville:"Grenoble" },
+  { n:"4 · Florent",  m:"Delagrange Florent · électricien, Montpellier", t:"+33755605880", corporate:false, prenom:"Florent", metier:"électricien", ville:"Montpellier" },
+  { n:"5 · Bruno",    m:"BS Sani Chauf · plombier-chauffagiste, Orléans", t:"+33666791323", corporate:false, prenom:"Bruno", metier:"plombier-chauffagiste", ville:"Orléans" },
+  { n:"6 · Nicolas",  m:"Nice Travaux Rénovation · rénovation, Nice", t:"+33633631867", corporate:false, prenom:"Nicolas", metier:"rénovation", ville:"Nice" },
+  { n:"7 · Jean",     m:"L'Atelier de Plomberie · plombier, Marseille", t:"+33413940932", corporate:false, prenom:"Jean", metier:"plombier", ville:"Marseille" },
+  { n:"8 · Axel",     m:"Du Sol au Plafond · peintre, Marseille", t:"+33617143164", corporate:false, prenom:"Axel", metier:"peintre", ville:"Marseille" },
+  { n:"9 · Repartim", m:"Repartim Rouen · agence rénovation, Rouen", t:"+33970821718", corporate:true, prenom:"", metier:"rénovation", ville:"Rouen" },
+];
+
+function messageFor(c){
+  const salut = c.corporate ? "Bonjour, c'est Joffrey 👋" : `Salut ${c.prenom}, c'est Joffrey 👋`;
+  let contexte;
+  if (c.corporate) contexte = `Comme vous faites de la ${c.metier} à ${c.ville}, j'aimerais votre avis : vous testez`;
+  else if (c.metier === "rénovation") contexte = `Comme tu fais de la rénovation à ${c.ville}, j'aimerais ton avis : tu testes`;
+  else contexte = `Comme tu es ${c.metier} à ${c.ville}, j'aimerais ton avis : tu testes`;
+  return `${salut}\n\nJe lance MonDevis, un outil pour créer et envoyer ses devis en 2 minutes depuis le téléphone (TVA auto, signature électronique).\n\n${contexte} gratuitement 14 jours, sans carte bancaire ?\n\n→ mondedevis.eu`;
+}
+
+const list = document.getElementById("list");
+contacts.forEach((c, i) => {
+  const msg = messageFor(c);
+  const num = c.t.replace(/^\+/, "");
+  const url = "https://wa.me/" + num + "?text=" + encodeURIComponent(msg);
+  const card = document.createElement("div");
+  card.className = "card";
+  card.innerHTML =
+    `<div class="head"><span class="name">${c.n}</span><span class="meta">${c.m}</span></div>` +
+    `<div class="msg">${msg.replace(/&/g,"&amp;").replace(/</g,"&lt;")}</div>` +
+    `<a class="btn" href="${url}" target="_blank" rel="noopener" onclick="this.insertAdjacentHTML('afterend','<span class=done>✓ ouvert</span>')">Ouvrir WhatsApp</a>`;
+  list.appendChild(card);
+});
+</script>
+</body>
+</html>
