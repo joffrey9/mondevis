@@ -9,14 +9,14 @@
 
 | # | Tâche | Où | ✅ |
 |---|---|---|---|
-| 1 | Recréer la redirection `hello@mondedevis.eu → joffrey-menuiserie@hotmail.com` (le MX `redirect.ovh.net` est en place) | OVH → Emails → Redirections | ⬜ |
+| 1 | Redirection `hello@mondedevis.eu → joffrey-menuiserie@hotmail.com` (MX Plan : `mx0..mx4.mail.ovh.net`) | OVH → Emails → Redirections | ✅ |
 | 2 | Renommer la Page FB en `MonDevis` + changer le @ | Meta Business Suite | ⬜ |
 | 3 | Renommer le compte IG (nom d'affichage + @) | Instagram | ⬜ |
 | 4 | Mettre à jour bio + lien → `https://mondedevis.eu` | IG + FB | ⬜ |
 | 5 | Site en ligne après déploiement | `mondedevis.eu` | ✅ déployé |
 | 6 | Tester le checkout Stripe live (14 j d'essai, carte test puis annulation) | `/pricing` | ⬜ |
 | 7 | Envoyer les 10 premiers messages WhatsApp (voir §4) | WhatsApp | ⬜ |
-| 8 | Vérifier la réception des emails (test `hello@` après redirection) | Hotmail | ⬜ |
+| 8 | Vérifier la réception des emails (test `hello@` après redirection) | Hotmail | ✅ reçu (spam → marqué légitime) |
 
 ---
 
