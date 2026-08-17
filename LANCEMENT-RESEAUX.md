@@ -10,11 +10,11 @@
 | # | Tâche | Où | ✅ |
 |---|---|---|---|
 | 1 | Redirection `hello@mondedevis.eu → joffrey-menuiserie@hotmail.com` (MX Plan : `mx0..mx4.mail.ovh.net`) | OVH → Emails → Redirections | ✅ |
-| 2 | Renommer la Page FB en `MonDevis` + changer le @ | Meta Business Suite | ⬜ |
-| 3 | Renommer le compte IG (nom d'affichage + @) | Instagram | ⬜ |
-| 4 | Mettre à jour bio + lien → `https://mondedevis.eu` | IG + FB | ⬜ |
+| 2 | Renommer la Page FB en `MonDevis` + changer le @ | Meta Business Suite | ✅ @mondedevis |
+| 3 | Renommer le compte IG (nom d'affichage + @) | Instagram | ✅ @mondedevis |
+| 4 | Mettre à jour bio + lien → `https://mondedevis.eu` | IG + FB | ✅ |
 | 5 | Site en ligne après déploiement | `mondedevis.eu` | ✅ déployé |
-| 6 | Tester le checkout Stripe live (14 j d'essai, carte test puis annulation) | `/pricing` | ⬜ |
+| 6 | Tester le checkout Stripe live (14 j d'essai, carte test puis annulation) | `/pricing` | ✅ essai Pro actif jusqu'au 30/08 |
 | 7 | Envoyer les 10 premiers messages WhatsApp (voir §4) | WhatsApp | ⬜ |
 | 8 | Vérifier la réception des emails (test `hello@` après redirection) | Hotmail | ✅ reçu (spam → marqué légitime) |
 
@@ -151,19 +151,13 @@ Je peux te configurer ton compte perso si tu veux.
 
 ---
 
-## 🔎 Pseudos — candidats (à confirmer dans Meta)
+## 🔎 Pseudos — obtenus le 17/08/2026
 
-La vérif automatique n'est **pas fiable** (Instagram bloque les contrôles sans
-connexion). À confirmer au moment du renommage, dans cet ordre :
+- **Instagram** : nom `MonDevis`, @ **`mondedevis`**
+- **Facebook** : nom `MonDevis`, @ **`mondedevis`**
 
-1. `mondevis` (idéal)
-2. `mondevis.eu`
-3. `mondevis_fr`
-4. `mondedevis`
-
-> ⚠️ Facebook : **1 renommage max / 60 jours**. Vérifie d'abord que le compte
-> DevisFlash n'est ni restreint ni déjà renommé récemment. Le @ se change
-> séparément du nom.
+> ⚠️ Facebook : **1 renommage max / 60 jours** — ne plus renommer avant 60 jours.
+> Le @ se change séparément du nom.
 
 ---
 
@@ -177,7 +171,7 @@ connexion). À confirmer au moment du renommage, dans cet ordre :
 1. **Invite tes contacts** : Page FB → « Inviter des amis » (bouton sous la couverture).
 2. **WhatsApp** : statut + envoie le lien `mondedevis.eu` à tes contacts proches en demandant un follow.
 3. **Proches** : famille, amis, anciens clients, artisans que tu connais déjà.
-4. **Signature email** : ajoute « 📐 MonDevis → mondedevis.eu · Instagram @mondevis » à ta signature.
+4. **Signature email** : ajoute « 📐 MonDevis → mondedevis.eu · Instagram @mondedevis » à ta signature.
 
 ### Semaine 2 — les artisans (20–50 abonnés)
 5. **Groupes Facebook d'artisans** (menuiserie, BTP, rénovation FR/BE) : réponds aux posts qui demandent « comment faire un devis ? » avec une vraie réponse + ton lien, sans spam.
