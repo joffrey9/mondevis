@@ -51,3 +51,7 @@ clef Resend mondevis-prod/
 
 # Secrets exportés (clés API) — ne jamais committer
 Clé API MISTRAL*
+
+# Python (creative-studio)
+__pycache__/
+*.pyc

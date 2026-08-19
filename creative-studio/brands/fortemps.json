@@ -1,0 +1,43 @@
+{
+  "name": "Fortemps Menuiserie",
+  "handle": "fortemps",
+  "description": "Charte Fortemps Menuiserie — fond sombre bois, accents dorés, CTA WhatsApp",
+  "logo": "../logo_transparent.png",
+  "colors": {
+    "bg_dark": "#1C140E",
+    "bg_mid": "#302314",
+    "gold_light": "#F4E4C1",
+    "gold_mid": "#C9A84C",
+    "gold_dark": "#8B6914",
+    "copper": "#B8956A",
+    "cta_bg": "#C9A84C",
+    "cta_text": "#1C140E",
+    "white": "#FFFFFF",
+    "white_dim": "#C8BEAA"
+  },
+  "fonts": [
+    "/System/Library/Fonts/Helvetica.ttc",
+    "/System/Library/Fonts/HelveticaNeue.ttc",
+    "/System/Library/Fonts/Supplemental/Arial.ttf",
+    "/System/Library/Fonts/Supplemental/Georgia.ttf"
+  ],
+  "cta": {
+    "label": "Devis gratuit",
+    "whatsapp": "+32 0498 59 34 78",
+    "brand_bar": "FORTEMPS MENUISERIE"
+  },
+  "overlay": {
+    "headline_size": 42,
+    "subtext_size": 22,
+    "cta_size": 22,
+    "whatsapp_size": 18,
+    "logo_size": 120,
+    "logo_position": "bottom-right",
+    "logo_opacity": 0.85,
+    "band_opacity": 0.55
+  },
+  "sizes": {
+    "1x1": "1080x1080",
+    "9x16": "1080x1920"
+  }
+}

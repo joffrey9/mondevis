@@ -1,0 +1,45 @@
+{
+  "name": "MonDevis",
+  "handle": "mondevis",
+  "description": "Charte MonDevis — SaaS de devis artisans, gradient indigo→rose→orange",
+  "character": "un jeune homme de 25-30 ans, cheveux courts dégradés, barbe courte et soignée, regardant face caméra, chemise fermée, look moderne, artisan",
+  "logo": "logo-mondevis.png",
+  "colors": {
+    "bg_dark": "#0a0a14",
+    "bg_mid": "#14141f",
+    "gold_light": "#e8e8f0",
+    "gold_mid": "#f472b6",
+    "gold_dark": "#4f46e5",
+    "copper": "#9ca3af",
+    "cta_bg": "#6366f1",
+    "cta_text": "#ffffff",
+    "white": "#ffffff",
+    "white_dim": "#a5b4fc"
+  },
+  "fonts": [
+    "/System/Library/Fonts/Helvetica.ttc",
+    "/System/Library/Fonts/HelveticaNeue.ttc",
+    "/System/Library/Fonts/Supplemental/Arial.ttf"
+  ],
+  "cta": {
+    "label": "Devis gratuit",
+    "whatsapp": "",
+    "brand_bar": "MONDEVIS"
+  },
+  "overlay": {
+    "headline_size": 42,
+    "subtext_size": 22,
+    "cta_size": 22,
+    "whatsapp_size": 18,
+    "benefit_size": 24,
+    "price_size": 40,
+    "logo_size": 90,
+    "logo_position": "bottom-right",
+    "logo_opacity": 1.0,
+    "band_opacity": 0.6
+  },
+  "sizes": {
+    "1x1": "1080x1080",
+    "9x16": "1080x1920"
+  }
+}

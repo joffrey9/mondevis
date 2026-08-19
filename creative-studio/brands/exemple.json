@@ -1,0 +1,42 @@
+{
+  "name": "Ma Marque",
+  "handle": "exemple",
+  "description": "Charte générique — copie ce fichier pour chaque nouvelle marque (MonDevis, etc.)",
+  "logo": "../logo_transparent.png",
+  "colors": {
+    "bg_dark": "#101418",
+    "bg_mid": "#1C232B",
+    "gold_light": "#E8EDF2",
+    "gold_mid": "#4C8DFF",
+    "gold_dark": "#1F5FC9",
+    "copper": "#8FA3B8",
+    "cta_bg": "#4C8DFF",
+    "cta_text": "#FFFFFF",
+    "white": "#FFFFFF",
+    "white_dim": "#C7D2DE"
+  },
+  "fonts": [
+    "/System/Library/Fonts/Helvetica.ttc",
+    "/System/Library/Fonts/HelveticaNeue.ttc",
+    "/System/Library/Fonts/Supplemental/Arial.ttf"
+  ],
+  "cta": {
+    "label": "Demander un devis",
+    "whatsapp": "+32 000 00 00 00",
+    "brand_bar": "MA MARQUE"
+  },
+  "overlay": {
+    "headline_size": 42,
+    "subtext_size": 22,
+    "cta_size": 22,
+    "whatsapp_size": 18,
+    "logo_size": 120,
+    "logo_position": "bottom-right",
+    "logo_opacity": 0.85,
+    "band_opacity": 0.5
+  },
+  "sizes": {
+    "1x1": "1080x1080",
+    "9x16": "1080x1920"
+  }
+}
