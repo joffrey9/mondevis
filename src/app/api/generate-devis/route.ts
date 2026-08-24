@@ -62,7 +62,7 @@ Description brute : ${description}`;
         model: "openai/gpt-oss-20b",
         messages: [{ role: "user", content: prompt }],
         temperature: 0.4,
-        max_tokens: 1500,
+        max_tokens: 2000,
       }),
     });
 
