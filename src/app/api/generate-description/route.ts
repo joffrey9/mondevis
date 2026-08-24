@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
 
-const apiKey = process.env.MISTRAL_API_KEY;
+const groqApiKey = process.env.GROQ_API_KEY;
 
 export async function POST(request: Request) {
-  if (!apiKey) {
+  if (!groqApiKey) {
     return NextResponse.json(
-      { error: "Clé API Mistral non configurée. Ajoute MISTRAL_API_KEY dans .env" },
+      { error: "Clé API Groq non configurée. Ajoute GROQ_API_KEY dans .env" },
       { status: 500 }
     );
   }
@@ -31,14 +31,14 @@ Description brute : ${description}
 
 Réponds UNIQUEMENT avec la description reformulée, sans aucun en-tête ni pied de page.`;
 
-    const response = await fetch("https://api.mistral.ai/v1/chat/completions", {
+    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${apiKey}`,
+        "Authorization": `Bearer ${groqApiKey}`,
       },
       body: JSON.stringify({
-        model: "mistral-small-latest",
+        model: "openai/gpt-oss-20b",
         messages: [{ role: "user", content: prompt }],
         temperature: 0.3,
         max_tokens: 500,
@@ -47,18 +47,18 @@ Réponds UNIQUEMENT avec la description reformulée, sans aucun en-tête ni pied
 
     if (!response.ok) {
       const err = await response.text();
-      console.error("[Mistral HTTP]", response.status, err);
+      console.error("[Groq HTTP]", response.status, err);
       if (response.status === 401) {
-        return NextResponse.json({ error: "Clé API Mistral invalide" }, { status: 500 });
+        return NextResponse.json({ error: "Clé API Groq invalide" }, { status: 500 });
       }
-      return NextResponse.json({ error: "Erreur API Mistral" }, { status: 500 });
+      return NextResponse.json({ error: "Erreur API Groq" }, { status: 500 });
     }
 
     const data = await response.json();
     const generated = (data.choices?.[0]?.message?.content || description).trim();
     return NextResponse.json({ generated });
   } catch (error: any) {
-    console.error("[Mistral Error]", error?.message || error);
+    console.error("[Groq Error]", error?.message || error);
     return NextResponse.json(
       { error: "Erreur lors de la génération" },
       { status: 500 }

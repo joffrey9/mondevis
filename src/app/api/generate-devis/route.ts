@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
 
-const apiKey = process.env.MISTRAL_API_KEY;
+const groqApiKey = process.env.GROQ_API_KEY;
 
 export async function POST(request: Request) {
-  if (!apiKey) {
+  if (!groqApiKey) {
     return NextResponse.json(
-      { error: "Clé API Mistral non configurée. Ajoute MISTRAL_API_KEY dans .env" },
+      { error: "Clé API Groq non configurée. Ajoute GROQ_API_KEY dans .env" },
       { status: 500 }
     );
   }
@@ -38,28 +38,28 @@ CONTEXTE :
 RÈGLES :
 1. Découpe le projet en 3 à 7 lignes de devis (items)
 2. Chaque ligne doit avoir : description, quantité, prixUnitaire (€ HT), tvaRate
-3. Les prix doivent être réalistes pour ${pays} en 2026
-4. La quantité ne doit JAMAIS être 0 — min 1
+3. Les prix unitaires (€ HT) doivent être réalistes pour ${pays} en 2026 — JAMAIS 0 €, JAMAIS vides
+4. Les quantités doivent refléter la réalité du chantier (m², ml, unités, forfaits) — JAMAIS 0
 5. Fais varier les taux TVA selon le type de prestation (ex: rénovation énergétique = taux réduit)
 
 Réponds UNIQUEMENT avec un objet JSON valide (pas de markdown, pas de texte avant/après) au format :
 {
   "description": "Description reformulée du projet en 1-2 phrases",
   "lines": [
-    { "description": "...", "quantity": 1, "unitPrice": 0, "tvaRate": 20 }
+    { "description": "Dépose de l'ancien revêtement", "quantity": 50, "unitPrice": 12, "tvaRate": 10 }
   ]
 }
 
 Description brute : ${description}`;
 
-    const response = await fetch("https://api.mistral.ai/v1/chat/completions", {
+    const response = await fetch("https://api.groq.com/openai/v1/chat/completions", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        "Authorization": `Bearer ${apiKey}`,
+        "Authorization": `Bearer ${groqApiKey}`,
       },
       body: JSON.stringify({
-        model: "mistral-small-latest",
+        model: "openai/gpt-oss-20b",
         messages: [{ role: "user", content: prompt }],
         temperature: 0.4,
         max_tokens: 1500,
@@ -68,11 +68,11 @@ Description brute : ${description}`;
 
     if (!response.ok) {
       const err = await response.text();
-      console.error("[Mistral HTTP]", response.status, err);
+      console.error("[Groq HTTP]", response.status, err);
       if (response.status === 401) {
-        return NextResponse.json({ error: "Clé API Mistral invalide" }, { status: 500 });
+        return NextResponse.json({ error: "Clé API Groq invalide" }, { status: 500 });
       }
-      return NextResponse.json({ error: "Erreur API Mistral" }, { status: 500 });
+      return NextResponse.json({ error: "Erreur API Groq" }, { status: 500 });
     }
 
     const data = await response.json();
@@ -85,7 +85,7 @@ Description brute : ${description}`;
     try {
       parsed = JSON.parse(cleanContent);
     } catch {
-      console.error("[Mistral Parse] Impossible de parser:", cleanContent.slice(0, 300));
+      console.error("[Groq Parse] Impossible de parser:", cleanContent.slice(0, 300));
       return NextResponse.json(
         { error: "Erreur de parsing de la réponse IA" },
         { status: 500 }
@@ -114,7 +114,7 @@ Description brute : ${description}`;
       lines,
     });
   } catch (error: any) {
-    console.error("[Mistral Error]", error?.message || error);
+    console.error("[Groq Error]", error?.message || error);
     return NextResponse.json(
       { error: "Erreur lors de la génération du devis" },
       { status: 500 }
