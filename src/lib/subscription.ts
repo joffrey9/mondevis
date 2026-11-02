@@ -22,7 +22,18 @@ export async function getUserSubscription(userId?: string) {
 /** L'utilisateur est-il payant (actif ou en essai) ? */
 export async function isSubscribed(userId?: string): Promise<boolean> {
   const sub = await getUserSubscription(userId);
-  return sub?.status === "active" || sub?.status === "trialing";
+  if (sub?.status === "active" || sub?.status === "trialing") return true;
+
+  // Accès fondateur : Jo (rôle "admin") utilise son propre outil gratuitement,
+  // sans abonnement Stripe. Traité comme abonné partout (quota illimité, etc.).
+  let id = userId;
+  if (!id) {
+    const session = await auth();
+    id = session?.user?.id;
+  }
+  if (!id) return false;
+  const user = await prisma.user.findUnique({ where: { id }, select: { role: true } });
+  return user?.role === "admin";
 }
 
 /**

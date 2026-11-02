@@ -19,11 +19,27 @@ inscription MonDevis au KBO. Détail : `REPRISE-2026-10-16-TIKTOK.md`.
 
 | # | Vidéo | Fichier | Publié le | Vues | Likes | Com. | DM | Clics bio* |
 |---|---|---|---|---|---|---|---|---|
-| 1 ⭐ | Peppol obligatoire | `clip2-devis-vers-peppol.mp4` | **16/10 (matin, ~9 h)** | 901 ¹ | | | | |
-| 2 | Devis sur le chantier | `clip1-devis-chantier.mp4` | | | | | | |
-| 3 | Pourquoi MonDevis | `clip3-pourquoi-mondevis.mp4` | | | | | | |
+| 1 ⭐ | Peppol obligatoire | `clip2-devis-vers-peppol.mp4` | **16/10 (matin, ~9 h)** | 898 ¹ | 1 | 0 | 0 | — |
+| 2 | Devis sur le chantier | `clip1-devis-chantier.mp4` | **26/10 (matin)** | 263 ² | 0 | 0 | 0 | — |
+| 3 | Pourquoi MonDevis | `clip3-pourquoi-mondevis.mp4` | **29/10 (matin)** | | | | | |
 
-¹ Capture « Temps forts hebdomadaire » reçue le **25/10** : **901 vues de vidéo** + **0 nouveau follower** pour la semaine **12→18/10**. Chiffres au niveau du **compte** (seul clip publié cette semaine-là — clips 2 et 3 toujours sans date de publication au 25/10, à confirmer). Likes / commentaires / DM : **non fournis** par ce module → bouton « Obtiens plus de données » dans l'app.
+¹ **Détail par vidéo relevé le 26/10** (Analytics > Contenu, capture de Jo) :
+**898 vues** · 1 like · 0 commentaire · 0 partage · 2 enregistrements ·
+**0 nouveau follower**. Sous le seuil des **1 000 vues**.
+
+**🚨 Diagnostic de rétention (le point important)** :
+- Temps de visionnage moyen : **4,51 s** sur 50 s · vidéo entièrement regardée : **0,9 %**
+- **La majorité des spectateurs décroche à la 1ᵉʳᵉ seconde** (« la plupart ont
+  arrêté de regarder la vidéo à 0:01 »)
+- Sources : **Pour toi 99 %** (l'algorithme a bien distribué — le problème n'est
+  pas la diffusion, c'est le **contenu/hook**)
+- Lecture : 1 h 07 min au total sur 898 vues → preuve du décrochage immédiat
+
+→ **Le hook ne retient pas** : le clip est une capture d'écran statique de
+facture ; rien ne bouge dans la 1ʳᵉ seconde. À corriger sur **P3 → P6** :
+**visage/chantier en ouverture, phrase choc à l'écran dès la 0,5 s**, capture
+d'écran seulement en milieu de vidéo. C'est aussi l'hypothèse à tester avant le
+09/11 avant de conclure que « TikTok ne marche pas ».
 
 \* Clics bio : ⛔ **champ Site web bloqué jusqu'à 1 000 abonnés** (confirmé par
 Jo le 15/10) → pas de clics bio à suivre pour l'instant. On suit donc :
@@ -37,9 +53,32 @@ Analytics est branché).
 **Re-postage** : même clip en Reels IG + Shorts YouTube le même jour → noter ici
 ou dans le suivi IG existant (pas de re-download, upload direct, sans watermark).
 
+✅ **P1 « Devis sur le chantier » — tout publié le 26/10 (matin)** : **TikTok ✅**
+(70 vues dans l'heure, après examen automatique) · **IG ✅** · **FB Page ✅** (Reel)
+· **YouTube Shorts ✅**. DM déjà sur « Tout le monde ». Pack : `PUBLIER-P1-2026-10-26.md`.
+
+✅ **P2 « Pourquoi MonDeVis » — publié jeu 29/10 sur les 4 canaux** : **TikTok ✅**
+· **IG ✅** · **FB Page ✅** · **YouTube Shorts ✅**. Pack : `PUBLIER-P2-2026-10-28.md`.
+(YouTube a fait payer : 2 figés de la machine pendant l'upload — cause identifiée
+dans `DIAGNOSTIC-FIGES-2026-10-29.md`, aucun impact sur la publication.)
+
 ✅ **Clips 1/Peppol re-posté le 16/10** (même jour que TikTok) : **IG ✅ fait**
 (bio déjà à jour) · **YouTube ✅ fait** (public, lien dans description) ·
 **Facebook ✅ fait** (partage 2-3 groupes artisans bonus). Détail : `REPRISE-2026-10-16-TIKTOK.md`.
+
+📊 **Capture TikTok reçue le 29/10** (« Indicateurs clés », fenêtre **21 → 27/10**,
+7 derniers jours) :
+- **274 vues (↓ -69,6 % / -627)** vs 901 la semaine précédente — courbe plate
+  jusqu'au **pic du 26/10** (= P1), puis **retombée à 0 dès le 27/10** →
+  preuve supplémentaire : *on publie = vues, on arrête = 0* ;
+- **0 like · 0 commentaire · 0 partage · 0 vue de profil** sur la fenêtre ;
+- **Aucun commentaire à répondre** (section « Derniers commentaires » vide) ;
+- Profil : **J'aime 1 · Followers 0 · Suivis 1** → **0 abonné** — le seuil
+  **1 000** reste très loin, champ Site web toujours bloqué ;
+- Récompenses : **$0,00**.
+
+² **P1 (clip1) relevé au 29/10** : publiée **26/10 06:00**, **263 vues**,
+0 like · 0 commentaire (70 vues dans la 1ʳᵉ h → ~263 au total), durée 50 s.
 
 ---
 
@@ -60,7 +99,7 @@ ou dans le suivi IG existant (pas de re-download, upload direct, sans watermark)
 | Semaine | Vues totales | Likes | Com. | DM qualifiés | Abonnés (cumul) | Inscriptions | Verdict |
 |---|---|---|---|---|---|---|---|
 | S1 (13-19/10) | 901 | — | — | — | 0 | — | En cours |
-| S2 | | | | | | | |
+| S2 (fenêtre TikTok 21-27/10) | 274 | 0 | 0 | — | **0** | — | En cours |
 | S3 | | | | | | | |
 | S4 | | | | | | | |
 

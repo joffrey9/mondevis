@@ -15,7 +15,7 @@ const features = [
   { icon: Send, title: "Envoi instantané", desc: "Email, WhatsApp ou lien direct. Le client reçoit le devis en 1 seconde. Signature électronique incluse.", gradient: "from-pink-500 to-rose-500", benefit: "Taux de signature × 3" },
   { icon: BarChart3, title: "Suivi en temps réel", desc: "Statut : envoyé, lu, accepté, refusé. Relances automatiques pour ne plus jamais perdre une vente.", gradient: "from-amber-500 to-orange-500", benefit: "Taux de conversion +40%" },
   { icon: Smartphone, title: "100% mobile", desc: "Crée et envoie un devis depuis ton téléphone, sur le chantier, en 2 minutes. Sans rien installer.", gradient: "from-emerald-500 to-teal-500", benefit: "Fonctionne partout" },
-  { icon: Shield, title: "Conforme et sécurisé", desc: "Données hébergées en France, chiffrement SSL, RGPD. Factures électroniques compatibles Peppol.", gradient: "from-cyan-500 to-blue-500", benefit: "Normes européennes" },
+  { icon: Shield, title: "Conforme et sécurisé", desc: "Données hébergées en France, chiffrement SSL, RGPD. Factures électroniques : Peppol pour la Belgique, réforme française e-facture en préparation.", gradient: "from-cyan-500 to-blue-500", benefit: "Normes européennes" },
   { icon: Zap, title: "IA intelligente", desc: "L'IA pré-remplit les descriptions, suggère les prix et détecte automatiquement la TVA applicable.", gradient: "from-violet-500 to-purple-500", benefit: "Zéro saisie inutile" },
 ];
 
@@ -32,7 +32,7 @@ const faqs = [
   { q: "Mes données sont-elles sécurisées ?", a: "Oui. Hébergement en France (Neon PostgreSQL), chiffrement SSL/TLS, sauvegarde quotidienne. Conforme RGPD." },
   { q: "Puis-je utiliser MonDevis sur mon téléphone ?", a: "Oui, 100% responsive. Crée et envoie un devis depuis ton téléphone aussi facilement que depuis ton ordinateur. Aucune app à installer." },
   { q: "Est-ce que ça gère la TVA belge ?", a: "Oui ! MonDevis gère automatiquement la TVA française (20%, 10%, 5.5%) et la TVA belge (21%, 12%, 6%). Idéal pour les artisans frontaliers." },
-  { q: "Puis-je envoyer des factures via Peppol ?", a: "Oui, MonDevis est connecté au réseau Peppol. En un clic, ta facture est envoyée directement dans le système de ton client pro." },
+  { q: "Puis-je envoyer des factures via Peppol ?", a: "Oui — pour les factures B2B belges (Peppol obligatoire en Belgique depuis le 1er janvier 2026) : ta facture part directement dans le système de ton client pro. 🇫🇷 En France, c'est une autre réforme : le passage par des Plateformes Agréées (obligation de réception depuis le 1er septembre 2026, émission pour les TPE/PME au 1er septembre 2027). MonDevis s'y prépare." },
 ];
 
 const plans = [

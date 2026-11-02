@@ -1,7 +1,7 @@
 """Fournisseurs de génération IA — fal.ai (payant) + Pollinations (gratuit) + mock.
 
 Image : fal.ai (FAL_KEY, payant) ou Pollinations.AI (gratuit, sans clé ni carte).
-Vidéo : fal.ai (clip IA) ou montage local ffmpeg (gratuit, cf. video.py).
+Vidéo : fal.ai / Google Veo / Kie.ai (avatar UGC) ou montage local ffmpeg.
 Sans clé ni réseau, le mode mock génère un visuel déterministe hors-ligne.
 """
 
@@ -9,6 +9,7 @@ from __future__ import annotations
 
 import base64
 import io
+import json
 import os
 import sys
 import time
@@ -47,6 +48,14 @@ def _load_env() -> None:
 _load_env()
 
 FAL_KEY = os.environ.get("FAL_KEY", "").strip()
+KIE_API_KEY = os.environ.get("KIE_API_KEY", "").strip()
+ELEVENLABS_API_KEY = os.environ.get("ELEVENLABS_API_KEY", "").strip()
+ELEVENLABS_API_BASE = "https://api.elevenlabs.io/v1"
+DEFAULT_ELEVENLABS_MODEL = "eleven_v4"
+KIE_API_BASE = "https://api.kie.ai"
+KIE_UPLOAD_URL = "https://kieai.redpandaai.co/api/file-stream-upload"
+KIE_AVATAR_STANDARD = "kling/ai-avatar-standard"
+KIE_AVATAR_PRO = "kling/ai-avatar-pro"
 FAL_QUEUE_BASE = "https://queue.fal.run"
 POLLINATIONS_IMAGE_BASE = "https://image.pollinations.ai"
 
@@ -71,6 +80,97 @@ class ProviderError(Exception):
 
 def has_api_key() -> bool:
     return bool(FAL_KEY)
+
+
+def has_kie_key() -> bool:
+    return bool(KIE_API_KEY)
+
+
+def has_elevenlabs_key() -> bool:
+    return bool(ELEVENLABS_API_KEY)
+
+
+def elevenlabs_voices(search: str = "French", page_size: int = 50) -> list[dict]:
+    """Retourne les voix ElevenLabs accessibles à la clé (filtre langue française)."""
+    if not ELEVENLABS_API_KEY:
+        raise ProviderError("ELEVENLABS_API_KEY manquante — ajoute-la dans .env")
+    response = requests.get(
+        f"https://api.elevenlabs.io/v2/voices",
+        headers={"xi-api-key": ELEVENLABS_API_KEY},
+        params={"search": search, "page_size": min(max(page_size, 1), 100)},
+        timeout=30,
+    )
+    if response.status_code != 200:
+        raise ProviderError(f"ElevenLabs liste des voix → HTTP {response.status_code}: {response.text[:400]}")
+    try:
+        body = response.json()
+        voices = body["voices"]
+    except (ValueError, KeyError, TypeError) as err:
+        raise ProviderError("ElevenLabs liste des voix → réponse inattendue") from err
+    if not isinstance(voices, list):
+        raise ProviderError("ElevenLabs liste des voix → format invalide")
+    return [voice for voice in voices if isinstance(voice, dict)]
+
+
+def generate_elevenlabs_tts(
+    text: str,
+    voice_id: str,
+    model_id: str = DEFAULT_ELEVENLABS_MODEL,
+    *,
+    with_timestamps: bool = False,
+) -> tuple[bytes, dict | None]:
+    """Génère du MP3 via ElevenLabs; renvoie aussi l'alignement si demandé."""
+    if not ELEVENLABS_API_KEY:
+        raise ProviderError("ELEVENLABS_API_KEY manquante — ajoute-la dans .env")
+    if not text.strip() or not voice_id.strip():
+        raise ProviderError("ElevenLabs nécessite un script et un voice ID non vides")
+    max_chars = {
+        "eleven_v4": 2_000,  # limite pratique Text to Dialogue, une voix
+        "eleven_v4_turbo": 2_000,
+        "eleven_v3": 5_000,
+        "eleven_multilingual_v2": 10_000,
+        "eleven_flash_v2_5": 40_000,
+    }.get(model_id, 10_000)
+    if len(text) > max_chars:
+        raise ProviderError(f"Script trop long pour {model_id} (maximum {max_chars:,} caractères)")
+    if model_id in ("eleven_v4", "eleven_v4_turbo"):
+        if with_timestamps:
+            raise ProviderError(
+                f"{model_id} ne fournit pas les timings via Text to Dialogue; "
+                "choisis eleven_v3 ou eleven_multilingual_v2 pour les sous-titres synchronisés"
+            )
+        url = f"{ELEVENLABS_API_BASE}/text-to-dialogue"
+        payload = {"inputs": [{"text": text, "voice_id": voice_id}], "model_id": model_id}
+    else:
+        endpoint = "with-timestamps" if with_timestamps else ""
+        url = f"{ELEVENLABS_API_BASE}/text-to-speech/{voice_id}"
+        if endpoint:
+            url += f"/{endpoint}"
+        payload = {"text": text, "model_id": model_id}
+    response = requests.post(
+        url,
+        params={"output_format": "mp3_44100_128"},
+        headers={"xi-api-key": ELEVENLABS_API_KEY, "Content-Type": "application/json"},
+        json=payload,
+        timeout=120,
+    )
+    if response.status_code != 200:
+        raise ProviderError(
+            f"ElevenLabs synthèse → HTTP {response.status_code}: {response.text[:500]}"
+        )
+    if with_timestamps:
+        try:
+            body = response.json()
+            audio = base64.b64decode(body["audio_base64"], validate=True)
+            alignment = body.get("alignment") or body.get("normalized_alignment")
+        except (ValueError, KeyError, TypeError) as err:
+            raise ProviderError("ElevenLabs synthèse → audio ou alignement absent/invalide") from err
+        if not audio:
+            raise ProviderError("ElevenLabs synthèse → audio vide")
+        return audio, alignment
+    if not response.content:
+        raise ProviderError("ElevenLabs synthèse → audio vide")
+    return response.content, None
 
 
 def has_google_key() -> bool:
@@ -334,6 +434,120 @@ def generate_google_video(
     if video_resp.status_code != 200:
         raise ProviderError(f"Google Veo → téléchargement HTTP {video_resp.status_code}")
     return video_resp.content
+
+
+def _kie_json(response: requests.Response, operation: str) -> dict:
+    """Valide HTTP + l'enveloppe JSON Kie (qui peut échouer avec HTTP 200)."""
+    if response.status_code != 200:
+        raise ProviderError(f"Kie.ai {operation} → HTTP {response.status_code}: {response.text[:400]}")
+    try:
+        body = response.json()
+    except (ValueError, requests.exceptions.JSONDecodeError) as err:
+        raise ProviderError(f"Kie.ai {operation} → réponse JSON invalide") from err
+    if not isinstance(body, dict):
+        raise ProviderError(f"Kie.ai {operation} → réponse inattendue")
+    code = body.get("code", 200)
+    if code != 200:
+        detail = body.get("msg", "erreur inconnue")
+        hint = " (crédits insuffisants)" if code == 402 else ""
+        raise ProviderError(f"Kie.ai {operation} → code {code}: {detail}{hint}")
+    return body
+
+
+def _kie_upload(content: bytes, filename: str, mime_type: str) -> str:
+    """Envoie un média binaire à l'API d'upload Kie et retourne son URL temporaire."""
+    if not KIE_API_KEY:
+        raise ProviderError("KIE_API_KEY manquante — ajoute-la dans .env")
+    response = requests.post(
+        KIE_UPLOAD_URL,
+        headers={"Authorization": f"Bearer {KIE_API_KEY}"},
+        data={"uploadPath": "creative-studio/avatars"},
+        files={"file": (filename, content, mime_type)},
+        timeout=180,
+    )
+    body = _kie_json(response, "upload")
+    download_url = (body.get("data") or {}).get("downloadUrl")
+    if not body.get("success") or not download_url:
+        raise ProviderError(f"Kie.ai upload → URL de fichier absente: {body.get('msg', '')}")
+    return str(download_url)
+
+
+def generate_kie_avatar(
+    image_bytes: bytes,
+    audio_bytes: bytes,
+    prompt: str,
+    *,
+    model: str = KIE_AVATAR_STANDARD,
+    poll_timeout: int = 900,
+) -> bytes:
+    """Crée un avatar parlant avec Kling via Kie.ai; retourne le MP4 final.
+
+    Les fichiers source sont uploadés, puis createTask est pollé jusqu'à un
+    état terminal. Aucun retry automatique de createTask (évite les doubles coûts).
+    """
+    if not KIE_API_KEY:
+        raise ProviderError("KIE_API_KEY manquante — ajoute-la dans .env")
+    if model not in (KIE_AVATAR_STANDARD, KIE_AVATAR_PRO):
+        raise ProviderError(f"Modèle Kie.ai non pris en charge: {model}")
+    if not image_bytes or not audio_bytes or not prompt.strip():
+        raise ProviderError("Kie.ai avatar nécessite une image, un audio et un prompt non vide")
+    if len(prompt) > 5000:
+        raise ProviderError("Kie.ai avatar: le prompt ne peut pas dépasser 5 000 caractères")
+
+    image_url = _kie_upload(image_bytes, "avatar.png", "image/png")
+    audio_url = _kie_upload(audio_bytes, "voice.mp3", "audio/mpeg")
+    submit = requests.post(
+        f"{KIE_API_BASE}/api/v1/jobs/createTask",
+        headers={"Authorization": f"Bearer {KIE_API_KEY}", "Content-Type": "application/json"},
+        json={
+            "model": model,
+            "input": {"image_url": image_url, "audio_url": audio_url, "prompt": prompt},
+        },
+        timeout=60,
+    )
+    body = _kie_json(submit, "création du job")
+    task_id = (body.get("data") or {}).get("taskId")
+    if not task_id:
+        raise ProviderError("Kie.ai création du job → taskId absent")
+
+    deadline = time.monotonic() + max(1, poll_timeout)
+    interval = 2.0
+    while time.monotonic() < deadline:
+        status_response = requests.get(
+            f"{KIE_API_BASE}/api/v1/jobs/recordInfo",
+            headers={"Authorization": f"Bearer {KIE_API_KEY}"},
+            params={"taskId": task_id},
+            timeout=30,
+        )
+        status_body = _kie_json(status_response, "consultation du job")
+        task = status_body.get("data") or {}
+        state = task.get("state")
+        if state == "fail":
+            raise ProviderError(
+                f"Kie.ai avatar échoué ({task.get('failCode', 'inconnu')}): "
+                f"{task.get('failMsg', 'aucun détail')}"
+            )
+        if state == "success":
+            try:
+                result = task.get("response")
+                if not isinstance(result, dict):
+                    result_json = task.get("resultJson")
+                    result = json.loads(result_json) if isinstance(result_json, str) else result_json
+                result_urls = result["resultUrls"]
+                video_url = result_urls[0]
+            except (KeyError, IndexError, TypeError, ValueError) as err:
+                raise ProviderError("Kie.ai avatar terminé sans URL vidéo exploitable") from err
+            video_response = requests.get(str(video_url), timeout=180)
+            if video_response.status_code != 200:
+                raise ProviderError(f"Kie.ai téléchargement vidéo → HTTP {video_response.status_code}")
+            if not video_response.content:
+                raise ProviderError("Kie.ai téléchargement vidéo → fichier vide")
+            return video_response.content
+        if state not in ("waiting", "queuing", "generating"):
+            raise ProviderError(f"Kie.ai état de job inattendu: {state!r}")
+        time.sleep(interval)
+        interval = min(interval * 1.5, 10.0)
+    raise ProviderError(f"Kie.ai avatar → timeout après {poll_timeout} s (taskId {task_id})")
 
 
 def save_media(content: bytes, out_path: str | Path) -> Path:

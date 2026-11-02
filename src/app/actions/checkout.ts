@@ -27,6 +27,9 @@ export async function createCheckoutSession(plan: "pro" | "business") {
     line_items: [{ price: priceId, quantity: 1 }],
     success_url: `${ORIGIN}/dashboard?checkout=success`,
     cancel_url: `${ORIGIN}/pricing`,
+    // L'essai doit démarrer sans carte (promesse du site). Par défaut, Stripe
+    // collecte toujours un moyen de paiement, même avec trial_period_days.
+    payment_method_collection: "if_required",
     metadata: { userId: session.user.id, plan },
     // Propager le userId sur la souscription elle-même : la Checkout Session
     // ne transmet PAS ses metadata à l'objet Subscription, mais le webhook

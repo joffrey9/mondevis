@@ -15,10 +15,10 @@
 | Date | # | Contenu | Réseau source | Tournage ? |
 |---|---|---|---|---|
 | **lun 26/10** | P1 | `clip1-devis-chantier.mp4` (50 s) | TikTok | ❌ **clip déjà prêt** |
-| **jeu 29/10** | P2 | `clip3-pourquoi-mondevis.mp4` (16 s) | TikTok | ❌ **clip déjà prêt** |
-| **sam 31/10** | P3 | « Le devis oublié » (~30 s) | TikTok | 🎬 1 prise ~20 min, **script ci-dessous** |
-| **lun 02/11** | P4 | « Facture B2B refusée » (Peppol, ~30 s) | TikTok | 🎬 1 prise, **script ci-dessous** |
-| **jeu 05/11** | P5 | « 1 h de paperasse = 260 h/an » (~30 s) | TikTok | 🎬 1 prise, **script ci-dessous** |
+| **jeu 29/10** ¹ | P2 | `clip3-pourquoi-mondevis.mp4` (16 s) | TikTok | ✅ **publié 29/10 (TikTok + IG + FB + YouTube)** |
+| **lun 02/11** | P3 | « Le devis oublié » (~30 s) | TikTok | 🎬 **tournage + publication lun 02/11** — pack : `PUBLIER-P3-2026-11-02.md` |
+| **mer 04/11** | P4 | « Facture B2B refusée » (Peppol, ~30 s) | TikTok | 🎬 1 prise, **script ci-dessous** |
+| **ven 06/11** | P5 | « 1 h de paperasse = 260 h/an » (~30 s) | TikTok | 🎬 1 prise, **script ci-dessous** |
 | **sam 07/11** | P6 | Preuve : un vrai devis accepté + CTA (~30 s) | TikTok | 🎬 capture écran + voix, **script ci-dessous** |
 | **dim 08/11** | — | Bilan hebdo (P1 → P6) dans `SUIVI-TIKTOK.md` | — | — |
 | **lun 09/11** | — | 🎯 **Décision** : 1 vidéo > 1 000 vues OU ≥ 2 DM qualifiés ? | — | — |
@@ -28,11 +28,19 @@
   Upload direct depuis le fichier d'origine, **sans watermark** (pas de
   re-download d'une plateforme à l'autre) — les 4 textes sont copiés plus bas,
   c'est du copier-coller.
+- ¹ **Décalage du 26/10 (Jo)** : P2 passe de jeu 29 → mer 28/10 pour une
+  cadence plus régulière et plus de données avant le 09/11. P3 reste sam 31/10 —
+  on garde 3 pubs/sem. Pack : `PUBLIER-P2-2026-10-28.md`.
+- ¹ **2ᵉ décalage du 29/10 (Jo)** : 28/10 non faite → P2 publiée **jeu 29/10**
+  (cadence lun → jeu → sam, conforme au plan initial). P3 inchangée sam 31/10.
+- ¹ **3ᵉ décalage du 02/11 (Jo)** : P3 non tournée le 31/10 → **publiée lun
+  02/11**, puis P4 mer 04/11, P5 ven 06/11, P6 sam 07/11. Bilan dim 08/11 et
+  décision lun 09/11 inchangés. Pack : `PUBLIER-P3-2026-11-02.md`.
 - **Autour de la publication** (même matin) : stats de D-1 + réponses aux
   commentaires, notées dans `SUIVI-TIKTOK.md` / `SUIVI-RESEAUX.md`.
-- **dim 01/11** : bilan de la semaine P1-P3 · **dim 08/11** : bilan P4-P6.
-- Si 2 videos/sem te semblent plus tenables → supprimer sam 31/10 et sam 07/11,
-  le calendrier tient debout avec 4 publications avant le 09/11.
+- **dim 08/11** : bilan P1-P6 (les bilans des dim 01/11 sont fusionnés dedans).
+- Si 2 videos/sem te semblent plus tenables → supprimer ven 06/11 (P5), le
+  calendrier tient debout avec 5 publications avant le 09/11.
 
 ---
 
@@ -260,10 +268,12 @@ message**, max 1 pub/groupe/jour, 3-5 groupes suivis sérieusement) :
 4. **Jours sans publication** (mar / mer / ven) : 5 min — stats + commentaires.
 5. **Dimanche** : bilan hebdo (lignes déjà ouvertes).
 
-🎬 **Tournages** (P3 → P6, scripts ci-dessus) : **P3 à tourner avant ven.
-30/10** (~20 min, une seule prise), **P4-P6 en UNE session de 45-60 min** le
-week-end 31/10-01/11 — selfie ou capture écran, **zéro montage**. Ta demi-heure
-du matin reste alors du simple publication.
+🎬 **Montages** (P3 → P6, textes ci-dessus) : **format faceless adopté le
+02/11** (Jo ne se filme pas) → **document devis/facture réel** + voix off
+edge-tts + sous-titres, via `creative-studio/build-p3.py` (jamais de photo de
+chantier : MonDevis ne parle que de devis et factures). **P3 est déjà produite**
+(`creative-studio/output/p3-devis-oublie.mp4`), **P4-P6** se montent sur le
+même modèle en ~10 min chacun. Ta demi-heure du matin reste de la publication.
 
 💡 **Option soirée (18-20 h) sans se lever tôt** : TikTok (compte Pro) propose
 la **programmation** à l'upload depuis le navigateur (champ « Programmer » à
@@ -272,11 +282,12 @@ publier le matin est très bien : l'essentiel est la régularité, pas l'heure.
 
 ## 🎯 Avant le 09/11 — n'oublier pas
 
-- [ ] **Lundi 26/10 (matin)** — **Détail TikTok par vidéo** (Analytics > Contenu) :
-      le clip Peppol était à **901 vues cumulées** sem. 12-18/10 — savoir s'il
-      dépasse 1 000 → **critère n°1 de la décision du 09/11**.
-- [ ] **Lundi 26/10 (matin)** — **DM TikTok activés** (Paramètres →
-      Confidentialité → DM → « Tout le monde ») : le critère n°2 en dépend.
+- [x] **Lundi 26/10** — **Détail TikTok par vidéo** ✅ : clip Peppol =
+      **898 vues** (pas 901), 1 like, 0 com, 0 nouveau follower → **sous le
+      seuil des 1 000**. Rétention : décrochage à la 1ʳᵉ s (voir diagnostic
+      dans `SUIVI-TIKTOK.md`).
+- [x] **Lundi 26/10** — **DM TikTok activés** ✅ (« Tout le monde » déjà
+      en place).
 - [ ] **Abonnés** : seuil **1 000** = déblocage du champ Site web (colonne à
       suivre chaque semaine).
 - [ ] Remplir les colonnes vides de la semaine S1 et les bilans 01/11 et 08/11.

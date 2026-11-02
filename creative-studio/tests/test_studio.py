@@ -3,6 +3,7 @@
 import json
 import os
 import shutil
+from unittest.mock import Mock, patch
 import sys
 import tempfile
 import unittest
@@ -13,7 +14,7 @@ BRANDS_DIR = STUDIO_DIR / "brands"
 sys.path.insert(0, str(STUDIO_DIR))
 
 from cli import _parse_hooks, _slugify, _with_character  # noqa: E402
-from studio import providers, voiceover  # noqa: E402
+from studio import providers, voiceover, voice_studio  # noqa: E402
 from studio.brand import BrandError, load_brand, load_brand_by_handle, list_brands  # noqa: E402
 from studio.overlay import apply_brand, build_overlay_layer  # noqa: E402
 from studio.video import burn_captions, make_ken_burns_video  # noqa: E402
@@ -72,7 +73,7 @@ class TestProviders(unittest.TestCase):
     def test_mock_image_deterministe(self):
         a = providers.mock_image(300, 300, "test", seed=1)
         b = providers.mock_image(300, 300, "test", seed=1)
-        self.assertEqual(list(a.getdata()), list(b.getdata()))
+        self.assertEqual(list(a.get_flattened_data()), list(b.get_flattened_data()))
 
     def test_google_instance_texte(self):
         inst = providers._google_instance("bonjour", None)
@@ -92,6 +93,147 @@ class TestProviders(unittest.TestCase):
             self.skipTest("GOOGLE_AI_API_KEY présente")
         with self.assertRaises(providers.ProviderError):
             providers.generate_google_video("test")
+
+    def test_elevenlabs_tts_requete_et_audio_mp3_mock(self):
+        response = Mock(status_code=200, content=b"fake-mp3", text="")
+        with patch.object(providers, "ELEVENLABS_API_KEY", "test-key"):
+            with patch.object(providers.requests, "post", return_value=response) as post:
+                audio, alignment = providers.generate_elevenlabs_tts("Bonjour", "voice-123")
+        self.assertEqual(audio, b"fake-mp3")
+        self.assertIsNone(alignment)
+        self.assertEqual(post.call_args.args[0], "https://api.elevenlabs.io/v1/text-to-dialogue")
+        self.assertEqual(post.call_args.kwargs["json"]["inputs"], [
+            {"text": "Bonjour", "voice_id": "voice-123"}
+        ])
+        self.assertEqual(post.call_args.kwargs["headers"]["xi-api-key"], "test-key")
+        self.assertEqual(post.call_args.kwargs["json"]["model_id"], "eleven_v4")
+
+    def test_elevenlabs_v4_utilise_endpoint_dialogue_pour_une_seule_voix(self):
+        response = Mock(status_code=200, content=b"v4-mp3", text="")
+        with patch.object(providers, "ELEVENLABS_API_KEY", "test-key"):
+            with patch.object(providers.requests, "post", return_value=response) as post:
+                audio, alignment = providers.generate_elevenlabs_tts(
+                    "Bonjour", "voice-v4", "eleven_v4"
+                )
+        self.assertEqual(audio, b"v4-mp3")
+        self.assertIsNone(alignment)
+        self.assertEqual(post.call_args.args[0], "https://api.elevenlabs.io/v1/text-to-dialogue")
+        self.assertEqual(post.call_args.kwargs["json"]["inputs"], [
+            {"text": "Bonjour", "voice_id": "voice-v4"}
+        ])
+
+    def test_elevenlabs_timestamps_decode_audio_alignment(self):
+        import base64
+        payload = {"audio_base64": base64.b64encode(b"mp3").decode(), "alignment": {"characters": ["O"]}}
+        response = Mock(status_code=200, text="", json=lambda: payload)
+        with patch.object(providers, "ELEVENLABS_API_KEY", "test-key"):
+            with patch.object(providers.requests, "post", return_value=response) as post:
+                audio, alignment = providers.generate_elevenlabs_tts(
+                "O", "voice-1", "eleven_multilingual_v2", with_timestamps=True
+            )
+        self.assertEqual(audio, b"mp3")
+        self.assertEqual(alignment, payload["alignment"])
+        self.assertTrue(post.call_args.args[0].endswith("/with-timestamps"))
+
+    def test_elevenlabs_v4_refuse_timestamps_au_lieu_de_perdre_alignment(self):
+        with patch.object(providers, "ELEVENLABS_API_KEY", "test-key"):
+            with patch.object(providers.requests, "post") as post:
+                with self.assertRaisesRegex(providers.ProviderError, "ne fournit pas les timings"):
+                    providers.generate_elevenlabs_tts(
+                        "Bonjour", "voice-v4", "eleven_v4", with_timestamps=True
+                    )
+                post.assert_not_called()
+
+    def test_liste_voix_elevenlabs_sans_resultat_explique_le_vide(self):
+        from argparse import Namespace
+        from io import StringIO
+        from contextlib import redirect_stdout
+        from cli import cmd_voice
+
+        args = Namespace(
+            list_voices=False, list_eleven_voices=True, eleven_search="Belgian",
+            batch=None, script=None, compare=False, engine="edge",
+            eleven_voice_id=None, eleven_model="eleven_v4", captions=False,
+            max_words=4, music=None, music_volume=0.15, out_dir=None, base=None,
+            voice="be-m",
+        )
+        buffer = StringIO()
+        with patch.object(providers, "ELEVENLABS_API_KEY", "test-key"):
+            with patch.object(providers, "elevenlabs_voices", return_value=[]):
+                with redirect_stdout(buffer):
+                    cmd_voice(args)
+        output = buffer.getvalue()
+        self.assertIn("Aucune voix ElevenLabs trouvée", output)
+        self.assertIn("Belgian", output)
+        self.assertIn("Voice Library", output)
+
+    def test_elevenlabs_validation_sans_cle_ou_script(self):
+        with patch.object(providers, "ELEVENLABS_API_KEY", ""):
+            with self.assertRaisesRegex(providers.ProviderError, "ELEVENLABS_API_KEY"):
+                providers.generate_elevenlabs_tts("Bonjour", "voice-1")
+        with patch.object(providers, "ELEVENLABS_API_KEY", "test-key"):
+            with patch.object(providers.requests, "post") as post:
+                with self.assertRaisesRegex(providers.ProviderError, "script et un voice ID"):
+                    providers.generate_elevenlabs_tts(" ", "")
+                post.assert_not_called()
+
+    def test_kie_avatar_sans_cle_leve_erreur(self):
+        with patch.object(providers, "KIE_API_KEY", ""):
+            with self.assertRaisesRegex(providers.ProviderError, "KIE_API_KEY"):
+                providers.generate_kie_avatar(b"image", b"audio", "parle")
+
+    def test_kie_avatar_poll_upload_et_download_mocks(self):
+        upload = Mock(status_code=200, text="", json=lambda: {
+            "success": True, "code": 200, "data": {"downloadUrl": "https://files.test/input"}
+        })
+        created = Mock(status_code=200, text="", json=lambda: {"code": 200, "data": {"taskId": "task-1"}})
+        pending = Mock(status_code=200, text="", json=lambda: {"code": 200, "data": {"state": "generating"}})
+        complete = Mock(status_code=200, text="", json=lambda: {
+            "code": 200, "data": {"state": "success", "resultJson": '{"resultUrls":["https://files.test/video.mp4"]}'}
+        })
+        download = Mock(status_code=200, content=b"mp4-bytes")
+        with patch.object(providers, "KIE_API_KEY", "test-key"), \
+             patch.object(providers.requests, "post", side_effect=[upload, upload, created]) as post, \
+             patch.object(providers.requests, "get", side_effect=[pending, complete, download]), \
+             patch.object(providers.time, "sleep"):
+            result = providers.generate_kie_avatar(b"png", b"mp3", "parle", poll_timeout=5)
+        self.assertEqual(result, b"mp4-bytes")
+        self.assertEqual(post.call_count, 3)
+        self.assertEqual(post.call_args_list[-1].kwargs["json"]["model"], providers.KIE_AVATAR_STANDARD)
+
+    def test_kie_avatar_remonte_erreur_api_et_echec_job(self):
+        unauthorized = Mock(status_code=200, text="", json=lambda: {"code": 401, "msg": "unauthorized"})
+        with patch.object(providers, "KIE_API_KEY", "test-key"), \
+             patch.object(providers.requests, "post", return_value=unauthorized):
+            with self.assertRaisesRegex(providers.ProviderError, "code 401"):
+                providers.generate_kie_avatar(b"png", b"mp3", "parle")
+
+        uploaded = Mock(status_code=200, text="", json=lambda: {
+            "success": True, "code": 200, "data": {"downloadUrl": "https://files.test/input"}
+        })
+        created = Mock(status_code=200, text="", json=lambda: {"code": 200, "data": {"taskId": "task-2"}})
+        failed = Mock(status_code=200, text="", json=lambda: {
+            "code": 200, "data": {"state": "fail", "failCode": "500", "failMsg": "render error"}
+        })
+        with patch.object(providers, "KIE_API_KEY", "test-key"), \
+             patch.object(providers.requests, "post", side_effect=[uploaded, uploaded, created]), \
+             patch.object(providers.requests, "get", return_value=failed):
+            with self.assertRaisesRegex(providers.ProviderError, "render error"):
+                providers.generate_kie_avatar(b"png", b"mp3", "parle", poll_timeout=2)
+
+    def test_kie_avatar_reponse_sans_video_est_rejetee(self):
+        uploaded = Mock(status_code=200, text="", json=lambda: {
+            "success": True, "code": 200, "data": {"downloadUrl": "https://files.test/input"}
+        })
+        created = Mock(status_code=200, text="", json=lambda: {"code": 200, "data": {"taskId": "task-3"}})
+        complete_without_url = Mock(status_code=200, text="", json=lambda: {
+            "code": 200, "data": {"state": "success", "resultJson": "{}"}
+        })
+        with patch.object(providers, "KIE_API_KEY", "test-key"), \
+             patch.object(providers.requests, "post", side_effect=[uploaded, uploaded, created]), \
+             patch.object(providers.requests, "get", return_value=complete_without_url):
+            with self.assertRaisesRegex(providers.ProviderError, "sans URL vidéo"):
+                providers.generate_kie_avatar(b"png", b"mp3", "parle", poll_timeout=2)
 
 
 class TestOverlay(unittest.TestCase):
@@ -121,7 +263,7 @@ class TestOverlay(unittest.TestCase):
         self.assertEqual(layer.mode, "RGBA")
         self.assertEqual(layer.size, (640, 640))
         # La bande basse doit être semi-transparente : le canal alpha varie
-        alphas = set(layer.crop((0, 400, 640, 640)).getchannel("A").getdata())
+        alphas = set(layer.crop((0, 400, 640, 640)).getchannel("A").get_flattened_data())
         self.assertTrue(any(a not in (0, 255) for a in alphas))
 
     def test_overlay_layer_avec_benefices_prix(self):
@@ -158,6 +300,19 @@ class TestCliHelpers(unittest.TestCase):
 
 
 class TestVoiceover(unittest.TestCase):
+    def test_elevenlabs_alignment_converti_en_sous_titres(self):
+        alignment = {
+            "characters": list("Salut Jo"),
+            "character_start_times_seconds": [0.0, 0.1, 0.2, 0.3, 0.4, 0.6, 0.7, 0.8],
+            "character_end_times_seconds": [0.1, 0.2, 0.3, 0.4, 0.5, 0.7, 0.8, 0.9],
+        }
+        captions = voice_studio._captions_from_alignment(alignment, max_words=1)
+        self.assertEqual(captions, [(0, 500, "Salut"), (700, 900, "Jo")])
+        srt = voice_studio._srt_from_alignment("Salut Jo", alignment, max_words=1)
+        self.assertIn("00:00:00,000 --> 00:00:00,500", srt)
+        self.assertIn("Jo", srt)
+        self.assertIn("00:00:00,700 --> 00:00:00,900", srt)
+
     def test_fmt_ts(self):
         self.assertEqual(voiceover._fmt_ts(0), "00:00:00,000")
         self.assertEqual(voiceover._fmt_ts(3_661_001), "01:01:01,001")

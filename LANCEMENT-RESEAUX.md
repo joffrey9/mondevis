@@ -161,29 +161,10 @@ Je peux te configurer ton compte perso si tu veux.
 
 ---
 
-## 👥 Passer de 0 à ~100 abonnés (départ de zéro)
+## 👥 Passer de 0 à ~300 abonnés (départ de zéro)
 
-> Objectif : les **premiers 100** servent de preuve sociale, pas d'acquisition.
-> Les vrais clients arrivent par WhatsApp + le programme bêta. Les abonnés
-> viennent en support de crédibilité.
-
-### Semaine 1 — ton réseau (10–30 abonnés)
-1. **Invite tes contacts** : Page FB → « Inviter des amis » (bouton sous la couverture).
-2. **WhatsApp** : statut + envoie le lien `mondedevis.eu` à tes contacts proches en demandant un follow.
-3. **Proches** : famille, amis, anciens clients, artisans que tu connais déjà.
-4. **Signature email** : ajoute « 📐 MonDevis → mondedevis.eu · Instagram @mondedevis » à ta signature.
-
-### Semaine 2 — les artisans (20–50 abonnés)
-5. **Groupes Facebook d'artisans** (menuiserie, BTP, rénovation FR/BE) : réponds aux posts qui demandent « comment faire un devis ? » avec une vraie réponse + ton lien, sans spam.
-6. **Suivre + interagir** : suis 20–30 comptes d'artisans, like/commentaire sincère chaque jour (beaucoup suivent en retour).
-7. **Reels courts** (le seul levier de découverte d'IG en 2026) : « un devis en 2 minutes chrono » filmé sur ton téléphone, 15–30 s.
-
-### Semaine 3 — les 10 bêta-testeurs (conversion en abonnés)
-8. Chaque artisan du programme bêta : demande-lui de **suivre la page** en échange de l'accès offert.
-9. Capture un **témoignage** (1 phrase + photo) → ça devient le post qui fait suivre les autres artisans.
-
-### Règles anti-échec
-- **Pas de follow/unfollow massif** (ban IG).
-- **Pas d'achat de followers** (faux comptes = portée morte + risque de blocage).
-- **1 post + 1 reels par semaine minimum** pendant 1 mois, avant de juger les résultats.
-- Priorité réelle : **WhatsApp des 10 artisans** > abonnés. Un artisan qui paie 19 €/mois vaut 1 000 abonnés inactifs.
+> ⚠️ **REMPLACÉ le 04/09/2026** : cette section est périmée (elle reposait sur
+> l'invitation d'amis/connaissances et sur WhatsApp prioritaire).
+> ➡️ **Nouveau plan à jour : `PLAN-CROISSANCE-AUDIENCE-2026.md`**
+> (croissance organique 4 semaines : follows ciblés, groupes FB, reels, DM tièdes,
+> constance quotidienne — sans partage perso ni WhatsApp froid).

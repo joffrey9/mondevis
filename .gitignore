@@ -55,3 +55,8 @@ Clé API MISTRAL*
 # Python (creative-studio)
 __pycache__/
 *.pyc
+creative-studio/moneyprinter-turbo-docker/MoneyPrinterTurbo/
+
+# MoneyPrinterTurbo (UGC) — ne pas committer (config contient des clés API)
+creative-studio/MoneyPrinterTurbo/
+creative-studio/MoneyPrinterTurbo/config.toml
