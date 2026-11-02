@@ -60,3 +60,10 @@ creative-studio/moneyprinter-turbo-docker/MoneyPrinterTurbo/
 # MoneyPrinterTurbo (UGC) — ne pas committer (config contient des clés API)
 creative-studio/MoneyPrinterTurbo/
 creative-studio/MoneyPrinterTurbo/config.toml
+
+# Données prospects (RGPD) — dépôt public : ne jamais committer
+automation/leads*.csv
+automation/interactions.csv
+
+# Script de création du compte démo (mot de passe en clair)
+scripts/seed-demo.ts
