@@ -67,3 +67,4 @@ automation/interactions.csv
 
 # Script de création du compte démo (mot de passe en clair)
 scripts/seed-demo.ts
+creative-studio/lipsync/Wav2Lip
