@@ -19,7 +19,7 @@ except ImportError:  # pragma: no cover - dépendance optionnelle
 # Voix par défaut : homme, accent belge. Autres options :
 # fr-BE-CharlineNeural (femme), fr-FR-DeniseNeural (femme, France),
 # fr-FR-HenriNeural (homme, France), en-US-... pour l'anglais.
-DEFAULT_VOICE = "fr-BE-GerardNeural"
+DEFAULT_VOICE = "fr-FR-HenriNeural"
 
 # 1 tick edge-tts = 100 nanosecondes → 10 000 ticks = 1 milliseconde.
 _TICKS_TO_MS = 10_000

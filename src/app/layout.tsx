@@ -3,7 +3,7 @@ import { Providers } from "./providers";
 import "./globals.css";
 
 export const metadata: Metadata = {
-  title: "MonDevis — Crée des devis pros en 2 minutes",
+  title: "Monde Devis — Facturation Peppol et Devis simples pour indépendants",
   description:
     "MonDevis permet aux artisans de créer, envoyer et suivre leurs devis depuis leur téléphone. Devis, factures Peppol, signature électronique. Essai gratuit 14 jours.",
   keywords: ["devis", "facture", "artisan", "Peppol", "signature électronique", "devis gratuit", "logiciel devis"],
@@ -15,7 +15,7 @@ export const metadata: Metadata = {
     canonical: "/",
   },
   openGraph: {
-    title: "MonDevis — Crée des devis pros en 2 minutes",
+    title: "Monde Devis — Facturation Peppol et Devis simples pour indépendants",
     description:
       "Le devis que tes clients attendaient. Crée, envoie et fais signer tes devis en 2 minutes. Pour artisans et indépendants.",
     url: "https://mondedevis.eu",
@@ -25,7 +25,7 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "MonDevis — Crée des devis pros en 2 minutes",
+    title: "Monde Devis — Facturation Peppol et Devis simples pour indépendants",
     description:
       "Le devis que tes clients attendaient. Crée, envoie et fais signer tes devis en 2 minutes.",
   },

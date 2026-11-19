@@ -63,6 +63,9 @@ Application web SaaS permettant aux artisans de créer, signer et envoyer des de
 - [ ] Campagne d'acquisition (posts réseaux, WhatsApp, Meta Ads).
 - [ ] Suivi des testeurs et retours utilisateurs.
 - [ ] Optimisation du tunnel de conversion (landing → inscription → abonnement).
+- [ ] **RAPPEL DEMANDÉ PAR JO (02/11/2026)** : mettre la page Stripe Checkout en
+  français (`locale: "fr"` dans `createCheckoutSession`, `src/app/actions/checkout.ts`).
+  À faire plus tard, Jo a dit de laisser en l'état pour l'instant.
 
 ## Contraintes
 

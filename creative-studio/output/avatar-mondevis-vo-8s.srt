@@ -1,0 +1,19 @@
+1
+00:00:00,100 --> 00:00:01,250
+Fini les devis jusqu'à
+
+2
+00:00:01,262 --> 00:00:03,687
+minuit Avec MonDevis tes
+
+3
+00:00:03,725 --> 00:00:04,762
+devis sont envoyés et
+
+4
+00:00:04,837 --> 00:00:05,787
+signés en deux minutes
+
+5
+00:00:06,075 --> 00:00:06,962
+depuis ton téléphone
