@@ -32,7 +32,7 @@ export default function RetractationPage() {
         <p className="text-sm text-gray-600">
           Pour exercer votre droit de rétractation (dans la limite des exceptions ci-dessus),
           adressez une déclaration sans équivoque à{" "}
-          <a href="mailto:hello@mondedevis.eu" className="text-blue-600 hover:underline">
+          <a href="mailto:hello@mondedevis.eu" className="text-indigo-600 hover:underline">
             hello@mondedevis.eu
           </a>
           , par exemple au moyen du modèle ci-dessous.
@@ -63,7 +63,7 @@ export default function RetractationPage() {
         </div>
 
         <div className="mt-8 text-center">
-          <Link href="/" className="text-sm text-blue-600 hover:underline">← Retour à l&apos;accueil</Link>
+          <Link href="/" className="text-sm text-indigo-600 hover:underline">← Retour à l&apos;accueil</Link>
         </div>
       </div>
     </div>

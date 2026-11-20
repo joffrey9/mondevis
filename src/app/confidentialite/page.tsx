@@ -11,7 +11,7 @@ export default function ConfidentialitePage() {
         <p className="text-sm text-gray-600">
           Le responsable du traitement est <strong>Joffrey Fortemps</strong> — Rue Général Michel 11, 1120 Bruxelles, Belgique,
           joignable à{" "}
-          <a href="mailto:hello@mondedevis.eu" className="text-blue-600 hover:underline">
+          <a href="mailto:hello@mondedevis.eu" className="text-indigo-600 hover:underline">
             hello@mondedevis.eu
           </a>
           .
@@ -54,7 +54,7 @@ export default function ConfidentialitePage() {
         <p className="text-sm text-gray-600">
           Vous disposez des droits d&apos;accès, de rectification, d&apos;effacement, de limitation, de
           portabilité et d&apos;opposition. Vous pouvez les exercer en écrivant à{" "}
-          <a href="mailto:hello@mondedevis.eu" className="text-blue-600 hover:underline">
+          <a href="mailto:hello@mondedevis.eu" className="text-indigo-600 hover:underline">
             hello@mondedevis.eu
           </a>
           . Vous pouvez également introduire une réclamation auprès de l&apos;autorité de contrôle
@@ -69,7 +69,7 @@ export default function ConfidentialitePage() {
         </p>
 
         <div className="mt-8 text-center">
-          <Link href="/" className="text-sm text-blue-600 hover:underline">← Retour à l&apos;accueil</Link>
+          <Link href="/" className="text-sm text-indigo-600 hover:underline">← Retour à l&apos;accueil</Link>
         </div>
       </div>
     </div>

@@ -94,7 +94,7 @@ export default async function DashboardPage(props: { searchParams: Promise<{ che
           <p className="text-2xl font-bold mt-1 dark:text-gray-100">{draft}</p>
         </div>
         <div className="bg-white dark:bg-[#14141f] rounded-xl border border-gray-200 dark:border-[#1e1e30] p-4 shadow-sm">
-          <p className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide flex items-center gap-1"><Send className="w-3 h-3 text-blue-500" /> Envoyé</p>
+          <p className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide flex items-center gap-1"><Send className="w-3 h-3 text-indigo-500" /> Envoyé</p>
           <p className="text-2xl font-bold mt-1 dark:text-gray-100">{sent}</p>
         </div>
         <div className="bg-white dark:bg-[#14141f] rounded-xl border border-gray-200 dark:border-[#1e1e30] p-4 shadow-sm">
@@ -114,7 +114,7 @@ export default async function DashboardPage(props: { searchParams: Promise<{ che
           <p className="text-2xl font-bold mt-1 dark:text-gray-100">{factureTotal}</p>
         </Link>
         <div className="bg-white dark:bg-[#14141f] rounded-xl border border-gray-200 dark:border-[#1e1e30] p-4 shadow-sm">
-          <p className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide flex items-center gap-1"><Send className="w-3 h-3 text-blue-500" /> Envoyée</p>
+          <p className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide flex items-center gap-1"><Send className="w-3 h-3 text-indigo-500" /> Envoyée</p>
           <p className="text-2xl font-bold mt-1 dark:text-gray-100">{factureSent}</p>
         </div>
         <div className="bg-white dark:bg-[#14141f] rounded-xl border border-gray-200 dark:border-[#1e1e30] p-4 shadow-sm">
@@ -127,7 +127,7 @@ export default async function DashboardPage(props: { searchParams: Promise<{ che
       <section className="bg-white dark:bg-[#14141f] rounded-xl border border-gray-200 dark:border-[#1e1e30] shadow-sm">
         <div className="p-4 border-b border-gray-100 dark:border-[#1e1e30] flex items-center justify-between">
           <h2 className="font-semibold dark:text-gray-100">Derniers devis</h2>
-          <Link href="/dashboard/devis/nouveau" className="text-sm bg-blue-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-blue-700 transition">
+          <Link href="/dashboard/devis/nouveau" className="text-sm bg-indigo-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-indigo-700 transition">
             + Nouveau devis
           </Link>
         </div>

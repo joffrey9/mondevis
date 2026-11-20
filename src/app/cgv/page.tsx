@@ -11,7 +11,7 @@ export default function CgvPage() {
           Les présentes conditions régissent l&apos;accès et l&apos;utilisation du service MonDevis,
           édité par <strong>Joffrey Fortemps</strong> — Rue Général Michel 11, 1120 Bruxelles, Belgique — BE 0891.930.638,
           joignable à{" "}
-          <a href="mailto:hello@mondedevis.eu" className="text-blue-600 hover:underline">
+          <a href="mailto:hello@mondedevis.eu" className="text-indigo-600 hover:underline">
             hello@mondedevis.eu
           </a>
           .
@@ -55,7 +55,7 @@ export default function CgvPage() {
         <p className="text-sm text-gray-600">
           Le client consommateur dispose d&apos;un délai de 14 jours pour exercer son droit de
           rétractation (voir la page{" "}
-          <Link href="/retractation" className="text-blue-600 hover:underline">rétractation</Link>
+          <Link href="/retractation" className="text-indigo-600 hover:underline">rétractation</Link>
           ). Pour un service numérique dont l&apos;exécution commence immédiatement avec l&apos;accord du
           client, celui-ci renonce expressément à ce droit.
         </p>
@@ -79,7 +79,7 @@ export default function CgvPage() {
         <h2 className="text-xl font-semibold mt-8">8. Données personnelles</h2>
         <p className="text-sm text-gray-600">
           Le traitement des données personnelles est décrit dans la{" "}
-          <Link href="/confidentialite" className="text-blue-600 hover:underline">politique de confidentialité</Link>
+          <Link href="/confidentialite" className="text-indigo-600 hover:underline">politique de confidentialité</Link>
           .
         </p>
 
@@ -90,7 +90,7 @@ export default function CgvPage() {
         </p>
 
         <div className="mt-8 text-center">
-          <Link href="/" className="text-sm text-blue-600 hover:underline">← Retour à l&apos;accueil</Link>
+          <Link href="/" className="text-sm text-indigo-600 hover:underline">← Retour à l&apos;accueil</Link>
         </div>
       </div>
     </div>

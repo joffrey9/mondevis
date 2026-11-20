@@ -167,7 +167,7 @@ export function WhatsAppShareButton({
               : step === "done"
               ? "bg-green-600 text-white"
               : step === "copied"
-              ? "bg-blue-600 text-white"
+              ? "bg-indigo-600 text-white"
               : "bg-green-500 text-white hover:bg-green-600"
           }`}
         >
@@ -194,10 +194,10 @@ export function WhatsAppShareButton({
           onClick={handleCopyContact}
           className={`flex items-center gap-2 px-4 py-2.5 rounded-xl font-medium transition shadow-sm active:scale-95 ${
             contactCopied
-              ? "bg-blue-600 text-white"
+              ? "bg-indigo-600 text-white"
               : contactError
               ? "bg-orange-500 text-white"
-              : "bg-blue-500 text-white hover:bg-blue-600"
+              : "bg-indigo-500 text-white hover:bg-indigo-600"
           }`}
         >
           {contactCopied ? (

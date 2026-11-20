@@ -136,7 +136,7 @@ export function AddressAutocomplete({
             onFocus={() => { if (suggestions.length > 0) setShowDropdown(true); }}
             placeholder={placeholder || "Adresse du chantier"}
             autoComplete="off"
-            className="w-full px-3 py-2.5 pr-8 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+            className="w-full px-3 py-2.5 pr-8 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500"
           />
           <Loader2 className={`absolute right-2.5 top-3 w-4 h-4 text-gray-400 transition-opacity ${loading ? "opacity-100 animate-spin" : "opacity-0 pointer-events-none"}`} />
         </div>
@@ -151,7 +151,7 @@ export function AddressAutocomplete({
               onClick={() => handleSelect(s)}
               onMouseEnter={() => setSelectedIndex(i)}
               className={`flex items-start gap-2 px-3 py-2.5 text-sm cursor-pointer border-b border-gray-50 last:border-0 transition ${
-                i === selectedIndex ? "bg-blue-50 text-blue-700" : "hover:bg-gray-50"
+                i === selectedIndex ? "bg-indigo-50 text-indigo-700" : "hover:bg-gray-50"
               }`}
             >
               <MapPin className="w-3.5 h-3.5 mt-0.5 flex-shrink-0 text-gray-400" />

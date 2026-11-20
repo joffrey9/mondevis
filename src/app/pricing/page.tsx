@@ -20,7 +20,7 @@ type Plan = {
 
 const allPlans: Plan[] = [
   { name: "Débutant", price: "0", period: "€/mois", desc: "Pour démarrer gratuitement", features: ["3 devis/mois", "Modèles de base", "Envoi par email", "Support standard", "1 utilisateur"], cta: "Commencer gratuitement", popular: false },
-  { name: "Pro", price: "19", period: "€/mois", desc: "Pour les artisans actifs", features: ["Devis illimités", "Signature électronique", "Statistiques avancées", "Support prioritaire", "WhatsApp intégré", "Relances automatiques", "Personnalisation PDF"], cta: "Essayer 14 jours", popular: true, stripePlan: "pro", priceId: PRICE_IDS.pro },
+  { name: "Pro", price: "9,99", period: "€/mois", desc: "Pour les artisans actifs", features: ["Devis illimités", "Signature électronique", "Statistiques avancées", "Support prioritaire", "WhatsApp intégré", "Relances automatiques", "Personnalisation PDF"], cta: "Essayer 14 jours", popular: true, stripePlan: "pro", priceId: PRICE_IDS.pro },
   { name: "Business", price: "49", period: "€/mois", desc: "Pour les PME et équipes", features: ["Tout le plan Pro", "Factures électroniques Peppol", "Multi-utilisateurs (5)", "Marque blanche", "API accès", "Support dédié", "Formation incluse"], cta: "Démarrer", popular: false, stripePlan: "business", priceId: PRICE_IDS.business },
 ];
 

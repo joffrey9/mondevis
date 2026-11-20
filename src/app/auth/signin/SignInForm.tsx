@@ -67,12 +67,12 @@ export function SignInForm() {
         <div className="space-y-3">
           <input type="email" value={email} onChange={(e) => setEmail(e.target.value)}
             placeholder="Email" required
-            className="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            className="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" />
           <input type="password" value={password} onChange={(e) => setPassword(e.target.value)}
             placeholder="Mot de passe" required
-            className="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500" />
+            className="w-full px-3 py-2.5 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500" />
           <button type="submit" disabled={loading}
-            className="w-full bg-blue-600 text-white py-2.5 rounded-lg font-semibold hover:bg-blue-700 disabled:opacity-50 transition">
+            className="w-full bg-indigo-600 text-white py-2.5 rounded-lg font-semibold hover:bg-indigo-700 disabled:opacity-50 transition">
             {loading ? "Connexion..." : "Se connecter"}
           </button>
         </div>
@@ -89,7 +89,7 @@ export function SignInForm() {
       )}
 
       <button type="button" onClick={() => setMode(mode === "credentials" ? "magic" : "credentials")}
-        className="text-sm text-blue-600 hover:underline block mx-auto">
+        className="text-sm text-indigo-600 hover:underline block mx-auto">
         {mode === "credentials" ? "Connexion sans mot de passe ?" : "Mot de passe ?"}
       </button>
 
@@ -109,7 +109,7 @@ export function SignInForm() {
       )}
 
       <p className="text-xs text-center text-gray-500 mt-4">
-        Pas de compte ? <a href="/auth/register" className="text-blue-600 hover:underline">S&apos;inscrire</a>
+        Pas de compte ? <a href="/auth/register" className="text-indigo-600 hover:underline">S&apos;inscrire</a>
       </p>
     </form>
   );

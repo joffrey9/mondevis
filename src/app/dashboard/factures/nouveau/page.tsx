@@ -147,7 +147,7 @@ function NouvelleFactureForm() {
             {COUNTRY_LIST.map((c) => (
               <button key={c.code} type="button" onClick={() => handleCountryChange(c.code)}
                 className={`flex-1 flex items-center justify-center gap-2 px-4 py-3 rounded-xl border-2 font-medium text-sm transition ${
-                  country === c.code ? "border-blue-500 bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300" : "border-gray-200 dark:border-[#1e1e30] bg-white dark:bg-[#0f0f1a] text-gray-600 dark:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600"
+                  country === c.code ? "border-indigo-500 bg-indigo-50 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-300" : "border-gray-200 dark:border-[#1e1e30] bg-white dark:bg-[#0f0f1a] text-gray-600 dark:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600"
                 }`}>
                 <span className="text-lg">{c.flag}</span> {c.label}
               </button>
@@ -162,7 +162,7 @@ function NouvelleFactureForm() {
             Votre métier
           </h2>
           <select value={profession} onChange={(e) => setProfession(e.target.value)}
-            className="w-full px-3 py-2.5 border border-gray-300 dark:border-[#1e1e30] rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm bg-white dark:bg-[#0f0f1a] dark:text-gray-200">
+            className="w-full px-3 py-2.5 border border-gray-300 dark:border-[#1e1e30] rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm bg-white dark:bg-[#0f0f1a] dark:text-gray-200">
             <option value="">-- Sélectionnez votre spécialité --</option>
             {Object.entries(PROFESSIONS).map(([cat, trades]) => (
               <optgroup key={cat} label={cat}>
@@ -195,7 +195,7 @@ function NouvelleFactureForm() {
               }}
             />
             {selectedClientId && (
-              <p className="text-[10px] text-blue-600 dark:text-blue-400 mt-1.5">
+              <p className="text-[10px] text-indigo-600 dark:text-indigo-400 mt-1.5">
                 ✓ Client du carnet lié — modifie les champs ci-dessous pour cette fiche seulement
               </p>
             )}
@@ -204,12 +204,12 @@ function NouvelleFactureForm() {
             <div className="md:col-span-2">
               <input type="text" value={clientName} onChange={(e) => setClientName(e.target.value)}
                 placeholder="Nom du client *" required
-                className="w-full px-3 py-2.5 border border-gray-300 dark:border-[#1e1e30] rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-[#0f0f1a] dark:text-gray-200" />
+                className="w-full px-3 py-2.5 border border-gray-300 dark:border-[#1e1e30] rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-[#0f0f1a] dark:text-gray-200" />
             </div>
             <input type="email" value={clientEmail} onChange={(e) => setClientEmail(e.target.value)}
-              placeholder="Email du client" className="w-full px-3 py-2.5 border border-gray-300 dark:border-[#1e1e30] rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-[#0f0f1a] dark:text-gray-200" />
+              placeholder="Email du client" className="w-full px-3 py-2.5 border border-gray-300 dark:border-[#1e1e30] rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-[#0f0f1a] dark:text-gray-200" />
             <input type="tel" value={clientPhone} onChange={(e) => setClientPhone(e.target.value)}
-              placeholder="Téléphone" className="w-full px-3 py-2.5 border border-gray-300 dark:border-[#1e1e30] rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-[#0f0f1a] dark:text-gray-200" />
+              placeholder="Téléphone" className="w-full px-3 py-2.5 border border-gray-300 dark:border-[#1e1e30] rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-[#0f0f1a] dark:text-gray-200" />
             <div className="md:col-span-2">
               <div className="flex gap-2">
                 <AddressAutocomplete
@@ -227,7 +227,7 @@ function NouvelleFactureForm() {
                 <div className="flex-1">
                   <input type="text" value={clientSiret} onChange={(e) => setClientSiret(e.target.value)}
                     placeholder="N° TVA / SIRET du client (ex: FR12345678901 ou BE0123456789)"
-                    className="w-full px-3 py-2.5 border border-gray-300 dark:border-[#1e1e30] rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 font-mono text-sm bg-white dark:bg-[#0f0f1a] dark:text-gray-200" />
+                    className="w-full px-3 py-2.5 border border-gray-300 dark:border-[#1e1e30] rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 font-mono text-sm bg-white dark:bg-[#0f0f1a] dark:text-gray-200" />
                   <p className="text-[10px] text-gray-400 dark:text-gray-500 mt-1">
                     Saisissez le numéro pour détection automatique : 👤 Particulier ou 🏢 Professionnel
                   </p>
@@ -236,7 +236,7 @@ function NouvelleFactureForm() {
                   <div className={`flex-shrink-0 flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-bold border ${
                     detectClientType(clientSiret, country) === "professionnel"
                       ? "bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400 border-amber-300 dark:border-amber-700"
-                      : "bg-sky-50 dark:bg-sky-900/20 text-sky-700 dark:text-sky-400 border-sky-300 dark:border-sky-700"
+                      : "bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-400 border-indigo-300 dark:border-indigo-700"
                   }`}>
                     {detectClientType(clientSiret, country) === "professionnel" ? "🏢 Professionnel" : "👤 Particulier"}
                   </div>
@@ -257,13 +257,13 @@ function NouvelleFactureForm() {
               <label className="text-sm font-medium text-gray-700 dark:text-gray-300">IBAN</label>
               <input type="text" value={iban} onChange={(e) => setIban(e.target.value)}
                 placeholder="BE68 1234 5678 9012" maxLength={34}
-                className="mt-1 w-full px-3 py-2.5 border border-gray-300 dark:border-[#1e1e30] rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm bg-white dark:bg-[#0f0f1a] dark:text-gray-200" />
+                className="mt-1 w-full px-3 py-2.5 border border-gray-300 dark:border-[#1e1e30] rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm bg-white dark:bg-[#0f0f1a] dark:text-gray-200" />
             </div>
             <div>
               <label className="text-sm font-medium text-gray-700 dark:text-gray-300">BIC</label>
               <input type="text" value={bic} onChange={(e) => setBic(e.target.value)}
                 placeholder="BBRUBEBB" maxLength={11}
-                className="mt-1 w-full px-3 py-2.5 border border-gray-300 dark:border-[#1e1e30] rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm bg-white dark:bg-[#0f0f1a] dark:text-gray-200" />
+                className="mt-1 w-full px-3 py-2.5 border border-gray-300 dark:border-[#1e1e30] rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm bg-white dark:bg-[#0f0f1a] dark:text-gray-200" />
             </div>
           </div>
         </div>
@@ -273,7 +273,7 @@ function NouvelleFactureForm() {
           <div className="flex items-center justify-between mb-4">
             <h2 className="font-semibold dark:text-gray-100">Lignes de la facture</h2>
             <button type="button" onClick={addLine}
-              className="flex items-center gap-1 text-sm text-blue-600 hover:text-blue-700 font-medium">
+              className="flex items-center gap-1 text-sm text-indigo-600 hover:text-indigo-700 font-medium">
               <Plus className="w-4 h-4" /> Ajouter une ligne
             </button>
           </div>
@@ -282,20 +282,20 @@ function NouvelleFactureForm() {
               <div key={line.id} className="flex flex-col sm:flex-row items-stretch sm:items-start gap-2 p-3 bg-gray-50 dark:bg-[#0f0f1a] rounded-lg">
                 <div className="flex-1 min-w-0">
                   <input type="text" value={line.description} onChange={(e) => updateLine(line.id, "description", e.target.value)}
-                    placeholder="Description" className="w-full px-3 py-2 border border-gray-300 dark:border-[#1e1e30] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-[#14141f] dark:text-gray-200" />
+                    placeholder="Description" className="w-full px-3 py-2 border border-gray-300 dark:border-[#1e1e30] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-[#14141f] dark:text-gray-200" />
                 </div>
                 <div className="flex gap-2 sm:gap-3">
                   <div className="w-16 sm:w-20">
                     <input type="number" value={line.quantity || ""} onChange={(e) => updateLine(line.id, "quantity", parseFloat(e.target.value) || 0)}
-                      placeholder="Qté" min="0" step="1" className="w-full px-3 py-2 border border-gray-300 dark:border-[#1e1e30] rounded-lg text-sm text-right focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-[#14141f] dark:text-gray-200" />
+                      placeholder="Qté" min="0" step="1" className="w-full px-3 py-2 border border-gray-300 dark:border-[#1e1e30] rounded-lg text-sm text-right focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-[#14141f] dark:text-gray-200" />
                   </div>
                   <div className="w-20 sm:w-24">
                     <input type="number" value={line.unitPrice || ""} onChange={(e) => updateLine(line.id, "unitPrice", parseFloat(e.target.value) || 0)}
-                      placeholder="Prix" min="0" step="0.01" className="w-full px-3 py-2 border border-gray-300 dark:border-[#1e1e30] rounded-lg text-sm text-right focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-[#14141f] dark:text-gray-200" />
+                      placeholder="Prix" min="0" step="0.01" className="w-full px-3 py-2 border border-gray-300 dark:border-[#1e1e30] rounded-lg text-sm text-right focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-[#14141f] dark:text-gray-200" />
                   </div>
                   <div className="w-24 sm:w-28">
                     <select value={line.tvaRate} onChange={(e) => updateLine(line.id, "tvaRate", parseFloat(e.target.value))}
-                      className="w-full px-3 py-2 border border-gray-300 dark:border-[#1e1e30] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-[#14141f] dark:text-gray-200">
+                      className="w-full px-3 py-2 border border-gray-300 dark:border-[#1e1e30] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-[#14141f] dark:text-gray-200">
                       {tvaOptions.map((r) => (<option key={r.value} value={r.value}>{r.label}</option>))}
                     </select>
                   </div>
@@ -329,7 +329,7 @@ function NouvelleFactureForm() {
                 <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Préfixe de la facture</label>
                 <input type="text" value={facturePrefix} onChange={(e) => setFacturePrefix(e.target.value)}
                   placeholder={country === "BE" ? "FAC-BE" : "FAC"}
-                  className="mt-1 w-full px-3 py-2 border border-gray-300 dark:border-[#1e1e30] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-[#0f0f1a] dark:text-gray-200" />
+                  className="mt-1 w-full px-3 py-2 border border-gray-300 dark:border-[#1e1e30] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-[#0f0f1a] dark:text-gray-200" />
                 <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">Le numéro sera généré automatiquement.</p>
               </div>
               <div className="grid grid-cols-2 gap-4">
@@ -337,7 +337,7 @@ function NouvelleFactureForm() {
                   <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Délai de paiement</label>
                   <div className="flex items-center gap-2 mt-1">
                     <input type="number" value={delaiPaiement} onChange={(e) => setDelaiPaiement(parseInt(e.target.value) || 30)}
-                      min="0" className="w-full px-3 py-2 border border-gray-300 dark:border-[#1e1e30] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-[#0f0f1a] dark:text-gray-200" />
+                      min="0" className="w-full px-3 py-2 border border-gray-300 dark:border-[#1e1e30] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-[#0f0f1a] dark:text-gray-200" />
                     <span className="text-sm text-gray-500 dark:text-gray-400">jours</span>
                   </div>
                 </div>
@@ -346,7 +346,7 @@ function NouvelleFactureForm() {
                 <label className="text-sm font-medium text-gray-700 dark:text-gray-300">Notes</label>
                 <textarea value={notes} onChange={(e) => setNotes(e.target.value)}
                   placeholder="Notes personnelles, conditions particulières..."
-                  rows={2} className="mt-1 w-full px-3 py-2 border border-gray-300 dark:border-[#1e1e30] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-[#0f0f1a] dark:text-gray-200" />
+                  rows={2} className="mt-1 w-full px-3 py-2 border border-gray-300 dark:border-[#1e1e30] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-[#0f0f1a] dark:text-gray-200" />
               </div>
             </div>
           )}
@@ -355,7 +355,7 @@ function NouvelleFactureForm() {
         {error && <div className="bg-red-50 dark:bg-red-900/20 text-red-700 dark:text-red-400 text-sm p-3 rounded-lg border border-red-200 dark:border-red-800/30">{error}</div>}
 
         <button type="submit" disabled={saving}
-          className="w-full bg-blue-600 text-white py-3 rounded-xl font-semibold hover:bg-blue-700 disabled:opacity-50 transition">
+          className="w-full bg-indigo-600 text-white py-3 rounded-xl font-semibold hover:bg-indigo-700 disabled:opacity-50 transition">
           {saving ? "Création..." : `${country === "BE" ? "🇧🇪" : "🇫🇷"} Créer la facture`}
         </button>
       </form>

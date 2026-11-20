@@ -9,7 +9,7 @@ import { getDevisQuota } from "@/lib/subscription";
 
 const statusLabels: Record<string, { label: string; color: string }> = {
   draft: { label: "Brouillon", color: "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300" },
-  sent: { label: "Envoyé", color: "bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300" },
+  sent: { label: "Envoyé", color: "bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300" },
   accepted: { label: "Accepté", color: "bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300" },
   refused: { label: "Refusé", color: "bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300" },
   archived: { label: "Archivé", color: "bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400" },
@@ -36,7 +36,7 @@ export default async function DevisListPage() {
         </div>
         <Link
           href={quota && !quota.allowed ? "/pricing" : "/dashboard/devis/nouveau"}
-          className="flex items-center gap-2 px-4 py-2.5 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition"
+          className="flex items-center gap-2 px-4 py-2.5 bg-indigo-600 text-white rounded-xl font-medium hover:bg-indigo-700 transition"
         >
           <Plus className="w-4 h-4" /> {quota && !quota.allowed ? "Passer Pro" : "Nouveau devis"}
         </Link>
@@ -75,7 +75,7 @@ export default async function DevisListPage() {
       {devisList.length === 0 ? (
         <div className="bg-white dark:bg-[#14141f] rounded-xl border border-gray-200 dark:border-[#1e1e30] p-12 text-center">
           <p className="text-gray-500 dark:text-gray-400">Aucun devis pour le moment.</p>
-          <Link href="/dashboard/devis/nouveau" className="mt-4 inline-block text-blue-600 hover:underline">
+          <Link href="/dashboard/devis/nouveau" className="mt-4 inline-block text-indigo-600 hover:underline">
             Créer ton premier devis →
           </Link>
         </div>
@@ -109,7 +109,7 @@ export default async function DevisListPage() {
                             <span className={`inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[10px] font-medium ${
                               detectClientType(devis.clientSiret, (devis.country || "FR") as Country) === "professionnel"
                                 ? 'bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-200'
-                                : 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-200'
+                                : 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-200'
                             }`}>
                               {detectClientType(devis.clientSiret, (devis.country || "FR") as Country) === "professionnel" ? "🏢 Pro" : "👤 Part"}
                             </span>
@@ -140,8 +140,8 @@ export default async function DevisListPage() {
                             </Link>
                             {devis.status === "draft" && (
                               <form action={async () => { "use server"; await updateDevisStatus(devis.id, "sent"); }}>
-                                <button type="submit" className="p-1.5 hover:bg-blue-100 rounded transition" title="Envoyer">
-                                  <Send className="w-4 h-4 text-blue-500" />
+                                <button type="submit" className="p-1.5 hover:bg-indigo-100 rounded transition" title="Envoyer">
+                                  <Send className="w-4 h-4 text-indigo-500" />
                                 </button>
                               </form>
                             )}
@@ -189,7 +189,7 @@ export default async function DevisListPage() {
                           <span className={`ml-1.5 inline-flex items-center gap-1 px-1.5 py-0.5 rounded-full text-[10px] font-medium ${
                             detectClientType(devis.clientSiret, (devis.country || "FR") as Country) === "professionnel"
                               ? 'bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-200'
-                              : 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-200'
+                              : 'bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-200'
                           }`}>
                             {detectClientType(devis.clientSiret, (devis.country || "FR") as Country) === "professionnel" ? "🏢 Pro" : "👤 Part"}
                           </span>
@@ -214,7 +214,7 @@ export default async function DevisListPage() {
                     </Link>
                     {devis.status === "draft" && (
                       <form action={async () => { "use server"; await updateDevisStatus(devis.id, "sent"); }} className="flex-1">
-                        <button type="submit" className="w-full text-xs px-3 py-1.5 bg-blue-100 text-blue-700 rounded-lg hover:bg-blue-200 transition font-medium">
+                        <button type="submit" className="w-full text-xs px-3 py-1.5 bg-indigo-100 text-indigo-700 rounded-lg hover:bg-indigo-200 transition font-medium">
                           ✉️ Envoyer
                         </button>
                       </form>

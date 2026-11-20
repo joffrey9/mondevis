@@ -187,29 +187,29 @@ export default function SettingsPage() {
             <div className="md:col-span-2">
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Nom de l&apos;entreprise</label>
               <input type="text" value={form.companyName || ""} onChange={(e) => setForm((prev) => ({ ...prev, companyName: e.target.value }))}
-                placeholder="Votre entreprise" className="w-full px-3 py-2.5 border border-gray-300 dark:border-[#1e1e30] rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm bg-white dark:bg-[#0f0f1a] dark:text-gray-200" />
+                placeholder="Votre entreprise" className="w-full px-3 py-2.5 border border-gray-300 dark:border-[#1e1e30] rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm bg-white dark:bg-[#0f0f1a] dark:text-gray-200" />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 flex items-center gap-1">
                 <Hash className="w-3 h-3" /> SIRET (FR) ou N° TVA (BE)
               </label>
               <input type="text" value={form.companySiret || ""} onChange={(e) => setForm((prev) => ({ ...prev, companySiret: e.target.value }))}
-                placeholder="123 456 789 00010 ou BE 0123.456.789" className="w-full px-3 py-2.5 border border-gray-300 dark:border-[#1e1e30] rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm bg-white dark:bg-[#0f0f1a] dark:text-gray-200" />
+                placeholder="123 456 789 00010 ou BE 0123.456.789" className="w-full px-3 py-2.5 border border-gray-300 dark:border-[#1e1e30] rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm bg-white dark:bg-[#0f0f1a] dark:text-gray-200" />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 flex items-center gap-1"><Phone className="w-3 h-3" /> Téléphone</label>
               <input type="tel" value={form.companyPhone || ""} onChange={(e) => setForm((prev) => ({ ...prev, companyPhone: e.target.value }))}
-                placeholder="+32 4 12 34 56 78" className="w-full px-3 py-2.5 border border-gray-300 dark:border-[#1e1e30] rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm bg-white dark:bg-[#0f0f1a] dark:text-gray-200" />
+                placeholder="+32 4 12 34 56 78" className="w-full px-3 py-2.5 border border-gray-300 dark:border-[#1e1e30] rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm bg-white dark:bg-[#0f0f1a] dark:text-gray-200" />
             </div>
             <div className="md:col-span-2">
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 flex items-center gap-1"><Mail className="w-3 h-3" /> Email professionnel</label>
               <input type="email" value={form.companyEmail || ""} onChange={(e) => setForm((prev) => ({ ...prev, companyEmail: e.target.value }))}
-                placeholder="contact@monentreprise.be" className="w-full px-3 py-2.5 border border-gray-300 dark:border-[#1e1e30] rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm bg-white dark:bg-[#0f0f1a] dark:text-gray-200" />
+                placeholder="contact@monentreprise.be" className="w-full px-3 py-2.5 border border-gray-300 dark:border-[#1e1e30] rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm bg-white dark:bg-[#0f0f1a] dark:text-gray-200" />
             </div>
             <div className="md:col-span-2">
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1 flex items-center gap-1"><MapPin className="w-3 h-3" /> Adresse</label>
               <textarea value={form.companyAddress || ""} onChange={(e) => setForm((prev) => ({ ...prev, companyAddress: e.target.value }))}
-                placeholder="Rue, numéro, code postal, ville" rows={2} className="w-full px-3 py-2.5 border border-gray-300 dark:border-[#1e1e30] rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm bg-white dark:bg-[#0f0f1a] dark:text-gray-200" />
+                placeholder="Rue, numéro, code postal, ville" rows={2} className="w-full px-3 py-2.5 border border-gray-300 dark:border-[#1e1e30] rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm bg-white dark:bg-[#0f0f1a] dark:text-gray-200" />
             </div>
           </div>
         </div>
@@ -222,12 +222,12 @@ export default function SettingsPage() {
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">IBAN</label>
               <input type="text" value={form.companyIban || ""} onChange={(e) => setForm((prev) => ({ ...prev, companyIban: e.target.value }))}
-                placeholder="BE68 1234 5678 9012" maxLength={34} className="w-full px-3 py-2.5 border border-gray-300 dark:border-[#1e1e30] rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm bg-white dark:bg-[#0f0f1a] dark:text-gray-200" />
+                placeholder="BE68 1234 5678 9012" maxLength={34} className="w-full px-3 py-2.5 border border-gray-300 dark:border-[#1e1e30] rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm bg-white dark:bg-[#0f0f1a] dark:text-gray-200" />
             </div>
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">BIC</label>
               <input type="text" value={form.companyBic || ""} onChange={(e) => setForm((prev) => ({ ...prev, companyBic: e.target.value }))}
-                placeholder="BBRUBEBB" maxLength={11} className="w-full px-3 py-2.5 border border-gray-300 dark:border-[#1e1e30] rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm bg-white dark:bg-[#0f0f1a] dark:text-gray-200" />
+                placeholder="BBRUBEBB" maxLength={11} className="w-full px-3 py-2.5 border border-gray-300 dark:border-[#1e1e30] rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm bg-white dark:bg-[#0f0f1a] dark:text-gray-200" />
             </div>
           </div>
         </div>
@@ -238,7 +238,7 @@ export default function SettingsPage() {
           <p className="text-xs text-gray-400 dark:text-gray-500 mb-3">Les numéros de devis sont générés automatiquement (DEV-2026-0001, DEV-2026-0002...). Vous pouvez définir un point de départ personnalisé.</p>
           <div>              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Prochain numéro de devis</label>
               <input type="number" value={form.nextDevisNumber ?? ""} onChange={(e) => setForm((prev) => ({ ...prev, nextDevisNumber: e.target.value ? parseInt(e.target.value, 10) : null }))}
-                placeholder="Laisser vide pour auto" min="1" max="99999" className="w-full max-w-xs px-3 py-2.5 border border-gray-300 dark:border-[#1e1e30] rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm bg-white dark:bg-[#0f0f1a] dark:text-gray-200" />
+                placeholder="Laisser vide pour auto" min="1" max="99999" className="w-full max-w-xs px-3 py-2.5 border border-gray-300 dark:border-[#1e1e30] rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm bg-white dark:bg-[#0f0f1a] dark:text-gray-200" />
             <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">Exemple : entrez <strong>42</strong> pour que le prochain devis soit <strong>DEV-{new Date().getFullYear()}-0042</strong></p>
           </div>
         </div>
@@ -254,7 +254,7 @@ export default function SettingsPage() {
             <div>
               <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Fournisseur Peppol</label>
               <select value={form.peppolProvider || ""} onChange={(e) => setForm((prev) => ({ ...prev, peppolProvider: e.target.value }))}
-                className="w-full max-w-md px-3 py-2.5 border border-gray-300 dark:border-[#1e1e30] rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm bg-white dark:bg-[#0f0f1a] dark:text-gray-200">
+                className="w-full max-w-md px-3 py-2.5 border border-gray-300 dark:border-[#1e1e30] rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm bg-white dark:bg-[#0f0f1a] dark:text-gray-200">
                 <option value="">-- Non configuré --</option>
                 <option value="einvoice">🇧🇪 e-invoice.be (recommandé pour la Belgique)</option>
                 <option value="billit">🇧🇪 Billit (Peppol Belgique)</option>
@@ -263,13 +263,13 @@ export default function SettingsPage() {
                 <option value="other">Autre fournisseur Peppol</option>
               </select>
             </div>
-            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-sm space-y-2">
-              <p className="font-medium text-blue-800">🔗 Liens utiles</p>
+            <div className="bg-indigo-50 border border-indigo-200 rounded-lg p-4 text-sm space-y-2">
+              <p className="font-medium text-indigo-800">🔗 Liens utiles</p>
               <ul className="space-y-1.5">
-                <li><a href="https://www.e-invoice.be" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline flex items-center gap-1">🇧🇪 e-invoice.be — Plateforme Peppol belge officielle</a></li>
-                <li><a href="https://www.billit.be" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline flex items-center gap-1">🇧🇪 Billit — Solution Peppol pour indépendants</a></li>
-                <li><a href="https://www.banqup.com" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline flex items-center gap-1">🇧🇪 Banqup — Facturation électronique Peppol</a></li>
-                <li><a href="https://peppol.org" target="_blank" rel="noopener noreferrer" className="text-blue-600 hover:underline flex items-center gap-1">🌐 peppol.org — Site officiel du réseau Peppol</a></li>
+                <li><a href="https://www.e-invoice.be" target="_blank" rel="noopener noreferrer" className="text-indigo-600 hover:underline flex items-center gap-1">🇧🇪 e-invoice.be — Plateforme Peppol belge officielle</a></li>
+                <li><a href="https://www.billit.be" target="_blank" rel="noopener noreferrer" className="text-indigo-600 hover:underline flex items-center gap-1">🇧🇪 Billit — Solution Peppol pour indépendants</a></li>
+                <li><a href="https://www.banqup.com" target="_blank" rel="noopener noreferrer" className="text-indigo-600 hover:underline flex items-center gap-1">🇧🇪 Banqup — Facturation électronique Peppol</a></li>
+                <li><a href="https://peppol.org" target="_blank" rel="noopener noreferrer" className="text-indigo-600 hover:underline flex items-center gap-1">🌐 peppol.org — Site officiel du réseau Peppol</a></li>
               </ul>
             </div>
             {form.peppolProvider && (
@@ -277,13 +277,13 @@ export default function SettingsPage() {
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">🔑 Clé API Peppol (votre compte)</label>
                   <input type="password" value={form.peppolApiKey || ""} onChange={(e) => setForm((prev) => ({ ...prev, peppolApiKey: e.target.value }))}
-                    placeholder="Clé API fournie par votre fournisseur Peppol" className="w-full max-w-md px-3 py-2.5 border border-gray-300 dark:border-[#1e1e30] rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm bg-white dark:bg-[#0f0f1a] dark:text-gray-200" />
+                    placeholder="Clé API fournie par votre fournisseur Peppol" className="w-full max-w-md px-3 py-2.5 border border-gray-300 dark:border-[#1e1e30] rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm bg-white dark:bg-[#0f0f1a] dark:text-gray-200" />
                   <p className="text-xs text-gray-400 mt-1">Nécessaire pour envoyer directement vos factures via Peppol. Sans cette clé, seul le téléchargement UBL est possible.</p>
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">🆔 Identifiant Peppol (optionnel)</label>
                   <input type="text" value={form.peppolSenderId || ""} onChange={(e) => setForm((prev) => ({ ...prev, peppolSenderId: e.target.value }))}
-                    placeholder="Votre identifiant Peppol (ex: 9933:be0123456789)" className="w-full max-w-md px-3 py-2.5 border border-gray-300 dark:border-[#1e1e30] rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm bg-white dark:bg-[#0f0f1a] dark:text-gray-200" />
+                    placeholder="Votre identifiant Peppol (ex: 9933:be0123456789)" className="w-full max-w-md px-3 py-2.5 border border-gray-300 dark:border-[#1e1e30] rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm bg-white dark:bg-[#0f0f1a] dark:text-gray-200" />
                 </div>
                 {form.peppolApiKey ? (
                   <div className="bg-green-50 border border-green-200 rounded-lg p-3 text-sm text-green-700">
@@ -308,7 +308,7 @@ export default function SettingsPage() {
           </p>
           <div>              <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Numéro WhatsApp (format international, sans +)</label>
               <input type="tel" value={form.whatsappNumber || ""} onChange={(e) => setForm((prev) => ({ ...prev, whatsappNumber: e.target.value }))}
-                placeholder="32412345678" className="w-full max-w-md px-3 py-2.5 border border-gray-300 dark:border-[#1e1e30] rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm bg-white dark:bg-[#0f0f1a] dark:text-gray-200" />
+                placeholder="32412345678" className="w-full max-w-md px-3 py-2.5 border border-gray-300 dark:border-[#1e1e30] rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm bg-white dark:bg-[#0f0f1a] dark:text-gray-200" />
             <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">Exemple : <strong>32412345678</strong> pour le numéro belge +32 4 12 34 56 78</p>
             {form.whatsappNumber && (
               <div className="bg-green-50 border border-green-200 rounded-lg p-3 text-sm text-green-700 mt-3">
@@ -330,7 +330,7 @@ export default function SettingsPage() {
             onChange={(e) => setForm((prev) => ({ ...prev, customLegalMentions: e.target.value }))}
             placeholder="Ex: Garantie de 2 ans sur tous les travaux de finition. Devis valable 30 jours à compter de la date d'émission."
             rows={4}
-            className="w-full px-3 py-2.5 border border-gray-300 dark:border-[#1e1e30] rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 text-sm bg-white dark:bg-[#0f0f1a] dark:text-gray-200"
+            className="w-full px-3 py-2.5 border border-gray-300 dark:border-[#1e1e30] rounded-lg focus:outline-none focus:ring-2 focus:ring-indigo-500 text-sm bg-white dark:bg-[#0f0f1a] dark:text-gray-200"
           />
           <p className="text-xs text-gray-400 dark:text-gray-500 mt-1">Une mention par ligne. Ces mentions seront ajoutées après les mentions légales obligatoires du pays sélectionné.</p>
         </div>
@@ -341,7 +341,7 @@ export default function SettingsPage() {
         {/* Submit */}
         <div className="flex gap-3">
           <button type="submit" disabled={saving}
-            className="flex items-center gap-2 px-6 py-3 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700 disabled:opacity-50 transition shadow-sm">
+            className="flex items-center gap-2 px-6 py-3 bg-indigo-600 text-white rounded-xl font-semibold hover:bg-indigo-700 disabled:opacity-50 transition shadow-sm">
             <Save className="w-4 h-4" /> {saving ? "Enregistrement..." : "Enregistrer"}
           </button>
         </div>

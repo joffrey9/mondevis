@@ -12,7 +12,7 @@ import { FactureSendButtons } from "@/app/components/FactureSendButtons";
 
 const statusLabels: Record<string, { label: string; color: string }> = {
   draft: { label: "Brouillon", color: "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300" },
-  sent: { label: "Envoyée", color: "bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300" },
+  sent: { label: "Envoyée", color: "bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300" },
   paid: { label: "Payée ✅", color: "bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300" },
   cancelled: { label: "Annulée", color: "bg-red-100 dark:bg-red-900/40 text-red-500 dark:text-red-300" },
 };
@@ -101,7 +101,7 @@ export default async function FactureDetailPage(props: { params: Promise<{ id: s
             <p className="text-sm text-gray-500 dark:text-gray-400 mt-1">
               Créée le {new Date(facture.createdAt).toLocaleDateString("fr-FR")}
               {facture.devis && (
-                <span> — Issue du devis <Link href={`/dashboard/devis/${facture.devis.id}`} className="text-blue-600 hover:underline">{facture.devis.number}</Link></span>
+                <span> — Issue du devis <Link href={`/dashboard/devis/${facture.devis.id}`} className="text-indigo-600 hover:underline">{facture.devis.number}</Link></span>
               )}
             </p>
           </div>
@@ -209,7 +209,7 @@ export default async function FactureDetailPage(props: { params: Promise<{ id: s
         <div className="flex items-center justify-between mb-4">
           <h3 className="font-semibold dark:text-gray-100">👤 Informations client</h3>
           {facture.clientId && (
-            <Link href="/dashboard/clients" className="text-xs text-blue-600 dark:text-blue-400 hover:underline">
+            <Link href="/dashboard/clients" className="text-xs text-indigo-600 dark:text-indigo-400 hover:underline">
               Voir dans le carnet clients →
             </Link>
           )}
@@ -227,7 +227,7 @@ export default async function FactureDetailPage(props: { params: Promise<{ id: s
           {facture.clientEmail && (
             <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300">
               <Mail className="w-4 h-4 text-gray-400 dark:text-gray-500" />
-              <a href={`mailto:${facture.clientEmail}`} className="text-blue-600 dark:text-blue-400 hover:underline">{facture.clientEmail}</a>
+              <a href={`mailto:${facture.clientEmail}`} className="text-indigo-600 dark:text-indigo-400 hover:underline">{facture.clientEmail}</a>
             </div>
           )}
           {facture.clientPhone && (
@@ -247,7 +247,7 @@ export default async function FactureDetailPage(props: { params: Promise<{ id: s
             <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold ${
               detectClientType(facture.clientSiret, (facture.country || "FR") as Country) === "professionnel"
                 ? "bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400"
-                : "bg-sky-50 dark:bg-sky-900/20 text-sky-700 dark:text-sky-400"
+                : "bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-400"
             }`}>
               {detectClientType(facture.clientSiret, (facture.country || "FR") as Country) === "professionnel"
                 ? "🏢 Professionnel"
@@ -294,7 +294,7 @@ export default async function FactureDetailPage(props: { params: Promise<{ id: s
       <div className="mt-6 flex flex-col sm:flex-row flex-wrap gap-2 sm:gap-3">
         {facture.status === "draft" && (
           <form action={async () => { "use server"; await updateFactureStatus(facture.id, "sent"); }}>
-            <button type="submit" className="px-4 py-2.5 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition">
+            <button type="submit" className="px-4 py-2.5 bg-indigo-600 text-white rounded-xl font-medium hover:bg-indigo-700 transition">
               ✉️ Marquer comme envoyée
             </button>
           </form>
@@ -333,9 +333,9 @@ export default async function FactureDetailPage(props: { params: Promise<{ id: s
 
       {/* Info Peppol si connecté */}
       {user?.peppolProvider && (
-        <div className="mt-4 bg-blue-50 dark:bg-blue-900/20 border border-blue-200 dark:border-blue-800/30 rounded-lg p-4 text-sm">
-          <p className="font-medium text-blue-800 dark:text-blue-300 mb-1">📤 Peppol connecté</p>
-          <p className="text-blue-700 dark:text-blue-300">
+        <div className="mt-4 bg-indigo-50 dark:bg-indigo-900/20 border border-indigo-200 dark:border-indigo-800/30 rounded-lg p-4 text-sm">
+          <p className="font-medium text-indigo-800 dark:text-indigo-300 mb-1">📤 Peppol connecté</p>
+          <p className="text-indigo-700 dark:text-indigo-300">
             Fournisseur : <strong>{{
               einvoice: "e-invoice.be",
               billit: "Billit",
@@ -344,7 +344,7 @@ export default async function FactureDetailPage(props: { params: Promise<{ id: s
               other: "Autre fournisseur",
             }[user.peppolProvider] || user.peppolProvider}</strong>
           </p>
-          <p className="text-xs text-blue-600 dark:text-blue-400 mt-1">
+          <p className="text-xs text-indigo-600 dark:text-indigo-400 mt-1">
             Téléchargez le fichier XML UBL ci-dessus et importez-le chez votre fournisseur Peppol.
             L&apos;envoi automatique sera disponible prochainement.
           </p>

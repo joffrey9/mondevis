@@ -7,7 +7,7 @@ import { getCountry, detectClientType, type Country } from "@/lib/countries";
 
 const statusLabels: Record<string, { label: string; color: string; icon: string }> = {
   draft: { label: "Brouillon", color: "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300", icon: "📄" },
-  sent: { label: "Envoyée", color: "bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300", icon: "✉️" },
+  sent: { label: "Envoyée", color: "bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300", icon: "✉️" },
   paid: { label: "Payée ✅", color: "bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300", icon: "✅" },
   cancelled: { label: "Annulée", color: "bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300", icon: "❌" },
 };
@@ -42,7 +42,7 @@ export default async function FacturesPage() {
         </div>
         <Link
           href="/dashboard/factures/nouveau"
-          className="flex items-center gap-2 bg-blue-600 text-white px-5 py-2.5 rounded-xl font-medium hover:bg-blue-700 transition shadow-sm"
+          className="flex items-center gap-2 bg-indigo-600 text-white px-5 py-2.5 rounded-xl font-medium hover:bg-indigo-700 transition shadow-sm"
         >
           <Plus className="w-4 h-4" />
           Nouvelle facture
@@ -63,7 +63,7 @@ export default async function FacturesPage() {
         </div>
         <div className="bg-white dark:bg-[#14141f] rounded-xl border border-gray-200 dark:border-[#1e1e30] p-4 shadow-sm">
           <p className="text-xs text-gray-500 dark:text-gray-400 uppercase tracking-wide flex items-center gap-1">
-            <Send className="w-3 h-3 text-blue-500" /> Envoyée
+            <Send className="w-3 h-3 text-indigo-500" /> Envoyée
           </p>
           <p className="text-2xl font-bold mt-1 dark:text-gray-100">{sent}</p>
         </div>
@@ -91,7 +91,7 @@ export default async function FacturesPage() {
             </p>
             <Link
               href="/dashboard/factures/nouveau"
-              className="inline-flex items-center gap-2 bg-blue-600 text-white px-5 py-2.5 rounded-xl font-medium hover:bg-blue-700 transition"
+              className="inline-flex items-center gap-2 bg-indigo-600 text-white px-5 py-2.5 rounded-xl font-medium hover:bg-indigo-700 transition"
             >
               <Plus className="w-4 h-4" />
               Créer ma première facture
@@ -118,7 +118,7 @@ export default async function FacturesPage() {
                         <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-bold ${
                           detectClientType(f.clientSiret, (f.country || "FR") as Country) === "professionnel"
                             ? "bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400"
-                            : "bg-sky-50 dark:bg-sky-900/20 text-sky-700 dark:text-sky-400"
+                            : "bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-400"
                         }`}>
                           {detectClientType(f.clientSiret, (f.country || "FR") as Country) === "professionnel"
                             ? "🏢 Pro"

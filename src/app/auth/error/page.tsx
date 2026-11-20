@@ -10,7 +10,7 @@ export default function AuthErrorPage() {
         </p>
         <Link
           href="/auth/signin"
-          className="inline-block px-6 py-3 bg-blue-600 text-white rounded-xl font-semibold hover:bg-blue-700"
+          className="inline-block px-6 py-3 bg-indigo-600 text-white rounded-xl font-semibold hover:bg-indigo-700"
         >
           Réessayer →
         </Link>

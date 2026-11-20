@@ -185,7 +185,7 @@ export function ClientsContent({ clients }: { clients: Client[] }) {
       {clients.length === 0 ? (
         /* Empty state */
         <div className="bg-white dark:bg-[#14141f] rounded-2xl border border-gray-200 dark:border-[#1e1e30] p-16 text-center shadow-sm">
-          <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-indigo-50 to-purple-50 dark:from-indigo-900/20 dark:to-purple-900/20 flex items-center justify-center">
+          <div className="w-20 h-20 mx-auto mb-6 rounded-2xl bg-gradient-to-br from-indigo-50 to-violet-50 dark:from-indigo-900/20 dark:to-violet-900/20 flex items-center justify-center">
             <Users className="w-10 h-10 text-indigo-400" />
           </div>
           <h3 className="text-lg font-semibold dark:text-gray-200 mb-2">Carnet d&apos;adresses vide</h3>
@@ -229,8 +229,8 @@ export function ClientsContent({ clients }: { clients: Client[] }) {
           {filteredParticuliers.length > 0 && (
             <section>
               <div className="flex items-center gap-3 mb-4">
-                <div className="w-8 h-8 rounded-lg bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center">
-                  <UserCircle className="w-4 h-4 text-blue-600 dark:text-blue-400" />
+                <div className="w-8 h-8 rounded-lg bg-indigo-100 dark:bg-indigo-900/30 flex items-center justify-center">
+                  <UserCircle className="w-4 h-4 text-indigo-600 dark:text-indigo-400" />
                 </div>
                 <h2 className="text-lg font-semibold dark:text-gray-100">Particuliers</h2>
                 <span className="text-sm text-gray-400 dark:text-gray-500 font-mono">{filteredParticuliers.length}</span>
@@ -343,7 +343,7 @@ export function ClientsContent({ clients }: { clients: Client[] }) {
                       🏢 Professionnel détecté
                     </span>
                   ) : (
-                    <span className="text-blue-600 dark:text-blue-400 flex items-center gap-1">
+                    <span className="text-indigo-600 dark:text-indigo-400 flex items-center gap-1">
                       👤 Particulier
                     </span>
                   )}
@@ -409,7 +409,7 @@ function ClientCard({
           <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${
             isPro
               ? "bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400"
-              : "bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400"
+              : "bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400"
           }`}>
             {isPro ? <Briefcase className="w-5 h-5" /> : <UserCircle className="w-5 h-5" />}
           </div>
@@ -421,7 +421,7 @@ function ClientCard({
               <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium ${
                 isPro
                   ? "bg-amber-100 dark:bg-amber-900/30 text-amber-800 dark:text-amber-200"
-                  : "bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-200"
+                  : "bg-indigo-100 dark:bg-indigo-900/30 text-indigo-700 dark:text-indigo-200"
               }`}>
                 {isPro ? "🏢 Pro" : "👤 Part"}
               </span>

@@ -13,7 +13,7 @@ export default function MentionsLegalesPage() {
           Adresse : Rue Général Michel 11, 1120 Bruxelles, Belgique<br />
           N° d&apos;entreprise / TVA : BE 0891.930.638<br />
           Email :{" "}
-          <a href="mailto:hello@mondedevis.eu" className="text-blue-600 hover:underline">
+          <a href="mailto:hello@mondedevis.eu" className="text-indigo-600 hover:underline">
             hello@mondedevis.eu
           </a>
         </p>
@@ -36,7 +36,7 @@ export default function MentionsLegalesPage() {
         <p className="text-sm text-gray-600">
           Les données collectées sont utilisées uniquement dans le cadre du fonctionnement du
           service, conformément au RGPD. Les modalités détaillées figurent dans la{" "}
-          <Link href="/confidentialite" className="text-blue-600 hover:underline">
+          <Link href="/confidentialite" className="text-indigo-600 hover:underline">
             politique de confidentialité
           </Link>
           .
@@ -44,15 +44,15 @@ export default function MentionsLegalesPage() {
 
         <h2 className="text-xl font-semibold mt-8">Informations complémentaires</h2>
         <p className="text-sm text-gray-600">
-          <Link href="/cgv" className="text-blue-600 hover:underline">Conditions générales de vente</Link>
+          <Link href="/cgv" className="text-indigo-600 hover:underline">Conditions générales de vente</Link>
           {" · "}
-          <Link href="/confidentialite" className="text-blue-600 hover:underline">Confidentialité</Link>
+          <Link href="/confidentialite" className="text-indigo-600 hover:underline">Confidentialité</Link>
           {" · "}
-          <Link href="/retractation" className="text-blue-600 hover:underline">Droit de rétractation</Link>
+          <Link href="/retractation" className="text-indigo-600 hover:underline">Droit de rétractation</Link>
         </p>
 
         <div className="mt-8 text-center">
-          <Link href="/" className="text-sm text-blue-600 hover:underline">← Retour à l&apos;accueil</Link>
+          <Link href="/" className="text-sm text-indigo-600 hover:underline">← Retour à l&apos;accueil</Link>
         </div>
       </div>
     </div>

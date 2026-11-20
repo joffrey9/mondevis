@@ -13,7 +13,7 @@ import { getCountry, detectClientType, type Country } from "@/lib/countries";
 
 const statusLabels: Record<string, { label: string; color: string }> = {
   draft: { label: "Brouillon", color: "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300" },
-  sent: { label: "Envoyé", color: "bg-blue-100 dark:bg-blue-900/40 text-blue-700 dark:text-blue-300" },
+  sent: { label: "Envoyé", color: "bg-indigo-100 dark:bg-indigo-900/40 text-indigo-700 dark:text-indigo-300" },
   accepted: { label: "Accepté ✅", color: "bg-green-100 dark:bg-green-900/40 text-green-700 dark:text-green-300" },
   refused: { label: "Refusé ❌", color: "bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-300" },
   archived: { label: "Archivé", color: "bg-gray-100 dark:bg-gray-800 text-gray-500 dark:text-gray-400" },
@@ -167,7 +167,7 @@ export default async function DevisDetailPage(props: { params: Promise<{ id: str
           {devis.clientEmail && (
             <div className="flex items-center gap-2 text-gray-600 dark:text-gray-300">
               <Mail className="w-4 h-4 text-gray-400 dark:text-gray-500" />
-              <a href={`mailto:${devis.clientEmail}`} className="text-blue-600 dark:text-blue-400 hover:underline">{devis.clientEmail}</a>
+              <a href={`mailto:${devis.clientEmail}`} className="text-indigo-600 dark:text-indigo-400 hover:underline">{devis.clientEmail}</a>
             </div>
           )}
           {devis.clientPhone && (
@@ -187,7 +187,7 @@ export default async function DevisDetailPage(props: { params: Promise<{ id: str
             <span className={`inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold ${
               detectClientType(devis.clientSiret, (devis.country || "FR") as Country) === "professionnel"
                 ? "bg-amber-50 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400"
-                : "bg-sky-50 dark:bg-sky-900/20 text-sky-700 dark:text-sky-400"
+                : "bg-indigo-50 dark:bg-indigo-900/20 text-indigo-700 dark:text-indigo-400"
             }`}>
               {detectClientType(devis.clientSiret, (devis.country || "FR") as Country) === "professionnel"
                 ? "🏢 Professionnel"
@@ -228,7 +228,7 @@ export default async function DevisDetailPage(props: { params: Promise<{ id: str
               <Pencil className="w-4 h-4" /> Modifier
             </Link>
             <form action={async () => { "use server"; await updateDevisStatus(devis.id, "sent"); }}>
-              <button type="submit" className="px-4 py-2.5 bg-blue-600 text-white rounded-xl font-medium hover:bg-blue-700 transition">
+              <button type="submit" className="px-4 py-2.5 bg-indigo-600 text-white rounded-xl font-medium hover:bg-indigo-700 transition">
                 ✉️ Marquer comme envoyé
               </button>
             </form>

@@ -153,14 +153,14 @@ export function ClientSelect({ selectedId, onSelect, placeholder = "Sélectionne
         onClick={toggle}
         aria-haspopup="listbox"
         aria-expanded={open}
-        className="w-full flex items-center gap-3 px-3 py-2.5 border border-gray-300 dark:border-[#1e1e30] rounded-lg text-sm text-left focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-[#0f0f1a] dark:text-gray-200 hover:border-blue-400 dark:hover:border-blue-700 transition"
+        className="w-full flex items-center gap-3 px-3 py-2.5 border border-gray-300 dark:border-[#1e1e30] rounded-lg text-sm text-left focus:outline-none focus:ring-2 focus:ring-indigo-500 bg-white dark:bg-[#0f0f1a] dark:text-gray-200 hover:border-indigo-400 dark:hover:border-indigo-700 transition"
       >
         {selected ? (
           <>
             <span className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${
               selected.type === "professionnel"
                 ? "bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400"
-                : "bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400"
+                : "bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400"
             }`}>
               {selected.type === "professionnel" ? <Briefcase className="w-4 h-4" /> : <UserCircle className="w-4 h-4" />}
             </span>
@@ -216,7 +216,7 @@ export function ClientSelect({ selectedId, onSelect, placeholder = "Sélectionne
                 aria-controls="client-listbox"
                 aria-activedescendant={activeId}
                 placeholder="Rechercher par nom, email..."
-                className="w-full pl-9 pr-3 py-2 bg-gray-50 dark:bg-[#0f0f1a] border border-gray-200 dark:border-[#1e1e30] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 dark:text-gray-200"
+                className="w-full pl-9 pr-3 py-2 bg-gray-50 dark:bg-[#0f0f1a] border border-gray-200 dark:border-[#1e1e30] rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500 dark:text-gray-200"
               />
             </div>
           </div>
@@ -226,7 +226,7 @@ export function ClientSelect({ selectedId, onSelect, placeholder = "Sélectionne
                 <p className="text-sm text-gray-400 dark:text-gray-500 mb-2">
                   {clients.length === 0 ? "Aucun client enregistré pour l'instant" : "Aucun résultat pour cette recherche"}
                 </p>
-                <Link href="/dashboard/clients" className="text-xs text-blue-600 dark:text-blue-400 hover:underline">
+                <Link href="/dashboard/clients" className="text-xs text-indigo-600 dark:text-indigo-400 hover:underline">
                   + Créer un client dans le carnet
                 </Link>
               </div>
@@ -249,7 +249,7 @@ export function ClientSelect({ selectedId, onSelect, placeholder = "Sélectionne
                   <span className={`w-8 h-8 rounded-lg flex items-center justify-center flex-shrink-0 ${
                     c.type === "professionnel"
                       ? "bg-amber-100 dark:bg-amber-900/30 text-amber-600 dark:text-amber-400"
-                      : "bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400"
+                      : "bg-indigo-100 dark:bg-indigo-900/30 text-indigo-600 dark:text-indigo-400"
                   }`}>
                     {c.type === "professionnel" ? <Briefcase className="w-4 h-4" /> : <UserCircle className="w-4 h-4" />}
                   </span>
@@ -261,7 +261,7 @@ export function ClientSelect({ selectedId, onSelect, placeholder = "Sélectionne
                       {c.siret ? ` · ${c.siret}` : ""}
                     </span>
                   </span>
-                  {c.id === selectedId && <Check className="w-4 h-4 text-blue-500 flex-shrink-0" />}
+                  {c.id === selectedId && <Check className="w-4 h-4 text-indigo-500 flex-shrink-0" />}
                 </button>
               ))
             )}
