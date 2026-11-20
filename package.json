@@ -2,6 +2,9 @@
   "name": "mondevis",
   "version": "0.1.0",
   "private": true,
+  "engines": {
+    "node": ">=20.9"
+  },
   "scripts": {
     "dev": "next dev",
     "dev:run": "unset DATABASE_URL 2>/dev/null; next dev",

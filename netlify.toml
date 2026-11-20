@@ -1,0 +1,12 @@
+# MonDevis — configuration Netlify
+# Next.js 16 (App Router, SSR, routes API, middleware) => l'adaptateur OpenNext
+# de Netlify est installé automatiquement : ne pas épingler @netlify/plugin-nextjs.
+# Ne JAMAIS déployer un zip de .next en drag & drop : les routes serveur
+# (/api/*, /dashboard, NextAuth, Prisma) ne peuvent pas tourner en statique.
+
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  NODE_VERSION = "22"
